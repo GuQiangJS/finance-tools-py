@@ -1,0 +1,331 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>calculate &mdash; finance-tools-py 0+untagged.14.g0906a6f 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="prev" title="Python 金融量化计算工具包" href="../index.html" /> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> finance-tools-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">calculate</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">finance-tools-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>calculate</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/calculate/index.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-finance_tools_py.calculate">
+<span id="calculate"></span><h1>calculate<a class="headerlink" href="#module-finance_tools_py.calculate" title="永久链接至标题">¶</a></h1>
+<dl class="function">
+<dt id="finance_tools_py.calculate.daily_returns">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">daily_returns</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.daily_returns" title="永久链接至目标">¶</a></dt>
+<dd><p>计算日收益率</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><strong>df</strong> (<em>pd.DataFrame</em>) – 待计算的数据表。</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body">按照**正序排序**计算后计算结果。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">返回类型:</th><td class="field-body">pd.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="finance_tools_py.calculate.daily_returns_avg">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">daily_returns_avg</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.daily_returns_avg" title="永久链接至目标">¶</a></dt>
+<dd><p>计算平均日收益</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><strong>df</strong> (<em>pd.DataFrame</em>) – 待计算的数据表。
+（未进行过 <cite>daily_returns</cite> 计算的数据）</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body">按照**正序排序**计算后计算结果。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">返回类型:</th><td class="field-body">pd.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="finance_tools_py.calculate.daily_returns_std">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">daily_returns_std</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.daily_returns_std" title="永久链接至目标">¶</a></dt>
+<dd><p>计算日收益标准差</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><strong>df</strong> (<em>pd.DataFrame</em>) – 待计算的数据表。
+（未进行过 <cite>daily_returns</cite> 计算的数据）</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body">按照**正序排序**计算后计算结果。</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">返回类型:</th><td class="field-body">pd.DataFrame</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="finance_tools_py.calculate.cum_returns">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">cum_returns</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>column_name: str = None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.cum_returns" title="永久链接至目标">¶</a></dt>
+<dd><p>计算累积收益</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> (<em>pd.DataFrame</em>) – 待计算的数据表。</li>
+<li><strong>column_name</strong> (<em>str</em>) – 计算用的列名。默认为 None。
+如果此值为 None，则默认取 <cite>df</cite> 的第一列。</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body"><p class="first">按照**正序排序**计算后计算结果。</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">返回类型:</th><td class="field-body"><p class="first last">pd.DataFrame</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="finance_tools_py.calculate.sharpe_ratio">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">sharpe_ratio</code><span class="sig-paren">(</span><em>daily_returns: pandas.core.frame.DataFrame = None</em>, <em>daily_rf: float = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.sharpe_ratio" title="永久链接至目标">¶</a></dt>
+<dd><p>计算夏普比率</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first last simple">
+<li><strong>daily_returns</strong> (<em>pd.DataFrame</em>) – 日收益数据表</li>
+<li><strong>daily_rf</strong> (<em>float</em>) – 日化无风险收益率</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="finance_tools_py.calculate.beta">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">beta</code><span class="sig-paren">(</span><em>returns_symbol: pandas.core.frame.DataFrame = None</em>, <em>returns_market: pandas.core.frame.DataFrame = None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.beta" title="永久链接至目标">¶</a></dt>
+<dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0">Beta系数</a>。</p>
+<blockquote>
+<div><dl class="docutils">
+<dt>Args:</dt>
+<dd>returns_symbol (pd.DataFrame): 单支股票日回报率数据。
+returns_market (pd.DataFrame): 市场日回报率数据</dd>
+</dl>
+</div></blockquote>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../index.html" class="btn btn-neutral" title="Python 金融量化计算工具包" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, GuQiangJS.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'0+untagged.14.g0906a6f',
+            LANGUAGE:'zh_CN',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+      <script type="text/javascript" src="../_static/translations.js"></script>
+
+  
+
+  <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

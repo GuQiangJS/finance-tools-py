@@ -1,3 +1,4 @@
+devel/_sources/calculate/index.rst.txt
 devel/_sources/index.rst.txt
 devel/_static/ajax-loader.gif
 devel/_static/basic.css
@@ -54,8 +55,10 @@ devel/_static/underscore.js
 devel/_static/up-pressed.png
 devel/_static/up.png
 devel/_static/websupport.js
+devel/calculate/index.html
 devel/genindex.html
 devel/index.html
 devel/objects.inv
+devel/py-modindex.html
 devel/search.html
 devel/searchindex.js
