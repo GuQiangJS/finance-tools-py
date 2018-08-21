@@ -102,3 +102,10 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/finance-tools-py.iml
+.idea/fileTemplates/internal/Python Unit Test.py
+.idea/fileTemplates/internal/Python Script.py
