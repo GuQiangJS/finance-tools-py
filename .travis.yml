@@ -2,21 +2,21 @@ sudo: false
 
 language: python
 
-#env:
-#  global:
-    # Doctr deploy key for GuQiangJS/finance-datareader-py
-#    - secure: "qYGS84w2yDz43HMJAn1ex0ciCZV8MGXaeY/pBRZerrrnp4o2WhUCuVEh5GKMfKXksBN2Hi7IMmZxGhLCz248hfLwCZUbq4g0haXInIkng3kgpC/psp8sauqfb006Ftpb4F7M+DNZWMtdYHosj6uOGQ7NzH2ugo4EEKZgkEb5U5z/NWp5HMTB4a7YjQabvkzB3FWzUQ1ekT+gpANgfRb7NuWgyUCSMwDWNpyWL9+SyeulvXIf6CIJ1U7BxDSZHCUV6zZru6hVmxm0iMr09YR7EXnYiLwmEMCbirio67F6mo1y2HdNFlU2lNfKoKaqjyXW3xXOfvnTIF+/Yw+cxkeT8x6DsPpB5J+15jKW9lXVcIIOO17Hpl23khqG9bkIAzp3l2qtJefjv15OtkOAs8zQzgkPWS/6J/uHsKSXAm/rmYNeaLmPAQ9XnJdMntE4r7JhsuuwCHwVlIt3zImfuamQvsjZ4tgdsn8xdZPpRBVVkZ8iDsiRe46Y1AaaQMqiBmoD6vjTQv8vgW71zjyqGiIh7uHPxrowKqY5mdcx0lY2zTQRNQD8QCHzVuqQVWcsQs4FhuVTceouXdnTHlhclgWOFk/h7Ymy1ONw/O5Zf4qPaBAQcmIvSuXnqHvitMYiciI0Qj12pS7QhUmBkkAHUiyat8rj1g+Sb9LaUhQp/lRVe58="
+env:
+    global:
+        Doctr deploy key for GuQiangJS/finance-datareader-py
+    - secure: "hTJTG5a9UyVLTku9AhXiwcQrcNWeFNr1aFgbZNgLY2hpdIQA7S52ceySAcKepGgNWzy7t3eOelIj+v8D8GIAtXRDK5O3FySBDLibeMaXuF3JYbhByvbK+xtuwwUT789fR+NU2K0zHcdnPnhggTJnTBNOPxBHxVcdrxz3xm4dqk2RtPPNdGIfdqHzuGsQYD9pvN/MVT0xKYuPde3KzBUcQBWqU4ekOu2jDpPjnSAXyn+cH0g1Fo924aivrNThn6KfBaabCtYCDhJUvOYUtigsk0Z7Bj6KCKrAT+hz4S5uq4pHtI4/VOTHSHmCBq4KbEaq8VvsTmpJ3BaStgejhIY5ouxXw27z9w/qcPbZ4/1zNe7LSbVIX8AS9T3zMwgln2ae8RwFZp66JK6JQQApvt2VTief+8B/GALXl50LDMMVYmVLY2pxuUA7z54KHARYrC51oyYNNOmyFVyVnrX3yZA2HJSFg3uvQI/3GsbgIyQhOv9X/unsC1OSKugQG99JTLDPmXzgdmAbN+L13dq9SRdd169xup10d0RDEpZuO7PBY1ZrK++63ZOLyx7s4zzeEZmjKVm1/9342A83Tx7zb7jycHbNbo+AWJHhO4OIs8pmgr14IDV+eGbe7HCxvcVeMCsOLMZbjjeYTI6CJ7ylM6E/88+Onh5M1QJFilSO6BtP4Qs="
 
 python:
   - "3.4"
   - "3.5"
   - "3.6"
   - "3.7-dev"
-  
-#matrix:
-#  include:
-#    - python: '3.6'
-#      env: DOCBUILD=true
+
+matrix:
+    include:
+    - python: '3.6'
+      env: DOCBUILD=true
   
 install:
   - pip install flake8
@@ -34,11 +34,11 @@ script:
   - flake8 finance_tools_py --ignore=E501
 after_success: 
   - coverage report
-#  - |
-#    if [[ $DOCBUILD ]]; then
-#      cd docs
-#      make html && make html
-#      cd ..
-#      doctr deploy devel --build-tags
-#    fi
+  - |
+      if [[ $DOCBUILD ]]; then
+        cd docs
+        make html && make html
+        cd ..
+        doctr deploy devel --build-tags
+      fi
   - coveralls
