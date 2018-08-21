@@ -170,3 +170,10 @@ texinfo_documents = [
      author, 'finance-tools-py', 'One line description of project.',
      'Miscellaneous'),
 ]
+
+intersphinx_mapping = {
+  'python': ('https://docs.python.org', None),
+  'numpy': ('http://docs.scipy.org/doc/numpy', None),
+  'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
+  'pandas': ('http://pandas.pydata.org/pandas-docs/dev', None)
+}
