@@ -1,11 +1,14 @@
 .. include:: ../../README.rst
 
-.. autofunction:: daily_returns
-.. autofunction:: daily_returns_avg
-.. autofunction:: daily_returns_std
-.. autofunction:: cum_returns
-.. autofunction:: sharpe_ratio
-.. autofunction:: beta
+Documentation
+-------------
+
+Contents:
+
+.. toctree::
+   :maxdepth: 3
+
+   calculate/index
 
 
 Indices and tables
