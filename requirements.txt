@@ -1,0 +1,5 @@
+pandas
+numpy
+# Documentation Only
+sphinx
+sphinxcontrib-napoleon

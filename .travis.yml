@@ -1,0 +1,44 @@
+sudo: false
+
+language: python
+
+#env:
+#  global:
+    # Doctr deploy key for GuQiangJS/finance-datareader-py
+#    - secure: "qYGS84w2yDz43HMJAn1ex0ciCZV8MGXaeY/pBRZerrrnp4o2WhUCuVEh5GKMfKXksBN2Hi7IMmZxGhLCz248hfLwCZUbq4g0haXInIkng3kgpC/psp8sauqfb006Ftpb4F7M+DNZWMtdYHosj6uOGQ7NzH2ugo4EEKZgkEb5U5z/NWp5HMTB4a7YjQabvkzB3FWzUQ1ekT+gpANgfRb7NuWgyUCSMwDWNpyWL9+SyeulvXIf6CIJ1U7BxDSZHCUV6zZru6hVmxm0iMr09YR7EXnYiLwmEMCbirio67F6mo1y2HdNFlU2lNfKoKaqjyXW3xXOfvnTIF+/Yw+cxkeT8x6DsPpB5J+15jKW9lXVcIIOO17Hpl23khqG9bkIAzp3l2qtJefjv15OtkOAs8zQzgkPWS/6J/uHsKSXAm/rmYNeaLmPAQ9XnJdMntE4r7JhsuuwCHwVlIt3zImfuamQvsjZ4tgdsn8xdZPpRBVVkZ8iDsiRe46Y1AaaQMqiBmoD6vjTQv8vgW71zjyqGiIh7uHPxrowKqY5mdcx0lY2zTQRNQD8QCHzVuqQVWcsQs4FhuVTceouXdnTHlhclgWOFk/h7Ymy1ONw/O5Zf4qPaBAQcmIvSuXnqHvitMYiciI0Qj12pS7QhUmBkkAHUiyat8rj1g+Sb9LaUhQp/lRVe58="
+
+python:
+  - "3.4"
+  - "3.5"
+  - "3.6"
+  - "3.7-dev"
+  
+#matrix:
+#  include:
+#    - python: '3.6'
+#      env: DOCBUILD=true
+  
+install:
+  - pip install flake8
+  - pip install coverage
+  - pip install pandas
+  - pip install numpy
+  - pip install coveralls
+  - python setup.py install
+  - if [[ $DOCBUILD ]]; then
+    pip install sphinx sphinx_rtd_theme doctr sphinxcontrib-napoleon;
+    fi
+script: 
+  - coverage run -m unittest discover finance_tools_py "test_*.py"
+  - flake8 --version
+  - flake8 finance_tools_py --ignore=E501
+after_success: 
+  - coverage report
+#  - |
+#    if [[ $DOCBUILD ]]; then
+#      cd docs
+#      make html && make html
+#      cd ..
+#      doctr deploy devel --build-tags
+#    fi
+  - coveralls

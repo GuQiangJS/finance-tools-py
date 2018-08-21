@@ -1,0 +1,24 @@
+# .coveragerc to control coverage.py
+[run]
+source = finance_tools_py
+branch = True
+include = */finance_tools_py/*
+omit =
+    */_version.py
+    tests/*
+
+[report]
+# Regexes for lines to exclude from consideration
+exclude_lines =
+    # Have to re-enable the standard pragma
+    pragma: no cover
+    # Don't complain if tests don't hit defensive assertion code:
+    raise NotImplementedError
+    raise ImmediateDeprecationError
+    # Ignore pass
+    pass
+include = */finance_tools_py/*
+omit =
+    */_version.py
+    tests/*
+ignore_errors = True
