@@ -8,10 +8,7 @@ env:
     - secure: "hTJTG5a9UyVLTku9AhXiwcQrcNWeFNr1aFgbZNgLY2hpdIQA7S52ceySAcKepGgNWzy7t3eOelIj+v8D8GIAtXRDK5O3FySBDLibeMaXuF3JYbhByvbK+xtuwwUT789fR+NU2K0zHcdnPnhggTJnTBNOPxBHxVcdrxz3xm4dqk2RtPPNdGIfdqHzuGsQYD9pvN/MVT0xKYuPde3KzBUcQBWqU4ekOu2jDpPjnSAXyn+cH0g1Fo924aivrNThn6KfBaabCtYCDhJUvOYUtigsk0Z7Bj6KCKrAT+hz4S5uq4pHtI4/VOTHSHmCBq4KbEaq8VvsTmpJ3BaStgejhIY5ouxXw27z9w/qcPbZ4/1zNe7LSbVIX8AS9T3zMwgln2ae8RwFZp66JK6JQQApvt2VTief+8B/GALXl50LDMMVYmVLY2pxuUA7z54KHARYrC51oyYNNOmyFVyVnrX3yZA2HJSFg3uvQI/3GsbgIyQhOv9X/unsC1OSKugQG99JTLDPmXzgdmAbN+L13dq9SRdd169xup10d0RDEpZuO7PBY1ZrK++63ZOLyx7s4zzeEZmjKVm1/9342A83Tx7zb7jycHbNbo+AWJHhO4OIs8pmgr14IDV+eGbe7HCxvcVeMCsOLMZbjjeYTI6CJ7ylM6E/88+Onh5M1QJFilSO6BtP4Qs="
 
 python:
-  - "3.4"
-  - "3.5"
   - "3.6"
-  - "3.7-dev"
 
 matrix:
     include:
@@ -19,7 +16,6 @@ matrix:
       env: DOCBUILD=true
   
 install:
-  - pip install flake8
   - pip install coverage
   - pip install pandas
   - pip install numpy
@@ -30,8 +26,8 @@ install:
     fi
 script: 
   - coverage run -m unittest discover finance_tools_py "test_*.py"
-  - flake8 --version
-  - flake8 finance_tools_py --ignore=E501
+#  - flake8 --version
+#  - flake8 finance_tools_py --ignore=E501
 after_success: 
   - coverage report
   - |
