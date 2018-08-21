@@ -1,13 +1,5 @@
 .. include:: ../../README.rst
 
-Documentation
--------------
-
-Contents:
-
-.. toctree::
-   :maxdepth: 3
-
 .. autofunction:: daily_returns
 .. autofunction:: daily_returns_avg
 .. autofunction:: daily_returns_std
