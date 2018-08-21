@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 
 
-def _check_dataframe(df):
+def _check_dataframe(df: pd.DataFrame):
     """检查 `df` 。如果为 `None` 或 为空，抛出 `ValueError`。
 
     Args:
-        df (pandas.DataFrame): 待检查的数据表。
+        df: 待检查的数据表。
 
     """
     if df is None or df.empty:
@@ -17,14 +17,14 @@ def _check_dataframe(df):
     pass
 
 
-def daily_returns(df = None):
+def daily_returns(df: pd.DataFrame = None) -> pd.DataFrame:
     """计算日收益率
 
     Args:
-        df (pandas.DataFrame): 待计算的数据表。
+        df: 待计算的数据表。
 
     Returns:
-        pandas.DataFrame: 按照**正序排序**计算后计算结果。
+        按照*正序排序*计算后计算结果。
 
     """
     _check_dataframe(df)
@@ -32,44 +32,43 @@ def daily_returns(df = None):
     return df[1:].values / df[:-1] - 1
 
 
-def daily_returns_avg(df: pd.DataFrame = None):
+def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
     """计算平均日收益
 
     Args:
-        df (pd.DataFrame): 待计算的数据表。
-            （未进行过 `daily_returns` 计算的数据）
+        df: 待计算的数据表。（未进行过 `daily_returns` 计算的数据）
 
     Returns:
-        pd.DataFrame: 按照**正序排序**计算后计算结果。
+        按照*正序排序*计算后计算结果。
 
     """
     return daily_returns(df).mean()
 
 
-def daily_returns_std(df: pd.DataFrame = None):
+def daily_returns_std(df: pd.DataFrame = None) -> pd.DataFrame:
     """计算日收益标准差
 
     Args:
-        df (pd.DataFrame): 待计算的数据表。
-            （未进行过 `daily_returns` 计算的数据）
+        df: 待计算的数据表。（未进行过 `daily_returns` 计算的数据）
 
     Returns:
-        pd.DataFrame: 按照**正序排序**计算后计算结果。
+        按照*正序排序*计算后计算结果。
 
     """
     return daily_returns(df).std()
 
 
-def cum_returns(df: pd.DataFrame = None, column_name: str = None):
+def cum_returns(df: pd.DataFrame = None,
+                column_name: str = None) -> pd.DataFrame:
     """计算累积收益
 
     Args:
-        df (pd.DataFrame): 待计算的数据表。
-        column_name (str): 计算用的列名。默认为 None。
-            如果此值为 None，则默认取 `df` 的第一列。
+        df: 待计算的数据表。
+        column_name: 计算用的列名。默认为 None。
+                     如果此值为 None，则默认取 `df` 的第一列。
 
     Returns:
-        pd.DataFrame: 按照**正序排序**计算后计算结果。
+        按照*正序排序*计算后计算结果。
 
     """
     _check_dataframe(df)
