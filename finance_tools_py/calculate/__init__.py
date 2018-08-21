@@ -24,7 +24,7 @@ def daily_returns(df: pd.DataFrame = None) -> pd.DataFrame:
         df: 待计算的数据表。
 
     Returns:
-        按照*正序排序*计算后计算结果。
+        按照 **正序排序** 计算后计算结果。
 
     """
     _check_dataframe(df)
@@ -39,7 +39,7 @@ def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
         df: 待计算的数据表。（未进行过 `daily_returns` 计算的数据）
 
     Returns:
-        按照*正序排序*计算后计算结果。
+        按照 **正序排序** 计算后计算结果。
 
     """
     return daily_returns(df).mean()
@@ -49,10 +49,10 @@ def daily_returns_std(df: pd.DataFrame = None) -> pd.DataFrame:
     """计算日收益标准差
 
     Args:
-        df: 待计算的数据表。（未进行过 `daily_returns` 计算的数据）
+        df: 待计算的数据表。（未进行过 `calculate.daily_returns` 计算的数据）
 
     Returns:
-        按照*正序排序*计算后计算结果。
+        按照 **正序排序** 计算后计算结果。
 
     """
     return daily_returns(df).std()
@@ -68,7 +68,7 @@ def cum_returns(df: pd.DataFrame = None,
                      如果此值为 None，则默认取 `df` 的第一列。
 
     Returns:
-        按照*正序排序*计算后计算结果。
+        按照 **正序排序** 计算后计算结果。
 
     """
     _check_dataframe(df)
