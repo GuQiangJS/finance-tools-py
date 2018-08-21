@@ -1,6 +1,8 @@
 calculate
 ----------
 
+.. py:module:: finance_tools_py.calculate
+
 .. autofunction:: daily_returns
 .. autofunction:: daily_returns_avg
 .. autofunction:: daily_returns_std
