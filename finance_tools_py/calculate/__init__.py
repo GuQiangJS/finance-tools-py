@@ -37,7 +37,7 @@ def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
 
     Args:
         df: 待计算的数据表。
-            （未进行过 :func:`calculate.daily_returns` 计算的数据）
+            （未进行过 :func:`daily_returns` 计算的数据）
 
     Returns:
         按照 **正序排序** 计算后计算结果。
