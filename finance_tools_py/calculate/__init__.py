@@ -5,11 +5,11 @@ import numpy as np
 import pandas as pd
 
 
-def _check_dataframe(df: pd.DataFrame):
+def _check_dataframe(df):
     """检查 `df` 。如果为 `None` 或 为空，抛出 `ValueError`。
 
     Args:
-        df (pd.DataFrame): 待检查的数据表。
+        df (pandas.DataFrame): 待检查的数据表。
 
     """
     if df is None or df.empty:
@@ -17,14 +17,14 @@ def _check_dataframe(df: pd.DataFrame):
     pass
 
 
-def daily_returns(df: pd.DataFrame = None):
+def daily_returns(df = None):
     """计算日收益率
 
     Args:
-        df (pd.DataFrame): 待计算的数据表。
+        df (pandas.DataFrame): 待计算的数据表。
 
     Returns:
-        pd.DataFrame: 按照**正序排序**计算后计算结果。
+        pandas.DataFrame: 按照**正序排序**计算后计算结果。
 
     """
     _check_dataframe(df)
@@ -97,9 +97,9 @@ def beta(returns_symbol: pd.DataFrame = None,
          returns_market: pd.DataFrame = None):
     """计算 `Beta系数`_。
 
-        Args:
-            returns_symbol (pd.DataFrame): 单支股票日回报率数据。
-            returns_market (pd.DataFrame): 市场日回报率数据
+    Args:
+        returns_symbol (pd.DataFrame): 单支股票日回报率数据。
+        returns_market (pd.DataFrame): 市场日回报率数据
 
     .. _Beta系数:
         https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
