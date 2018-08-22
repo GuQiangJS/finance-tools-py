@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>calculate &mdash; finance-tools-py 0+untagged.20.g28ec1d7 文档</title>
+  <title>calculate &mdash; finance-tools-py 0+untagged.21.gd07a456 文档</title>
   
 
   
@@ -223,21 +223,28 @@
 
 <dl class="function">
 <dt id="finance_tools_py.calculate.sharpe_ratio">
-<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">sharpe_ratio</code><span class="sig-paren">(</span><em>daily_returns: pandas.core.frame.DataFrame = None</em>, <em>daily_rf: float = 0</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.sharpe_ratio" title="永久链接至目标">¶</a></dt>
-<dd><p>计算夏普比率</p>
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">sharpe_ratio</code><span class="sig-paren">(</span><em>r=None</em>, <em>rf=None</em>, <em>r_std: float = None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.sharpe_ratio" title="永久链接至目标">¶</a></dt>
+<dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5">夏普比率</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first last simple">
-<li><strong>daily_returns</strong> (<em>pd.DataFrame</em>) – 日收益数据表</li>
-<li><strong>daily_rf</strong> (<em>float</em>) – 日化无风险收益率</li>
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
+<li><strong>r</strong> (<em>pd.DataFrame</em><em>,</em><em>float</em>) – 收益数据表或均值</li>
+<li><strong>rf</strong> (<em>pd.DataFrame</em><em>,</em><em>float</em>) – 无风险收益率表或均值</li>
+<li><strong>r_std</strong> – <cite>r</cite> 的标准差。如果 <cite>r</cite> 传入的是 <cite>DataFrame</cite> 则无需传入此参数。</li>
 </ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body"><p class="first">计算后的夏普比率。</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">返回类型:</th><td class="field-body"><p class="first last">float</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Returns:</p>
+<p>%9F%BA%E9%87%91#%E5%A4%8F%E6%99%AE%E6%AF%94%E7%8E%87</p>
 </dd></dl>
 
 <dl class="function">
@@ -300,7 +307,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0+untagged.20.g28ec1d7',
+            VERSION:'0+untagged.21.gd07a456',
             LANGUAGE:'zh_CN',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
