@@ -6,7 +6,8 @@ import pandas as pd
 
 
 def _check_dataframe(df: pd.DataFrame):
-    """检查 `df` 。如果为 `None` 或 为空，抛出 `ValueError`。
+    """检查参数 *df* 。
+    如果为 ``None`` 或 为空，抛出 :exc:`ValueError` 异常。
 
     Args:
         df: 待检查的数据表。
@@ -37,7 +38,7 @@ def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
 
     Args:
         df: 待计算的数据表。
-            （未进行过 :func:`daily_returns` 计算的数据）
+            **（未进行过 :func:`daily_returns` 计算的数据）**
 
     Returns:
         按照 **正序排序** 计算后计算结果。
@@ -51,7 +52,7 @@ def daily_returns_std(df: pd.DataFrame = None) -> pd.DataFrame:
 
     Args:
         df: 待计算的数据表。
-            （未进行过 :func:`daily_returns` 计算的数据）
+            **（未进行过 :func:`daily_returns` 计算的数据）**
 
     Returns:
         按照 **正序排序** 计算后计算结果。
@@ -66,8 +67,8 @@ def cum_returns(df: pd.DataFrame = None,
 
     Args:
         df: 待计算的数据表。
-        column_name: 计算用的列名。默认为 None。
-                     如果此值为 None，则默认取 `df` 的第一列。
+        column_name: 计算用的列名。默认为 ``None``。
+                     如果此值为 ``None``，则默认取 参数 `df` 的第一列。
 
     Returns:
         按照 **正序排序** 计算后计算结果。
@@ -91,7 +92,7 @@ def risk_free_interest_rate(sr: float = 0, cycle: int = 365) -> float:
             假设使用的是每月采样，一年共有 12 个交易月
 
     Returns:
-        根据 `cycle` 返回不同采样周期的收益率。默认返回 *日化收益率*。
+        根据参数 `cycle` 返回不同采样周期的收益率。默认返回 *日化收益率*。
     """
     # 即便某支股票一年只交易了80天，在以每日采样计算调整因子时，还是应该是用365来进行计算
     return sr / cycle
@@ -101,16 +102,16 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     """计算 `夏普比率`_
 
     Args:
-        r (pd.DataFrame,float): 收益数据表或均值
-        rf (pd.DataFrame,float): 无风险收益率表或均值
-        r_std: `r` 的标准差。如果 `r` 传入的是 `DataFrame` 则无需传入此参数。
+        r (pd.DataFrame,float): 收益数据表或均值。
+        rf (pd.DataFrame,float): 无风险收益率表或均值。
+        r_std: 参数 `r` 的标准差。如果 `r` 传入的是 `DataFrame` 则无需传入此参数。
 
     Returns:
         float: 计算后的夏普比率。
 
     .. _夏普比率:
         https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
-    %9F%BA%E9%87%91#%E5%A4%8F%E6%99%AE%E6%AF%94%E7%8E%87
+        %9F%BA%E9%87%91#%E5%A4%8F%E6%99%AE%E6%AF%94%E7%8E%87
     """
     # 夏普比率是回报与风险的比率。公式为：
     # （Rp - Rf） / ？p
@@ -129,7 +130,8 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     if isinstance(rf, pd.DataFrame):
         rf_mean = rf.mean()
 
-    return (r_mean - rf_mean) / rf_std
+    result = (r_mean - rf_mean) / rf_std
+    return result if isinstance(result, float) else result[0]
 
 
 def beta(returns_symbol: pd.DataFrame = None,
