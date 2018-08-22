@@ -1,7 +1,6 @@
 # Copyright (C) 2018 GuQiangJs.
 # Licensed under Apache License 2.0 <see LICENSE file>
 
-import numpy as np
 import pandas as pd
 
 
@@ -29,8 +28,8 @@ def daily_returns(df: pd.DataFrame = None) -> pd.DataFrame:
 
     """
     _check_dataframe(df)
-    df = df.sort_index()
-    return df[1:].values / df[:-1] - 1
+    df_sort = df.sort_index()
+    return df_sort[1:].values / df_sort[:-1] - 1
 
 
 def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
@@ -102,9 +101,9 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     """计算 `夏普比率`_
 
     Args:
-        r: 收益数据表(`DataFrame`)或均值(`float`)。
-        rf: 无风险收益率表(`DataFrame`)或均值(`float`)。
-        r_std: 参数 `r` 的标准差。如果 `r` 传入的是 `DataFrame` 则无需传入此参数。
+        r: 收益数据表( :py:class: pd.DataFrame )或均值(`float`)。
+        rf: 无风险收益率表(:py:class: pd.DataFrame)或均值(`float`)。
+        r_std: 参数 `r` 的标准差。如果 `r` 传入的是 :py:class: pd.DataFrame 则无需传入此参数。
 
     Returns:
         float: 计算后的夏普比率。
@@ -134,19 +133,23 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     return result if isinstance(result, float) else result[0]
 
 
-def beta(returns_symbol: pd.DataFrame = None,
-         returns_market: pd.DataFrame = None):
-    """计算 `Beta系数`_。
+def mo(df: pd.DataFrame = None, n: int = 0):
+    """计算 `MO运动量震荡指标 (Momentum Oscillator)`_
 
     Args:
-        returns_symbol (pd.DataFrame): 单支股票日回报率数据。
-        returns_market (pd.DataFrame): 市场日回报率数据
+        df: 数据表
+        n: 待计算的天数
 
-    .. _Beta系数:
-        https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
+    Returns:
+
+    .. _MO运动量震荡指标 (Momentum Oscillator):
+        https://zh.wikipedia.org/wiki/%E9%81%8B%E5%8B%95%E9%87%8F%E9%9C%87%E7
+        %9B%AA%E6%8C%87%E6%A8%99
     """
-    raise NotImplementedError()
-    # Create a matrix of [returns, market]
-    m = np.matrix([returns_symbol, returns_market])
-    # Return the covariance of m divided by the standard deviation of the market returns
-    return np.cov(m)[0][1] / np.var(returns_market)
+    # MOt = (Pt / Pt-n) * 100
+    # 其中n為天數，Pt為當日股價，Pt-n為n日前的股價
+    _check_dataframe(df)
+    if n <= 0:
+        raise ValueError('n<=0')
+    df_sort = df.sort_index()
+    return (df_sort[(1 * n):].values / df_sort[:(-1 * n)]) * 100

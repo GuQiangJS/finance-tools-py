@@ -3,6 +3,7 @@
 
 import unittest
 
+import numpy as np
 from finance_datareader_py.sohu.daily import SohuDailyReader
 
 from finance_tools_py.calculate import *
@@ -70,6 +71,24 @@ class calculate_TestCase(unittest.TestCase):
                                         -0.0200, -0.0100]), 0)
         self.assertIsInstance(sr, float)
         self.assertEqual(np.around(sr, decimals=6), 0.275241)
+
+    def test_mo(self):
+        """测试 MO运动量震荡指标 (Momentum Oscillator)"""
+        max = 10
+        min = 1
+        n = 3
+        # 模拟计算开始
+        lst = np.arange(min, max)
+        lst_1 = []
+        for i in range(n, max - min):
+            lst_1.append((lst[i] / lst[i - n]) * 100)
+        # 模拟计算结束
+        _mo = mo(pd.DataFrame(np.arange(min, max)), n)
+        self.assertFalse(_mo.empty)
+        self.assertEqual(_mo.index.size, max - min - n)
+        # mo方法结果应该和模拟计算结果一致
+        self.assertTrue(np.array_equal(_mo[0].values, np.array(lst_1)))
+        # print(__mo)
 
 
 if __name__ == '__main__':
