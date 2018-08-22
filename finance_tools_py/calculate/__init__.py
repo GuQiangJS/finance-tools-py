@@ -102,7 +102,7 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
 
     Args:
         r: 收益数据表( :py:class: pd.DataFrame )或均值(`float`)。
-        rf: 无风险收益率表(:py:class: pd.DataFrame)或均值(`float`)。
+        rf: 无风险收益率表( :py:class: pandas.DataFrame )或均值( :py:class: float )。
         r_std: 参数 `r` 的标准差。如果 `r` 传入的是 :py:class: pd.DataFrame 则无需传入此参数。
 
     Returns:
