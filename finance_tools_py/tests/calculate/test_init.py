@@ -40,6 +40,34 @@ class calculate_TestCase(unittest.TestCase):
         df = pd.DataFrame(data)
         self.assertEqual(daily_returns_std(df)[0], daily_returns(df).std()[0])
 
+    def test_risk_free_interest_rate(self):
+        # 年化收益 5%，持有 30 天，本金 10000。月均收益应该为 41.1
+        risk = risk_free_interest_rate(0.05, 365)
+        print(risk)
+        print(risk * 30 * 10000)
+        print(np.around((risk * 30 * 10000), decimals=2))
+        print(np.around(41.1, decimals=2))
+        self.assertEqual(np.around((risk * 30 * 10000), decimals=2),
+                         np.around(41.1, decimals=2))
+
+    def test_sharpe_ratio(self):
+        """测试夏普比率计算"""
+        # 假设你希望你的股票投资组合，返回12％，明年全年。
+        # 如果无风险国债收益票据的，比如说5％，你的投资组合带有0.06标准偏差，
+        # 然后从上面的公式，我们可以计算出的夏普比率为你的投资组合是：
+        # （0.12 - 0.05） / 0.06 = 1.17
+        # 这意味着对于每个回报点，您承担1.17“单位”的风险。
+        sr = sharpe_ratio(0.12, 0.05, 0.06)
+        print(sr)
+        self.assertEqual(np.around(sr, decimals=2), 1.17)
+
+        lst = []
+        for i in range(100):
+            lst.append(sharpe_ratio(pd.DataFrame(np.random.normal(0.12, 0.06,
+                                                                  10)), 0.05))
+        # [print(l) for l in lst]
+        print(np.mean(lst))
+
 
 if __name__ == '__main__':
     unittest.main()

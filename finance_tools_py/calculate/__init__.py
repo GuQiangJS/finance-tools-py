@@ -80,18 +80,56 @@ def cum_returns(df: pd.DataFrame = None,
     return (df[column_name].iloc[-1] / df[column_name].iloc[0]) - 1
 
 
-def sharpe_ratio(daily_returns: pd.DataFrame = None, daily_rf: float = 0):
-    """计算夏普比率
+def risk_free_interest_rate(sr: float = 0, cycle: int = 365) -> float:
+    """根据 年化收益率 计算 指定周期的收益率
 
     Args:
-        daily_returns (pd.DataFrame): 日收益数据表
-        daily_rf (float): 日化无风险收益率
+        sr: 年化收益率。如果年化收益率为 4%，则传入 0.04。
+        cycle: 计算周期。默认值为365。
+            假设使用的是每日采样，一年共有 365 个交易日。
+            假设使用的是每周采样，一年共有 52 个交易周。
+            假设使用的是每月采样，一年共有 12 个交易月
 
     Returns:
-
+        根据 `cycle` 返回不同采样周期的收益率。默认返回 *日化收益率*。
     """
-    raise NotImplementedError()
-    return (daily_returns - daily_rf).mean() / daily_returns.std()
+    # 即便某支股票一年只交易了80天，在以每日采样计算调整因子时，还是应该是用365来进行计算
+    return sr / cycle
+
+
+def sharpe_ratio(r=None, rf=None, r_std: float = None):
+    """计算 `夏普比率`_
+
+    Args:
+        r (pd.DataFrame,float): 收益数据表或均值
+        rf (pd.DataFrame,float): 无风险收益率表或均值
+        r_std: `r` 的标准差。如果 `r` 传入的是 `DataFrame` 则无需传入此参数。
+
+    Returns:
+        float: 计算后的夏普比率。
+
+    .. _夏普比率:
+        https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
+    %9F%BA%E9%87%91#%E5%A4%8F%E6%99%AE%E6%AF%94%E7%8E%87
+    """
+    # 夏普比率是回报与风险的比率。公式为：
+    # （Rp - Rf） / ？p
+    # 其中：
+    #
+    # Rp = 投资者投资组合的预期回报率
+    # Rf = 无风险回报率
+    # ？p = 投资组合的标准差，风险度量
+
+    r_mean = r
+    rf_mean = rf
+    rf_std = r_std
+    if isinstance(r, pd.DataFrame):
+        r_mean = r.mean()
+        rf_std = r.std()
+    if isinstance(rf, pd.DataFrame):
+        rf_mean = rf.mean()
+
+    return (r_mean - rf_mean) / rf_std
 
 
 def beta(returns_symbol: pd.DataFrame = None,
