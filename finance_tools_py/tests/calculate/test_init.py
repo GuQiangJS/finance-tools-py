@@ -17,6 +17,17 @@ class calculate_TestCase(unittest.TestCase):
         self.assertFalse(df1.empty)
         print(df.sort_index().tail())
         print(df1.tail())
+        # 2018-08-15    3291.98
+        # 2018-08-16    3276.73
+        # 2018-08-17    3229.62
+        # 2018-08-20    3267.25
+        # 2018-08-21    3326.65
+        self.assertEqual(np.around((df1['2018-08-16']), decimals=6),
+                         np.around((3276.73 / 3291.98 - 1), decimals=6))
+        self.assertEqual(np.around((df1['2018-08-20']), decimals=6),
+                         np.around((3267.25 / 3229.62 - 1), decimals=6))
+        self.assertEqual(np.around((df1['2018-08-21']), decimals=6),
+                         np.around((3326.65 / 3267.25 - 1), decimals=6))
 
     def test_cum_returns(self):
         data = [1, 2, 3, 4, 5]
@@ -84,11 +95,14 @@ class calculate_TestCase(unittest.TestCase):
             lst_1.append((lst[i] / lst[i - n]) * 100)
         # 模拟计算结束
         _mo = mo(pd.DataFrame(np.arange(min, max)), n)
+        _mo = _mo.dropna()
         self.assertFalse(_mo.empty)
         self.assertEqual(_mo.index.size, max - min - n)
         # mo方法结果应该和模拟计算结果一致
         self.assertTrue(np.array_equal(_mo[0].values, np.array(lst_1)))
         # print(__mo)
+        self.assertEqual(mo(pd.DataFrame(np.arange(min, max)),
+                            n, dropna=True).index.size, max - min - n)
 
 
 if __name__ == '__main__':

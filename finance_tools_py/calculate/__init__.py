@@ -29,7 +29,7 @@ def daily_returns(df: pd.DataFrame = None) -> pd.DataFrame:
     """
     _check_dataframe(df)
     df_sort = df.sort_index()
-    return df_sort[1:].values / df_sort[:-1] - 1
+    return ((df_sort - df_sort.shift(1)) / df_sort.shift(1)).dropna()
 
 
 def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
@@ -101,9 +101,9 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     """计算 `夏普比率`_
 
     Args:
-        r: 收益数据表( :py:class: pd.DataFrame )或均值(`float`)。
-        rf: 无风险收益率表( :py:class: pandas.DataFrame )或均值( :py:class: float )。
-        r_std: 参数 `r` 的标准差。如果 `r` 传入的是 :py:class: pd.DataFrame 则无需传入此参数。
+        r: 收益数据表( `DataFrame` )或均值(`float`)。
+        rf: 无风险收益率表( `pandas.DataFrame` )或均值( `float` )。
+        r_std: 参数 `r` 的标准差。如果 `r` 传入的是 `pd.DataFrame` 则无需传入此参数。
 
     Returns:
         float: 计算后的夏普比率。
@@ -133,12 +133,13 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     return result if isinstance(result, float) else result[0]
 
 
-def mo(df: pd.DataFrame = None, n: int = 0):
+def mo(df: pd.DataFrame = None, n: int = 0, dropna: bool = False):
     """计算 `MO运动量震荡指标 (Momentum Oscillator)`_
 
     Args:
         df: 数据表
         n: 待计算的天数
+        dropna: 是否丢弃结果中为 `NaN` 的数据。默认为 `False`。
 
     Returns:
 
@@ -152,4 +153,5 @@ def mo(df: pd.DataFrame = None, n: int = 0):
     if n <= 0:
         raise ValueError('n<=0')
     df_sort = df.sort_index()
-    return (df_sort[(1 * n):].values / df_sort[:(-1 * n)]) * 100
+    df_result = df_sort / df_sort.shift(n) * 100
+    return df_result.dropna() if dropna else df_result
