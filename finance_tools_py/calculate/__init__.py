@@ -38,7 +38,7 @@ def daily_returns_avg(df: pd.DataFrame = None) -> pd.DataFrame:
 
     Args:
         df: 待计算的数据表。
-            **（未进行过 :func:`daily_returns` 计算的数据）**
+            （未进行过 :func:`daily_returns` 计算的数据）
 
     Returns:
         按照 **正序排序** 计算后计算结果。
@@ -52,7 +52,7 @@ def daily_returns_std(df: pd.DataFrame = None) -> pd.DataFrame:
 
     Args:
         df: 待计算的数据表。
-            **（未进行过 :func:`daily_returns` 计算的数据）**
+            （未进行过 :func:`daily_returns` 计算的数据）
 
     Returns:
         按照 **正序排序** 计算后计算结果。
@@ -102,8 +102,8 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     """计算 `夏普比率`_
 
     Args:
-        r (pd.DataFrame,float): 收益数据表或均值。
-        rf (pd.DataFrame,float): 无风险收益率表或均值。
+        r: 收益数据表(`DataFrame`)或均值(`float`)。
+        rf: 无风险收益率表(`DataFrame`)或均值(`float`)。
         r_std: 参数 `r` 的标准差。如果 `r` 传入的是 `DataFrame` 则无需传入此参数。
 
     Returns:
