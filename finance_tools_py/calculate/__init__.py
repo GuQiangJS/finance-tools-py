@@ -161,7 +161,7 @@ def mo(df: pd.DataFrame = None, n: int = 0,
     return df_result.dropna() if dropna else df_result
 
 
-def beta_alpha(df: DataFrame = None, **kwargs) -> (float, float):
+def beta_alpha(df: DataFrame = None, **kwargs) -> (float):
     """计算 `beta系数`_ , `alpha系数`_
 
     Args:
@@ -177,8 +177,7 @@ def beta_alpha(df: DataFrame = None, **kwargs) -> (float, float):
 
     .. hint::
         `beta系数`_ , `alpha系数`_ 的计算也可以使用
-        `numpy.polyfit<https://docs.scipy.org/doc/numpy-1.14.0/reference
-        /generated/numpypolyfit.html>`_ 方法。
+        `numpy.polyfit <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html>`_ 方法。
 
     .. _beta系数:
         https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
