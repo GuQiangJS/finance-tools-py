@@ -3,6 +3,7 @@
 
 import numpy as np
 import pandas as pd
+from pandas import DataFrame
 
 
 def _check_dataframe(df: pd.DataFrame):
@@ -160,7 +161,7 @@ def mo(df: pd.DataFrame = None, n: int = 0,
     return df_result.dropna() if dropna else df_result
 
 
-def beta_alpha(df: pd.DataFrame = None, **kwargs) -> [float, float]:
+def beta_alpha(df: DataFrame = None, **kwargs) -> tuple[float, float]:
     """计算 `beta系数`_ , `alpha系数`_
 
     Args:
@@ -172,7 +173,7 @@ def beta_alpha(df: pd.DataFrame = None, **kwargs) -> [float, float]:
             取 `df` 的第一列为 `市场收益数据列` ；第二列为 `单支股票收益数据列`。
 
     Returns:
-        [beta,alpha]
+        (beta,alpha)
 
     Note:
         `beta系数`_ ,`alpha系数`_ 的计算也可以使用 :py:class:`numpy.polyfit`
@@ -197,4 +198,4 @@ def beta_alpha(df: pd.DataFrame = None, **kwargs) -> [float, float]:
 
     beta = covmat[0, 1] / covmat[1, 1]
     alpha = np.mean(dfsm[symbol_col]) - beta * np.mean(dfsm[market_col])
-    return [beta, alpha]
+    return (beta, alpha)
