@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>calculate &mdash; finance-tools-py 0+untagged.32.ga905d91 文档</title>
+  <title>calculate &mdash; finance-tools-py 0+untagged.34.g31b03a4 文档</title>
   
 
   
@@ -151,7 +151,7 @@
 <span id="calculate"></span><h1>calculate<a class="headerlink" href="#module-finance_tools_py.calculate" title="永久链接至标题">¶</a></h1>
 <dl class="function">
 <dt id="finance_tools_py.calculate.beta_alpha">
-<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">beta_alpha</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>**kwargs</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.calculate.beta_alpha" title="永久链接至目标">¶</a></dt>
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">beta_alpha</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.beta_alpha" title="永久链接至目标">¶</a></dt>
 <dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0">beta系数</a> , <a class="reference external" href="https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5%9F%BA%E9%87%91#%E9%98%BF%E5%B0%94%E6%B3%95%E7%B3%BB%E6%95%B0">alpha系数</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -257,6 +257,32 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="finance_tools_py.calculate.ema">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">ema</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window=10</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.ema" title="永久链接至目标">¶</a></dt>
+<dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87#%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87">指数移动平均</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first last simple">
+<li><strong>df</strong> – 待计算的数据表。</li>
+<li><strong>window</strong> – 天数。默认值为 <cite>10</cite>。</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Returns:</p>
+<div class="admonition seealso">
+<p class="first admonition-title">参见</p>
+<ul class="simple">
+<li><a href="#id2"><span class="problematic" id="id3">`</span></a>pandas.DataFrame.ewm</li>
+</ul>
+<p class="last">&lt;<a class="reference external" href="http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html">http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html</a>&gt;`_</p>
+</div>
+</dd></dl>
+
+<dl class="function">
 <dt id="finance_tools_py.calculate.mo">
 <code class="descclassname">finance_tools_py.calculate.</code><code class="descname">mo</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>n: int = 0</em>, <em>dropna: bool = False</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#finance_tools_py.calculate.mo" title="永久链接至目标">¶</a></dt>
 <dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E9%81%8B%E5%8B%95%E9%87%8F%E9%9C%87%E7%9B%AA%E6%8C%87%E6%A8%99">MO运动量震荡指标 (Momentum Oscillator)</a></p>
@@ -324,6 +350,30 @@
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="finance_tools_py.calculate.sma">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">sma</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window: int = 10</em>, <em>fillna: str = 'ffill'</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#finance_tools_py.calculate.sma" title="永久链接至目标">¶</a></dt>
+<dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87#%E7%B0%A1%E5%96%AE%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87">简单移动平均</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> – 待计算的数据表。</li>
+<li><strong>window</strong> – 天数。默认值为 <cite>10</cite>。</li>
+<li><strong>fillna</strong> – 填充空白数据的方式。默认为 <cite>ffill</cite>。为空表示不填充。参考`pandas.DataFrame.fillna</li>
+<li><strong>&lt;https</strong> – //pandas.pydata.org/pandas-docs/stable/generated/pandas</li>
+<li><strong>中的 method 属性。</strong> (<em>DataFrame.fillna.html&gt;`_</em>) – </li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body"><p class="first last">计算后的数据表。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 </div>
 
 
@@ -366,7 +416,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0+untagged.32.ga905d91',
+            VERSION:'0+untagged.34.g31b03a4',
             LANGUAGE:'zh_CN',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

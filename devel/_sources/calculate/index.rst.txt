@@ -8,6 +8,8 @@ calculate
 .. autofunction:: daily_returns
 .. autofunction:: daily_returns_avg
 .. autofunction:: daily_returns_std
+.. autofunction:: ema
 .. autofunction:: mo
 .. autofunction:: risk_free_interest_rate
 .. autofunction:: sharpe_ratio
+.. autofunction:: sma
