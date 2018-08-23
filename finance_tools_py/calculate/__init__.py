@@ -98,7 +98,7 @@ def risk_free_interest_rate(sr: float = 0, cycle: int = 365) -> float:
     return sr / cycle
 
 
-def sharpe_ratio(r=None, rf=None, r_std: float = None):
+def sharpe_ratio(r=None, rf=None, r_std: float = None) -> float:
     """计算 `夏普比率`_
 
     Args:
@@ -107,7 +107,7 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
         r_std: 参数 `r` 的标准差。如果 `r` 传入的是 `pd.DataFrame` 则无需传入此参数。
 
     Returns:
-        float: 计算后的夏普比率。
+        计算后的夏普比率。
 
     .. _夏普比率:
         https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
@@ -174,8 +174,9 @@ def beta_alpha(df: pd.DataFrame = None, **kwargs) -> [float, float]:
     Returns:
         [beta,alpha]
 
-    Notes:
-        beta系数,alpha系数的计算也可以使用 :py:class:`numpy.polyfit` 方法。
+    Note:
+        `beta系数`_ ,`alpha系数`_ 的计算也可以使用 :py:class:`numpy.polyfit`
+        方法。`numpy.polyfit'
 
     .. _beta系数:
         https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
