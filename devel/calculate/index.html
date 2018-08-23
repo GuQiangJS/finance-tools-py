@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>calculate &mdash; finance-tools-py 0+untagged.35.gfd93663 文档</title>
+  <title>calculate &mdash; finance-tools-py 0+untagged.36.gb560869 文档</title>
   
 
   
@@ -180,7 +180,8 @@
 <div class="admonition hint">
 <p class="first admonition-title">提示</p>
 <p class="last"><a class="reference external" href="https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0">beta系数</a> , <a class="reference external" href="https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5%9F%BA%E9%87%91#%E9%98%BF%E5%B0%94%E6%B3%95%E7%B3%BB%E6%95%B0">alpha系数</a> 的计算也可以使用
-<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a> 方法。</p>
+<a class="reference external" href="https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html">numpy.polyfit</a>
+方法。</p>
 </div>
 </dd></dl>
 
@@ -258,7 +259,7 @@
 
 <dl class="function">
 <dt id="finance_tools_py.calculate.ema">
-<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">ema</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window=10</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calculate.ema" title="永久链接至目标">¶</a></dt>
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">ema</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window=10</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.calculate.ema" title="永久链接至目标">¶</a></dt>
 <dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87#%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87">指数移动平均</a></p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -361,8 +362,7 @@
 <li><strong>df</strong> – 待计算的数据表。</li>
 <li><strong>window</strong> – 天数。默认值为 <cite>10</cite>。</li>
 <li><strong>fillna</strong> – 填充空白数据的方式。默认为 <cite>ffill</cite>。为空表示不填充。</li>
-<li><strong>参考`pandas.DataFrame.fillna</strong> – </li>
-<li><strong>&lt;https</strong> – //pandas.pydata.org/pandas-docs/stable/generated/pandasDataFrame.fillna.html&gt;`_ 中的 <cite>method</cite> 属性。</li>
+<li><strong>&lt;https</strong> (<em>参考`pandas.DataFrame.fillna</em>) – //pandas.pydata.org/pandas-docs/stable/generated/pandasDataFrame.fillna.html&gt;`_ 中的 <cite>method</cite> 属性。</li>
 </ul>
 </td>
 </tr>
@@ -415,7 +415,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0+untagged.35.gfd93663',
+            VERSION:'0+untagged.36.gb560869',
             LANGUAGE:'zh_CN',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
