@@ -109,8 +109,7 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None) -> float:
         计算后的夏普比率。
 
     .. _夏普比率:
-        https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
-        %9F%BA%E9%87%91#%E5%A4%8F%E6%99%AE%E6%AF%94%E7%8E%87
+        https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5%9F%BA%E9%87%91#%E5%A4%8F%E6%99%AE%E6%AF%94%E7%8E%87
     """
     # 夏普比率是回报与风险的比率。公式为：
     # （Rp - Rf） / ？p
@@ -146,8 +145,7 @@ def mo(df: pd.DataFrame = None, n: int = 0,
         计算后的数据表。
 
     .. _MO运动量震荡指标 (Momentum Oscillator):
-        https://zh.wikipedia.org/wiki/%E9%81%8B%E5%8B%95%E9%87%8F%E9%9C%87%E7
-        %9B%AA%E6%8C%87%E6%A8%99
+        https://zh.wikipedia.org/wiki/%E9%81%8B%E5%8B%95%E9%87%8F%E9%9C%87%E7%9B%AA%E6%8C%87%E6%A8%99
     """
     # MOt = (Pt / Pt-n) * 100
     # 其中n為天數，Pt為當日股價，Pt-n為n日前的股價
@@ -174,14 +172,14 @@ def beta_alpha(df: DataFrame = None, **kwargs):
 
     .. hint::
         `beta系数`_ , `alpha系数`_ 的计算也可以使用
-        `numpy.polyfit <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html>`_ 方法。
+        `numpy.polyfit <https://docs.scipy.org/doc/numpy/reference/generated/numpy.polyfit.html>`_
+        方法。
 
     .. _beta系数:
         https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
 
     .. _alpha系数:
-        https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
-        %9F%BA%E9%87%91#%E9%98%BF%E5%B0%94%E6%B3%95%E7%B3%BB%E6%95%B0
+        https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5%9F%BA%E9%87%91#%E9%98%BF%E5%B0%94%E6%B3%95%E7%B3%BB%E6%95%B0
     """
     dfsm = _prepare_dataframe(df, False, '')
     dfsm = dfsm.dropna()
@@ -216,20 +214,18 @@ def sma(df: DataFrame = None, window: int = 10, fillna: str = 'ffill') -> \
         df: 待计算的数据表。
         window: 天数。默认值为 `10`。
         fillna: 填充空白数据的方式。默认为 `ffill`。为空表示不填充。
-        参考`pandas.DataFrame.fillna
-        <https://pandas.pydata.org/pandas-docs/stable/generated/pandasDataFrame.fillna.html>`_ 中的 `method` 属性。
+        参考`pandas.DataFrame.fillna <https://pandas.pydata.org/pandas-docs/stable/generated/pandasDataFrame.fillna.html>`_ 中的 `method` 属性。
 
     Returns:
         计算后的数据表。
 
     .. _简单移动平均:
-        https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
-        #%E7%B0%A1%E5%96%AE%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
+        https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87#%E7%B0%A1%E5%96%AE%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
     """
     return _prepare_dataframe(df, True, fillna).rolling(window=window).mean()
 
 
-def ema(df: DataFrame = None, window=10):
+def ema(df: DataFrame = None, window=10) -> float:
     """计算 `指数移动平均`_
 
     Args:
@@ -239,8 +235,7 @@ def ema(df: DataFrame = None, window=10):
     Returns:
 
     .. _指数移动平均:
-        https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
-        #%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
+        https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87#%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
 
     .. seealso::
         * `pandas.DataFrame.ewm <http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html>`_
