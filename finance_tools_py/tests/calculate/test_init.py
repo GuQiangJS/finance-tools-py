@@ -3,7 +3,6 @@
 
 import unittest
 
-import numpy as np
 from finance_datareader_py.sohu.daily import SohuDailyReader
 
 from finance_tools_py.calculate import *
@@ -103,6 +102,24 @@ class calculate_TestCase(unittest.TestCase):
         # print(__mo)
         self.assertEqual(mo(pd.DataFrame(np.arange(min, max)),
                             n, dropna=True).index.size, max - min - n)
+
+    def test_beta(self):
+        symbol_code = '300104'
+        market_code = '000300'
+        df = pd.DataFrame()
+        df[market_code] = SohuDailyReader(market_code, prefix='zs_').read()[
+            'Close']
+        df = df.join(SohuDailyReader(symbol_code).read()['Close'])
+        df = df.rename(columns={'Close': symbol_code})
+        df = df.sort_index()
+        df = df.fillna(method='ffill')
+        df_dr = daily_returns(df)
+        b, a = beta_alpha(df_dr, m_name=market_code, s_name=symbol_code)
+        print(b, a)
+        b_np, a_np = np.polyfit(df_dr[market_code], df_dr[symbol_code], 1)
+        print(b_np, a_np)
+        self.assertEqual(np.around(b, decimals=8), np.around(b_np, decimals=8))
+        self.assertEqual(np.around(a, decimals=8), np.around(a_np, decimals=8))
 
 
 if __name__ == '__main__':

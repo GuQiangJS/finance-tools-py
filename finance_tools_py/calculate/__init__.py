@@ -1,6 +1,7 @@
 # Copyright (C) 2018 GuQiangJs.
 # Licensed under Apache License 2.0 <see LICENSE file>
 
+import numpy as np
 import pandas as pd
 
 
@@ -133,7 +134,8 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None):
     return result if isinstance(result, float) else result[0]
 
 
-def mo(df: pd.DataFrame = None, n: int = 0, dropna: bool = False):
+def mo(df: pd.DataFrame = None, n: int = 0,
+       dropna: bool = False) -> pd.DataFrame:
     """计算 `MO运动量震荡指标 (Momentum Oscillator)`_
 
     Args:
@@ -142,6 +144,7 @@ def mo(df: pd.DataFrame = None, n: int = 0, dropna: bool = False):
         dropna: 是否丢弃结果中为 `NaN` 的数据。默认为 `False`。
 
     Returns:
+        计算后的数据表。
 
     .. _MO运动量震荡指标 (Momentum Oscillator):
         https://zh.wikipedia.org/wiki/%E9%81%8B%E5%8B%95%E9%87%8F%E9%9C%87%E7
@@ -155,3 +158,42 @@ def mo(df: pd.DataFrame = None, n: int = 0, dropna: bool = False):
     df_sort = df.sort_index()
     df_result = df_sort / df_sort.shift(n) * 100
     return df_result.dropna() if dropna else df_result
+
+
+def beta_alpha(df: pd.DataFrame = None, **kwargs) -> [float, float]:
+    """计算 `beta系数`_ , `alpha系数`_
+
+    Args:
+        df: 收益表。
+        kwargs:
+            * m_name: 市场收益数据列列名。
+            * s_name: 单支股票收益数据列列名。
+            当 以上数据均不存在或有某项不存在时，
+            取 `df` 的第一列为 `市场收益数据列` ；第二列为 `单支股票收益数据列`。
+
+    Returns:
+        [beta,alpha]
+
+    Notes:
+        beta系数,alpha系数的计算也可以使用 :py:class:`numpy.polyfit` 方法。
+
+    .. _beta系数:
+        https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
+
+    .. _alpha系数:
+        https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
+        %9F%BA%E9%87%91#%E9%98%BF%E5%B0%94%E6%B3%95%E7%B3%BB%E6%95%B0
+    """
+    _check_dataframe(df)
+    dfsm = df.dropna()
+    market_col = dfsm.columns[0]
+    symbol_col = dfsm.columns[1]
+    if 'm_name' in kwargs and kwargs['m_name'] in dfsm.columns:
+        market_col = kwargs['m_name']
+    if 's_name' in kwargs and kwargs['s_name'] in dfsm.columns:
+        symbol_col = kwargs['s_name']
+    covmat = np.cov(dfsm[symbol_col], dfsm[market_col])
+
+    beta = covmat[0, 1] / covmat[1, 1]
+    alpha = np.mean(dfsm[symbol_col]) - beta * np.mean(dfsm[market_col])
+    return [beta, alpha]

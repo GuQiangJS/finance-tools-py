@@ -9,3 +9,4 @@ calculate
 .. autofunction:: cum_returns
 .. autofunction:: sharpe_ratio
 .. autofunction:: mo
+.. autofunction:: beta_alpha
