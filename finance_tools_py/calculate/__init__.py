@@ -215,9 +215,9 @@ def sma(df: DataFrame = None, window: int = 10, fillna: str = 'ffill') -> \
     Args:
         df: 待计算的数据表。
         window: 天数。默认值为 `10`。
-        fillna: 填充空白数据的方式。默认为 `ffill`。为空表示不填充。参考`pandas.DataFrame.fillna
-        <https://pandas.pydata.org/pandas-docs/stable/generated/pandas
-        .DataFrame.fillna.html>`_ 中的 `method` 属性。
+        fillna: 填充空白数据的方式。默认为 `ffill`。为空表示不填充。
+        参考`pandas.DataFrame.fillna
+        <https://pandas.pydata.org/pandas-docs/stable/generated/pandasDataFrame.fillna.html>`_ 中的 `method` 属性。
 
     Returns:
         计算后的数据表。
@@ -243,7 +243,6 @@ def ema(df: DataFrame = None, window=10):
         #%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
 
     .. seealso::
-        * `pandas.DataFrame.ewm
-        <http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html>`_
+        * `pandas.DataFrame.ewm <http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html>`_
     """
     return _prepare_dataframe(df, sort=True).ewm(span=window).mean()
