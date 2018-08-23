@@ -226,7 +226,7 @@ def sma(df: DataFrame = None, window: int = 10, fillna: str = 'ffill') -> \
         https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
         #%E7%B0%A1%E5%96%AE%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
     """
-    return pd.rolling_mean(_prepare_dataframe(df, True, fillna), window=window)
+    return _prepare_dataframe(df, True, fillna).rolling(window=window).mean()
 
 
 def ema(df: DataFrame = None, window=10):
