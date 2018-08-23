@@ -121,6 +121,34 @@ class calculate_TestCase(unittest.TestCase):
         self.assertEqual(np.around(b, decimals=8), np.around(b_np, decimals=8))
         self.assertEqual(np.around(a, decimals=8), np.around(a_np, decimals=8))
 
+    def test_sma(self):
+        """测试简单移动平均计算"""
+        symbol_code = '300104'
+        market_code = '000300'
+        df = pd.DataFrame()
+        df[market_code] = SohuDailyReader(market_code, prefix='zs_').read()[
+            'Close']
+        df = df.join(SohuDailyReader(symbol_code).read()['Close'])
+        df = df.rename(columns={'Close': symbol_code})
+        df_sma = sma(df, 5)
+        self.assertFalse(df_sma.empty)
+        print(df.sort_index().tail())
+        print(df_sma.tail())
+
+    def test_ema(self):
+        """测试简单移动平均计算"""
+        symbol_code = '300104'
+        market_code = '000300'
+        df = pd.DataFrame()
+        df[market_code] = SohuDailyReader(market_code, prefix='zs_').read()[
+            'Close']
+        df = df.join(SohuDailyReader(symbol_code).read()['Close'])
+        df = df.rename(columns={'Close': symbol_code})
+        df_sma = ema(df)
+        self.assertFalse(df_sma.empty)
+        print(df.sort_index().tail())
+        print(df_sma.tail())
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -29,8 +29,7 @@ def daily_returns(df: pd.DataFrame = None) -> pd.DataFrame:
         按照 **正序排序** 计算后计算结果。
 
     """
-    _check_dataframe(df)
-    df_sort = df.sort_index()
+    df_sort = _prepare_dataframe(df, sort=True)
     return ((df_sort - df_sort.shift(1)) / df_sort.shift(1)).dropna()
 
 
@@ -75,8 +74,7 @@ def cum_returns(df: pd.DataFrame = None,
         按照 **正序排序** 计算后计算结果。
 
     """
-    _check_dataframe(df)
-    df = df.sort_index()
+    df = _prepare_dataframe(df, sort=True)
     if not column_name:
         column_name = df.columns[0]
     return (df[column_name].iloc[-1] / df[column_name].iloc[0]) - 1
@@ -153,15 +151,14 @@ def mo(df: pd.DataFrame = None, n: int = 0,
     """
     # MOt = (Pt / Pt-n) * 100
     # 其中n為天數，Pt為當日股價，Pt-n為n日前的股價
-    _check_dataframe(df)
     if n <= 0:
         raise ValueError('n<=0')
-    df_sort = df.sort_index()
+    df_sort = _prepare_dataframe(df)
     df_result = df_sort / df_sort.shift(n) * 100
     return df_result.dropna() if dropna else df_result
 
 
-def beta_alpha(df: DataFrame = None, **kwargs) -> (float):
+def beta_alpha(df: DataFrame = None, **kwargs):
     """计算 `beta系数`_ , `alpha系数`_
 
     Args:
@@ -186,8 +183,8 @@ def beta_alpha(df: DataFrame = None, **kwargs) -> (float):
         https://zh.wikipedia.org/wiki/%E8%AF%81%E5%88%B8%E6%8A%95%E8%B5%84%E5
         %9F%BA%E9%87%91#%E9%98%BF%E5%B0%94%E6%B3%95%E7%B3%BB%E6%95%B0
     """
-    _check_dataframe(df)
-    dfsm = df.dropna()
+    dfsm = _prepare_dataframe(df, False, '')
+    dfsm = dfsm.dropna()
     market_col = dfsm.columns[0]
     symbol_col = dfsm.columns[1]
     if 'm_name' in kwargs and kwargs['m_name'] in dfsm.columns:
@@ -199,3 +196,54 @@ def beta_alpha(df: DataFrame = None, **kwargs) -> (float):
     beta = covmat[0, 1] / covmat[1, 1]
     alpha = np.mean(dfsm[symbol_col]) - beta * np.mean(dfsm[market_col])
     return (beta, alpha)
+
+
+def _prepare_dataframe(df: DataFrame, sort: bool = True, fillna: str = None):
+    _check_dataframe(df)
+    df_r = df.copy()
+    if sort:
+        df_r = df_r.sort_index()
+    if fillna:
+        df_r = df_r.fillna(method=fillna)
+    return df_r
+
+
+def sma(df: DataFrame = None, window: int = 10, fillna: str = 'ffill') -> \
+        DataFrame:
+    """计算 `简单移动平均`_
+
+    Args:
+        df: 待计算的数据表。
+        window: 天数。默认值为 `10`。
+        fillna: 填充空白数据的方式。默认为 `ffill`。为空表示不填充。参考`pandas.DataFrame.fillna
+        <https://pandas.pydata.org/pandas-docs/stable/generated/pandas
+        .DataFrame.fillna.html>`_ 中的 `method` 属性。
+
+    Returns:
+        计算后的数据表。
+
+    .. _简单移动平均:
+        https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
+        #%E7%B0%A1%E5%96%AE%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
+    """
+    return pd.rolling_mean(_prepare_dataframe(df, True, fillna), window=window)
+
+
+def ema(df: DataFrame = None, window=10):
+    """计算 `指数移动平均`_
+
+    Args:
+        df: 待计算的数据表。
+        window: 天数。默认值为 `10`。
+
+    Returns:
+
+    .. _指数移动平均:
+        https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
+        #%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87
+
+    .. seealso::
+        * `pandas.DataFrame.ewm
+        <http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html>`_
+    """
+    return _prepare_dataframe(df, sort=True).ewm(span=window).mean()
