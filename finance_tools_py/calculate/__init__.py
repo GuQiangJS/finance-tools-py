@@ -173,11 +173,12 @@ def beta_alpha(df: DataFrame = None, **kwargs) -> (float, float):
             取 `df` 的第一列为 `市场收益数据列` ；第二列为 `单支股票收益数据列`。
 
     Returns:
-        (beta,alpha)
+        (:obj:`float`): (beta,alpha)
 
-    Note:
-        `beta系数`_ ,`alpha系数`_ 的计算也可以使用 :py:class:`numpy.polyfit`
-        方法。`numpy.polyfit'
+    .. hint::
+        `beta系数`_ , `alpha系数`_ 的计算也可以使用
+        `numpy.polyfit<https://docs.scipy.org/doc/numpy-1.14.0/reference
+        /generated/numpypolyfit.html>`_ 方法。
 
     .. _beta系数:
         https://zh.wikipedia.org/wiki/Beta%E7%B3%BB%E6%95%B0
