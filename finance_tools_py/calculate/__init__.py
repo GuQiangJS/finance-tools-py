@@ -161,7 +161,7 @@ def mo(df: pd.DataFrame = None, n: int = 0,
     return df_result.dropna() if dropna else df_result
 
 
-def beta_alpha(df: DataFrame = None, **kwargs) -> tuple[float, float]:
+def beta_alpha(df: DataFrame = None, **kwargs) -> (float, float):
     """计算 `beta系数`_ , `alpha系数`_
 
     Args:
