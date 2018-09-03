@@ -193,7 +193,7 @@ def beta_alpha(df: DataFrame = None, **kwargs):
 
     beta = covmat[0, 1] / covmat[1, 1]
     alpha = np.mean(dfsm[symbol_col]) - beta * np.mean(dfsm[market_col])
-    return (beta, alpha)
+    return beta, alpha
 
 
 def _prepare_dataframe(df: DataFrame, sort: bool = True,
@@ -248,7 +248,6 @@ def ema(df: DataFrame = None, window=10) -> DataFrame:
     Args:
         df: 待计算的数据表。
         window: 天数。默认值为 `10`。
-        dropna: 是否丢弃结果中为 `NaN` 的数据。默认为 `False`。
 
     Returns:
         计算后的数据表。
@@ -262,7 +261,7 @@ def ema(df: DataFrame = None, window=10) -> DataFrame:
     return _prepare_dataframe(df, sort=True).ewm(span=window).mean()
 
 
-def Momentum(df: DataFrame = None, window=10,
+def momentum(df: DataFrame = None, window=10,
              dropna: bool = False) -> DataFrame:
     """计算 `动量指标`_
 

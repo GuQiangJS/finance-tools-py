@@ -8,7 +8,7 @@ from finance_datareader_py.sohu.daily import SohuDailyReader
 from finance_tools_py.calculate import *
 
 
-class calculate_TestCase(unittest.TestCase):
+class CalculateTestCase(unittest.TestCase):
     def test_daily_return(self):
         df = SohuDailyReader('000300', prefix='zs_').read()['Close']
         self.assertFalse(df.empty)
@@ -149,8 +149,8 @@ class calculate_TestCase(unittest.TestCase):
         print(df.sort_index().tail())
         print(df_sma.tail())
 
-    def test_Momentum(self):
-        """测试 动量指标 (Momentum)"""
+    def test_momentum(self):
+        """测试 动量指标 (momentum)"""
         max = 10
         min = 1
         n = 3
@@ -160,7 +160,7 @@ class calculate_TestCase(unittest.TestCase):
         for i in range(n, max - min):
             lst_1.append(lst[i] - lst[i - n])
         # 模拟计算结束
-        _mo = Momentum(pd.DataFrame(np.arange(min, max)), n, True)
+        _mo = momentum(pd.DataFrame(np.arange(min, max)), n, True)
         self.assertFalse(_mo.empty)
         self.assertEqual(_mo.index.size, max - min - n)
         # 结果应该和模拟计算结果一致
