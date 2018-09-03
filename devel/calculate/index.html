@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>calculate &mdash; finance-tools-py 0+untagged.39.ga97ab31 文档</title>
+  <title>calculate &mdash; finance-tools-py 0+untagged.40.g00fb6e7 文档</title>
   
 
   
@@ -258,6 +258,28 @@
 </dd></dl>
 
 <dl class="function">
+<dt id="finance_tools_py.calculate.daily_returns_volatility">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">daily_returns_volatility</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window=30</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#finance_tools_py.calculate.daily_returns_volatility" title="永久链接至目标">¶</a></dt>
+<dd><p>计算日收益波动性</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> – 待计算的数据表。
+（未进行过 <a class="reference internal" href="#finance_tools_py.calculate.daily_returns" title="finance_tools_py.calculate.daily_returns"><code class="xref py py-func docutils literal notranslate"><span class="pre">daily_returns()</span></code></a> 计算的数据）</li>
+<li><strong>window</strong> – 计算周期。</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body"><p class="first last">按照 <strong>正序排序</strong> 计算后计算结果。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="finance_tools_py.calculate.ema">
 <code class="descclassname">finance_tools_py.calculate.</code><code class="descname">ema</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window=10</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#finance_tools_py.calculate.ema" title="永久链接至目标">¶</a></dt>
 <dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87#%E6%8C%87%E6%95%B8%E7%A7%BB%E5%8B%95%E5%B9%B3%E5%9D%87">指数移动平均</a></p>
@@ -268,7 +290,6 @@
 <tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> – 待计算的数据表。</li>
 <li><strong>window</strong> – 天数。默认值为 <cite>10</cite>。</li>
-<li><strong>dropna</strong> – 是否丢弃结果中为 <cite>NaN</cite> 的数据。默认为 <cite>False</cite>。</li>
 </ul>
 </td>
 </tr>
@@ -296,6 +317,28 @@
 <tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
 <li><strong>df</strong> – 数据表</li>
 <li><strong>window</strong> – 待计算的天数</li>
+<li><strong>dropna</strong> – 是否丢弃结果中为 <cite>NaN</cite> 的数据。默认为 <cite>False</cite>。</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">返回:</th><td class="field-body"><p class="first last">计算后的数据表。</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="finance_tools_py.calculate.momentum">
+<code class="descclassname">finance_tools_py.calculate.</code><code class="descname">momentum</code><span class="sig-paren">(</span><em>df: pandas.core.frame.DataFrame = None</em>, <em>window=10</em>, <em>dropna: bool = False</em><span class="sig-paren">)</span> &#x2192; pandas.core.frame.DataFrame<a class="headerlink" href="#finance_tools_py.calculate.momentum" title="永久链接至目标">¶</a></dt>
+<dd><p>计算 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E5%8B%95%E9%87%8F%E6%8C%87%E6%A8%99">动量指标</a></p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">参数:</th><td class="field-body"><ul class="first simple">
+<li><strong>df</strong> – 待计算的数据表。</li>
+<li><strong>window</strong> – 天数。默认值为 <cite>10</cite>。</li>
 <li><strong>dropna</strong> – 是否丢弃结果中为 <cite>NaN</cite> 的数据。默认为 <cite>False</cite>。</li>
 </ul>
 </td>
@@ -420,7 +463,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'../',
-            VERSION:'0+untagged.39.ga97ab31',
+            VERSION:'0+untagged.40.g00fb6e7',
             LANGUAGE:'zh_CN',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',
