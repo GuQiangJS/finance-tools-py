@@ -132,13 +132,13 @@ def sharpe_ratio(r=None, rf=None, r_std: float = None) -> float:
     return result if isinstance(result, float) else result[0]
 
 
-def mo(df: pd.DataFrame = None, n: int = 0,
+def mo(df: pd.DataFrame = None, window: int = 0,
        dropna: bool = False) -> pd.DataFrame:
     """计算 `MO运动量震荡指标 (Momentum Oscillator)`_
 
     Args:
         df: 数据表
-        n: 待计算的天数
+        window: 待计算的天数
         dropna: 是否丢弃结果中为 `NaN` 的数据。默认为 `False`。
 
     Returns:
@@ -148,11 +148,11 @@ def mo(df: pd.DataFrame = None, n: int = 0,
         https://zh.wikipedia.org/wiki/%E9%81%8B%E5%8B%95%E9%87%8F%E9%9C%87%E7%9B%AA%E6%8C%87%E6%A8%99
     """
     # MOt = (Pt / Pt-n) * 100
-    # 其中n為天數，Pt為當日股價，Pt-n為n日前的股價
-    if n <= 0:
+    # 其中window為天數，Pt為當日股價，Pt-n為n日前的股價
+    if window <= 0:
         raise ValueError('n<=0')
     df_sort = _prepare_dataframe(df)
-    df_result = df_sort / df_sort.shift(n) * 100
+    df_result = df_sort / df_sort.shift(window) * 100
     return df_result.dropna() if dropna else df_result
 
 
@@ -196,7 +196,22 @@ def beta_alpha(df: DataFrame = None, **kwargs):
     return (beta, alpha)
 
 
-def _prepare_dataframe(df: DataFrame, sort: bool = True, fillna: str = None):
+def _prepare_dataframe(df: DataFrame, sort: bool = True,
+                       fillna: str = None) -> DataFrame:
+    """准备数据表。
+
+    Args:
+        df: 待处理的数据表。
+        sort: 是否按照索引进行排序。
+        fillna: 填充 `NaN` 数据的规则。如果为 `None` 或 `` 表示不进行填充。
+
+    Returns:
+        处理后的数据表。
+
+    Raises:
+        ValueError: 当 ``df`` 为空时。
+
+    """
     _check_dataframe(df)
     df_r = df.copy()
     if sort:
@@ -233,6 +248,7 @@ def ema(df: DataFrame = None, window=10) -> DataFrame:
     Args:
         df: 待计算的数据表。
         window: 天数。默认值为 `10`。
+        dropna: 是否丢弃结果中为 `NaN` 的数据。默认为 `False`。
 
     Returns:
         计算后的数据表。
@@ -244,3 +260,55 @@ def ema(df: DataFrame = None, window=10) -> DataFrame:
         * `pandas.DataFrame.ewm <http://pandas.pydata.org/pandas-docs/stable/generated/pandas.DataFrame.ewm.html>`_
     """
     return _prepare_dataframe(df, sort=True).ewm(span=window).mean()
+
+
+def Momentum(df: DataFrame = None, window=10,
+             dropna: bool = False) -> DataFrame:
+    """计算 `动量指标`_
+
+    Args:
+        df: 待计算的数据表。
+        window: 天数。默认值为 `10`。
+        dropna: 是否丢弃结果中为 `NaN` 的数据。默认为 `False`。
+
+    Returns:
+        计算后的数据表。
+
+    .. _动量指标:
+        https://zh.wikipedia.org/wiki/%E5%8B%95%E9%87%8F%E6%8C%87%E6%A8%99
+    """
+    if window <= 0:
+        raise ValueError('n<=0')
+    df_sort = _prepare_dataframe(df)
+    df_result = df_sort - df_sort.shift(window)
+    return df_result.dropna() if dropna else df_result
+
+
+def daily_returns_volatility(df: pd.DataFrame = None,
+                             window=30) -> pd.DataFrame:
+    """计算日收益波动性
+
+    Args:
+        df: 待计算的数据表。
+            （未进行过 :func:`daily_returns` 计算的数据）
+        window: 计算周期。
+
+    Returns:
+        按照 **正序排序** 计算后计算结果。
+
+    """
+    df_sort = _prepare_dataframe(df)
+    return _volatility(daily_returns_std(df_sort), window)
+
+
+def _volatility(daily_std: DataFrame = None, window=30) -> DataFrame:
+    """计算波动性
+
+    Args:
+        daily_std: 日标准差数据表。
+        window: 计算周期。
+
+    Returns:
+
+    """
+    return np.log(daily_std) / np.sqrt(1 ** window)

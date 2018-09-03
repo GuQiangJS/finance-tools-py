@@ -149,6 +149,26 @@ class calculate_TestCase(unittest.TestCase):
         print(df.sort_index().tail())
         print(df_sma.tail())
 
+    def test_Momentum(self):
+        """测试 动量指标 (Momentum)"""
+        max = 10
+        min = 1
+        n = 3
+        # 模拟计算开始
+        lst = np.arange(min, max)
+        lst_1 = []
+        for i in range(n, max - min):
+            lst_1.append(lst[i] - lst[i - n])
+        # 模拟计算结束
+        _mo = Momentum(pd.DataFrame(np.arange(min, max)), n, True)
+        self.assertFalse(_mo.empty)
+        self.assertEqual(_mo.index.size, max - min - n)
+        # 结果应该和模拟计算结果一致
+        self.assertTrue(np.array_equal(_mo[0].values, np.array(lst_1)))
+        # print(__mo)
+        self.assertEqual(mo(pd.DataFrame(np.arange(min, max)),
+                            n, dropna=True).index.size, max - min - n)
+
 
 if __name__ == '__main__':
     unittest.main()
