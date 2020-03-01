@@ -20,9 +20,9 @@
 import os
 import sys
 
-import finance_tools_py
-
 sys.path.insert(0, os.path.abspath('../../'))
+
+import finance_tools_py
 
 # -- General configuration ------------------------------------------------
 
@@ -173,8 +173,8 @@ texinfo_documents = [
 ]
 
 intersphinx_mapping = {
-  'python': ('https://docs.python.org', None),
-  'numpy': ('http://docs.scipy.org/doc/numpy', None),
-  'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
-  'pandas': ('http://pandas.pydata.org/pandas-docs/dev', None)
+    'python': ('https://docs.python.org', None),
+    'numpy': ('http://docs.scipy.org/doc/numpy', None),
+    'scipy': ('http://docs.scipy.org/doc/scipy/reference', None),
+    'pandas': ('http://pandas.pydata.org/pandas-docs/dev', None)
 }
