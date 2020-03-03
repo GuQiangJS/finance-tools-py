@@ -1,6 +1,5 @@
-devel/_sources/finance_tools_py.rst.txt
+devel/_sources/backtest/index.rst.txt
 devel/_sources/index.rst.txt
-devel/_sources/modules.rst.txt
 devel/_static/basic.css
 devel/_static/css/badge_only.css
 devel/_static/css/theme.css
@@ -55,11 +54,9 @@ devel/_static/searchtools.js
 devel/_static/translations.js
 devel/_static/underscore-1.3.1.js
 devel/_static/underscore.js
-devel/finance_tools_py.html
+devel/backtest/index.html
 devel/genindex.html
 devel/index.html
-devel/modules.html
 devel/objects.inv
-devel/py-modindex.html
 devel/search.html
 devel/searchindex.js
