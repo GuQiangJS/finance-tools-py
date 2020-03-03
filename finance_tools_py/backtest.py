@@ -3,25 +3,28 @@ import pandas as pd
 
 
 class BackTest():
-    """回测系统
+    """简单的回测系统。根据传入的购买日期和卖出日期，计算收益。
 
-    Attributes:
-        available_cash (float): 当前可用资金。
-        availabel_sell (int): 当前持仓数量。
-        cash ([float]): 资金明细。
-        history_df (:py:class: pandas.DataFrame): 成交历史的 DataFrame 格式。
-        history ([dict]): 成交历史的集合格式。
-
-    Example: ::
+    Example:
+        >>> from datetime import date
+        >>> import pandas as pd
+        >>> from finance_tools_py.backtest import BackTest
         >>> data=pd.DataFrame({
         >>>     'date':[date(1998,1,1),date(1999,1,1),date(2000,1,1),date(2001,1,1),date(2002,1,1)],
         >>>     'close':[4.5,7.9,6.7,13.4,15.3]
         >>> })
-        >>> bt=BackTest(pytest.global_data)
+        >>> bt=BackTest(data)
         >>> buysignal=[date(1999,1,1),date(2001,1,1)]
         >>> sellsignal=[date(2000,1,1),date(2002,1,1)]
         >>> bt.calc_trade_history(buysignal,sellsignal)
         >>> bt.report()
+        数据时间:1998-01-01~2002-01-01（可交易天数5）
+        交易次数:4 (买入/卖出各算1次)
+        当前持仓:0,可用资金:10045.67
+        资金变化率:100.46%
+        总手续费:20.00
+        总印花税:4.33
+        交易历史：
            amount  commission        date  price   tax    total towards
         0     100           5  1999-01-01    7.9  0.79   795.79     buy
         1     100           5  2000-01-01    6.7  0.67   664.33    sell
@@ -37,18 +40,19 @@ class BackTest():
                  tax_coeff=0.001,
                  commission_coeff=0.001,
                  min_commission=5,
-                 colname='close'):
-        """简单的回测。根据传入的购买日期和卖出日期，计算收益。
+                 col_name='close'):
+        """初始化
 
         Args:
-            data (pd.DataFrame): 完整的日线数据。数据中需要包含 `date`列，用来标记日期。
-            数据中至少需要包含 `date` 列和 `close` 列，其中 `close` 列可以由 `colname` 参数指定。
+            data (:py:class:`pandas.DataFrame`): 完整的日线数据。数据中需要包含 `date` 列，用来标记日期。
+                数据中至少需要包含 `date` 列和 `close` 列，其中 `close` 列可以由参数 `colname` 参数指定。
             init_cash (float): 初始资金。
             trade_amount (int): 每次交易数量。默认100。
             tax_coeff (float): 印花税费率。默认0.001。
             commission_coeff (float): 手续费率。默认0.001。
             min_commission (float): 最小印花税费。默认5。
-            colname (str): 计算用的列名。这个列名必须包含在 `data` 中。是用来进行回测计算的列，用来标记回测时使用的价格数据。
+            col_name (str): 计算用的列名。默认为 `close` 。
+                这个列名必须包含在参数 `data` 中。是用来进行回测计算的列，用来标记回测时使用的价格数据。
         """
         self._min_buy_amount = 100  # 单次可买最小数量
         self.data = data
@@ -61,18 +65,18 @@ class BackTest():
         self.history = []  # 交易历史
         self.available_sell = 0  # 当前可卖数量
         self._calced = False
-        self._colname = colname
+        self._colname = col_name
         # self.hold_amount=[]#当前持仓数量
         # self.hold_price=[]#当前持仓金额
 
     @property
     def history_df(self):
-        """成交历史的 DataFrame 格式。"""
+        """获取成交历史的 :py:class:`pandas.DataFrame` 格式。"""
         return pd.DataFrame(self.history)
 
     @property
     def available_cash(self):
-        """当前可用资金"""
+        """获取当前可用资金"""
         return self.cash[-1]
 
     def _calc_commission(self, price, amount):
@@ -96,11 +100,11 @@ class BackTest():
         """计算交易记录
 
         Args:
-            signal_buy_date ([datetime.datetime]): 计划买入日期。
-            signal_sell_date ([datetime.datetime]): 计划卖出日期。
-            allin (bool): 是否每次都全下（所有资金买入或所有持仓卖出）。如果为True，则不使用 `trade_amount` 属性。
-        Return:
-            :py:class: `pandas.DataFrame`
+            signal_buy_date ([datetime.datetime]): 计划买入日期的集合。
+            signal_sell_date ([datetime.datetime]): 计划卖出日期的集合。
+            verbose (int): 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。
+            allin (bool): 是否每次都全下（所有资金买入或所有持仓卖出）。默认为 ``False``。
+                如果为 ``True`` ，则不使用构造函数中传入的 `trade_amount` 属性。
         """
 
         sorted_buy_date = sorted(signal_buy_date)
@@ -168,7 +172,7 @@ class BackTest():
         return np.array([x['commission'] for x in self.history]).sum()
 
     def report(self):
-        """显示计算结果
+        """获取计算结果
 
         Returns:
             str: 返回计算结果。
