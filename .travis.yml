@@ -28,8 +28,7 @@ install:
     fi
 script: 
   pytest --cov=finance_tools_py
-after_success: 
-  - coverage report
+after_success:
   - |
       if [[ $DOCBUILD ]]; then
         set -e
@@ -39,4 +38,3 @@ after_success:
         cd ..
         doctr deploy devel --build-tags
       fi
-  - coveralls
