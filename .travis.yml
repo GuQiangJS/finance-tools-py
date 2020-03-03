@@ -5,7 +5,8 @@ language: python
 env:
     global:
     # Doctr deploy key for GuQiangJS/finance_tools_py
-    - secure: "hTJTG5a9UyVLTku9AhXiwcQrcNWeFNr1aFgbZNgLY2hpdIQA7S52ceySAcKepGgNWzy7t3eOelIj+v8D8GIAtXRDK5O3FySBDLibeMaXuF3JYbhByvbK+xtuwwUT789fR+NU2K0zHcdnPnhggTJnTBNOPxBHxVcdrxz3xm4dqk2RtPPNdGIfdqHzuGsQYD9pvN/MVT0xKYuPde3KzBUcQBWqU4ekOu2jDpPjnSAXyn+cH0g1Fo924aivrNThn6KfBaabCtYCDhJUvOYUtigsk0Z7Bj6KCKrAT+hz4S5uq4pHtI4/VOTHSHmCBq4KbEaq8VvsTmpJ3BaStgejhIY5ouxXw27z9w/qcPbZ4/1zNe7LSbVIX8AS9T3zMwgln2ae8RwFZp66JK6JQQApvt2VTief+8B/GALXl50LDMMVYmVLY2pxuUA7z54KHARYrC51oyYNNOmyFVyVnrX3yZA2HJSFg3uvQI/3GsbgIyQhOv9X/unsC1OSKugQG99JTLDPmXzgdmAbN+L13dq9SRdd169xup10d0RDEpZuO7PBY1ZrK++63ZOLyx7s4zzeEZmjKVm1/9342A83Tx7zb7jycHbNbo+AWJHhO4OIs8pmgr14IDV+eGbe7HCxvcVeMCsOLMZbjjeYTI6CJ7ylM6E/88+Onh5M1QJFilSO6BtP4Qs="
+        # Doctr deploy key for GuQiangJS/finance-tools-py
+        - secure: "VjNTVGc37qf6M7gVKnEiS9NhkRb1NPZbh/NdorKgHAGnMSzBAAe4id5Z2zrTG2V6/MNxRXzrIH+kmdgVfeSGrhDFohOcJwKN3gzmthaGthwO5XmOIgnHQ/LUNiVdNhS3Qn2qALskkFaW2f+wraXnIL3bs/PSNzVlYTKapFOGh/A88sjUz8zrgq7wiymE4TU57NWVBkYfl7NqSZF6OOvyEMhtemT5nzJdqNRleQbRpFZMWUPl6G95qmWSBUtdH6HA+wZlFzNlMY+YwWE68mA4oJtaZWr4Z6pAv17afJ4O815ZC6EZ2nNDBwGWFM98cWJO7ER/rJ6HVB0g7rIW+jq1Fu/obmYRGoVNZ8bXHCapqWTqeVFNksJRa5WDblnF0XwwtqJ+e5KAEvGZ44+9fHhixfWnozSMhF0iYOWSVedW78lgJCivRQmuED9uy/XkZLeL/m6ebaYw05lMRu3xjGEYNU3srF/Kx69vrmvJtHWXuIpjTuT1bshjE6U5rvSF8g3BAeu5qa3x3d8wNVjk2fZiRU9MpgDisTFsiwL6N0/qCKPxl0wSQVIiRphdxY+sKS3yiZsTEkz9oPxAAooh0YElnESf4j6JUn07qTwYekv02+7p7/1D/QAhhhVBh/EWQcsmHWLqA4ZzgDcjds23Blcq/NI0962q32SFd4zqgFWtgss="
 
 python:
   - "3.6"
@@ -23,6 +24,7 @@ install:
   - pip install pytest pytest-cov python-coveralls
   - python setup.py install
   - if [[ $DOCBUILD ]]; then
+    pip install doctr
     pip install sphinx sphinx_rtd_theme doctr sphinxcontrib-napoleon;
     fi
 script: 
