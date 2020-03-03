@@ -8,7 +8,7 @@ Contents:
 .. toctree::
    :maxdepth: 3
 
-   calculate/index
+    account
 
 
 Indices and tables
