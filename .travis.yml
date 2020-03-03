@@ -24,7 +24,6 @@ install:
   - pip install pytest pytest-cov python-coveralls
   - python setup.py install
   - if [[ $DOCBUILD ]]; then
-    pip install doctr
     pip install sphinx sphinx_rtd_theme doctr sphinxcontrib-napoleon;
     fi
 script: 
@@ -33,6 +32,8 @@ after_success:
   - coverage report
   - |
       if [[ $DOCBUILD ]]; then
+        set -e
+        pip install doctr
         cd docs
         make html && make html
         cd ..
