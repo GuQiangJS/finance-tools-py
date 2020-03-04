@@ -349,10 +349,10 @@ class BackTest():
         self._calced = True
 
     def _calc_total_tax(self)->float:
-        return np.asarray(self.history).T[6].sum()
+        return np.asarray(self.history).T[6].sum() if len(self.history)>0 else 0
 
     def _calc_total_commission(self)->float:
-        return np.asarray(self.history).T[5].sum()
+        return np.asarray(self.history).T[5].sum() if len(self.history)>0 else 0
 
     def report(self):
         """获取计算结果
