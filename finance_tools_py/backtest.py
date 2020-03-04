@@ -4,15 +4,31 @@ import datetime
 
 
 class CallBack():
+    """回测时的回调。"""
     def __init__(self):
         pass
 
     def on_calc_buy_check(self, date: datetime.datetime, code: str):
-        """检查是否需要买入"""
+        """检查是否需要买入。
+
+        Args:
+            date: 检查时间。
+            code: 股票代码。
+
+        Returns:
+            bool: 是否买入。
+        """
         return False
 
     def on_calc_sell_check(self, date: datetime.datetime, code: str):
-        """检查是否需要卖出"""
+        """检查是否需要卖出。
+
+        Args:
+            date: 检查时间。
+            code: 股票代码。
+
+        Returns:
+            bool: 是否卖出。"""
         return False
 
 
@@ -23,27 +39,41 @@ class BackTest():
         >>> from datetime import date
         >>> import pandas as pd
         >>> from finance_tools_py.backtest import BackTest
-        >>> data=pd.DataFrame({
-        >>>     'date':[date(1998,1,1),date(1999,1,1),date(2000,1,1),date(2001,1,1),date(2002,1,1)],
-        >>>     'close':[4.5,7.9,6.7,13.4,15.3]
+        >>> data = pd.DataFrame({
+        >>>     'code': ['000001' for x in range(5)],
+        >>>     'date': [dt(1998, 1, 1), dt(1999, 1, 1), dt(2000, 1, 1), dt(2001, 1, 1), dt(2002, 1, 1)],
+        >>>     'close': [4.5, 7.9, 6.7, 13.4, 15.3],
         >>> })
-        >>> bt=BackTest(data)
-        >>> buysignal=[date(1999,1,1),date(2001,1,1)]
-        >>> sellsignal=[date(2000,1,1),date(2002,1,1)]
-        >>> bt.calc_trade_history(buysignal,sellsignal)
+        >>> data = data.append(pd.DataFrame({
+        >>>     'code': ['000002' for x in range(5)],
+        >>>     'date': [dt(1998, 12, 31), dt(1999, 12, 31), dt(2000, 12, 31), dt(2001, 12, 31), dt(2002, 12, 31)],
+        >>>     'close': [41.5, 71.9, 61.7, 131.4, 151.3],
+        >>> }))
+        >>> bt = BackTest(data, init_cash=100000, callback=[BuyOrSellCheck(
+        >>>     buy_dict={'000001': [dt(1999, 1, 1), dt(2001, 1, 1)],
+        >>>               '000002': [dt(1999, 12, 31), dt(2000, 12, 31), dt(2002, 12, 31)]},
+        >>>     sell_dict={})])
+        >>> bt.calc_trade_history()
         >>> bt.report()
-        数据时间:1998-01-01~2002-01-01（可交易天数5）
-        交易次数:4 (买入/卖出各算1次)
-        当前持仓:0,可用资金:10045.67
-        资金变化率:100.46%
-        总手续费:20.00
-        总印花税:4.33
+        数据时间:1998-01-01~2002-12-31（可交易天数10）
+        初始资金:100000.00
+        交易次数:5 (买入/卖出各算1次)
+        可用资金:69310.89
+        当前持仓:code
+        000001                (10.65, 200.0)
+        000002    (94.96666666666667, 300.0)
+        当前总资产:99930.89
+        资金变化率:69.31%
+        资产变化率:99.93%
+        总手续费:38.49
+        总印花税:30.62
         交易历史：
-           amount  commission        date  price   tax    total towards
-        0     100           5  1999-01-01    7.9  0.79   795.79     buy
-        1     100           5  2000-01-01    6.7  0.67   664.33    sell
-        2     100           5  2001-01-01   13.4  1.34  1346.34     buy
-        3     100           5  2002-01-01   15.3  1.53  1523.47    sell
+             datetime    code  price  amount      cash  commission    tax     total  toward
+        0  1999-01-01  000001    7.9     100  99204.21        5.00   0.79    795.79       1
+        2  1999-12-31  000002   71.9     100  90653.49        7.19   7.19   7204.38       1
+        3  2000-12-31  000002   61.7     100  84471.15        6.17   6.17   6182.34       1
+        1  2001-01-01  000001   13.4     100  97857.87        5.00   1.34   1346.34       1
+        4  2002-12-31  000002  151.3     100  69310.89       15.13  15.13  15160.26       1
 
     """
 
@@ -55,7 +85,7 @@ class BackTest():
                  commission_coeff=0.001,
                  min_commission=5,
                  col_name='close',
-                 callback=[CallBack()]):
+                 callbacks=[CallBack()]):
         """初始化
 
         Args:
@@ -68,7 +98,7 @@ class BackTest():
             min_commission (float): 最小印花税费。默认5。
             col_name (str): 计算用的列名。默认为 `close` 。
                 这个列名必须包含在参数 `data` 中。是用来进行回测计算的列，用来标记回测时使用的价格数据。
-            callback ([:py:class: `finance_tools_py.backtest.CallBack`]): 回调函数集合。
+            callbacks ([:py:class:`finance_tools_py.backtest.CallBack`]): 回调函数集合。
         """
         self._min_buy_amount = 100  # 单次可买最小数量
         self.data = data
@@ -83,7 +113,7 @@ class BackTest():
         self._init_hold.index.name = 'code'
         self._calced = False
         self._colname = col_name
-        self._calbacks = callback
+        self._calbacks = callbacks
         self._history_headers = [
             'datetime',  # 时间
             'code',  # 代码
@@ -116,7 +146,7 @@ class BackTest():
         """获取可用持仓
 
         Returns:
-            :py:class:`pandas.DataFrame`
+            :py:class:`pandas.Series`
         """
         return self.history_df.groupby('code').amount.sum().replace(
             0,
@@ -190,7 +220,7 @@ class BackTest():
             ).sort_index().loc[:dt].groupby('code').apply(weights).dropna()
 
     @property
-    def total_assets_cur(self):
+    def total_assets_cur(self)->float:
         """获取当前总资产
 
         当前可用资金+当前持仓。
@@ -213,19 +243,19 @@ class BackTest():
     #     )
 
     @property
-    def available_cash(self):
+    def available_cash(self)->float:
         """获取当前可用资金"""
         return self.cash[-1]
 
-    def _calc_commission(self, price, amount):
+    def _calc_commission(self, price, amount)->float:
         """计算交易手续费"""
         return max(price * amount * self.commission_coeff, self.min_commission)
 
-    def _calc_tax(self, price, amount):
+    def _calc_tax(self, price, amount)->float:
         """计算印花税"""
         return price * amount * self.tax_coeff
 
-    def _calc_availble_buy(self, price):
+    def _calc_availble_buy(self, price)->int:
         """计算可买数量"""
         count = 0
         value = price * count
@@ -234,13 +264,13 @@ class BackTest():
             value = price * count
         return count - self._min_buy_amount if count > 0 else count
 
-    def _check_callback_buy(self, date, code):
+    def _check_callback_buy(self, date, code)->bool:
         for cb in self._calbacks:
             if cb.on_calc_buy_check(date, code):
                 return True
         return False
 
-    def _check_callback_sell(self, date, code):
+    def _check_callback_sell(self, date, code)->bool:
         for cb in self._calbacks:
             if cb.on_calc_sell_check(date, code):
                 return True
@@ -318,10 +348,10 @@ class BackTest():
         print('计算完成！')
         self._calced = True
 
-    def _calc_total_tax(self):
+    def _calc_total_tax(self)->float:
         return np.asarray(self.history).T[6].sum()
 
-    def _calc_total_commission(self):
+    def _calc_total_commission(self)->float:
         return np.asarray(self.history).T[5].sum()
 
     def report(self):
@@ -348,6 +378,6 @@ class BackTest():
         result = result + '\n资产变化率:{:.2%}'.format(self.total_assets_cur / self.init_cash)
         result = result + '\n总手续费:{:.2f}'.format(self._calc_total_commission())
         result = result + '\n总印花税:{:.2f}'.format(self._calc_total_tax())
-        result = result + '\n交易历史：'
-        result = result + self.history_df.to_string()
+        result = result + '\n交易历史：\n'
+        result = result + self.history_df.sort_values('datetime').to_string()
         return result

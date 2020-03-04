@@ -116,7 +116,7 @@ def test_backtest_holdprice(init_global_data):
                   '000002': [dt(1999, 12, 31), dt(2000, 12, 31), dt(2002, 12, 31)]},
         sell_dict={})])
     bt.calc_trade_history()
-    bt.report()
+    print(bt.report())
     assert 200 == bt.hold_price_cur['000001'][1]
     assert np.round((7.9 + 13.4) / 2, 2) == np.round(bt.hold_price_cur['000001'][0], 2)
     assert 300 == bt.hold_price_cur['000002'][1]
