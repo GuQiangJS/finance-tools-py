@@ -324,27 +324,31 @@ class BackTest():
                     if verbose > 1:
                         print('{} 可用资金不足，跳过购买。'.format(date))
             if self._check_callback_sell(date, code):
-                amount = self.available_hold_df[code] if allin else self.trade_amount  # 卖出数量
-                if amount <= self.available_hold_df[code] and amount > 0:
-                    price = row['close']
-                    commission = self._calc_commission(price, amount)
-                    tax = self._calc_tax(price, amount)
-                    value = price * amount - commission - tax
-                    self.cash.append(self.available_cash + value)
-                    update_history(self.history,
-                                   date,
-                                   code,
-                                   price,
-                                   amount,
-                                   self.cash[-1],
-                                   commission,
-                                   tax,
-                                   -1, )
-                    if verbose > 0:
-                        print('{} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, price, amount, self.available_cash))
-                else:
+                if self.available_hold_df.empty or code not in self.available_hold_df.index:
                     if verbose > 1:
                         print('{} 没有持仓，跳过卖出。'.format(date))
+                else:
+                    amount = self.available_hold_df[code] if allin else self.trade_amount  # 卖出数量
+                    if amount <= self.available_hold_df[code] and amount > 0:
+                        price = row['close']
+                        commission = self._calc_commission(price, amount)
+                        tax = self._calc_tax(price, amount)
+                        value = price * amount - commission - tax
+                        self.cash.append(self.available_cash + value)
+                        update_history(self.history,
+                                       date,
+                                       code,
+                                       price,
+                                       amount,
+                                       self.cash[-1],
+                                       commission,
+                                       tax,
+                                       -1, )
+                        if verbose > 0:
+                            print('{} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, price, amount, self.available_cash))
+                    else:
+                        if verbose > 1:
+                            print('{} 没有持仓，跳过卖出。'.format(date))
         print('计算完成！')
         self._calced = True
 
