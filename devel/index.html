@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测工具 &mdash; finance-tools-py 0+untagged.47.gaa09019 文档</title>
+  <title>回测工具 &mdash; finance-tools-py 0+untagged.48.g570aeb2 文档</title>
   
 
   
@@ -158,7 +158,7 @@
 <p>简单的回测工具。根据指定的买入、卖出日期，计算收益、持仓等。</p>
 <dl class="class">
 <dt id="finance_tools_py.backtest.BackTest">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">BackTest</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">init_cash=10000</em>, <em class="sig-param">trade_amount=100</em>, <em class="sig-param">tax_coeff=0.001</em>, <em class="sig-param">commission_coeff=0.001</em>, <em class="sig-param">min_commission=5</em>, <em class="sig-param">col_name='close'</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">BackTest</code><span class="sig-paren">(</span><em class="sig-param">data, init_cash=10000, trade_amount=100, tax_coeff=0.001, commission_coeff=0.001, min_commission=5, col_name='close', callback=[&lt;finance_tools_py.backtest.CallBack object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest" title="永久链接至目标">¶</a></dt>
 <dd><p>简单的回测系统。根据传入的购买日期和卖出日期，计算收益。</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
@@ -189,13 +189,13 @@
 </div>
 <dl class="method">
 <dt id="finance_tools_py.backtest.BackTest.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">init_cash=10000</em>, <em class="sig-param">trade_amount=100</em>, <em class="sig-param">tax_coeff=0.001</em>, <em class="sig-param">commission_coeff=0.001</em>, <em class="sig-param">min_commission=5</em>, <em class="sig-param">col_name='close'</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">data, init_cash=10000, trade_amount=100, tax_coeff=0.001, commission_coeff=0.001, min_commission=5, col_name='close', callback=[&lt;finance_tools_py.backtest.CallBack object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) – 完整的日线数据。数据中需要包含 <cite>date</cite> 列，用来标记日期。
-数据中至少需要包含 <cite>date</cite> 列和 <cite>close</cite> 列，其中 <cite>close</cite> 列可以由参数 <cite>colname</cite> 参数指定。</p></li>
+数据中至少需要包含 <cite>date</cite> 列、 <cite>code</cite> 列和 <cite>close</cite> 列，其中 <cite>close</cite> 列可以由参数 <cite>colname</cite> 参数指定。</p></li>
 <li><p><strong>init_cash</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 初始资金。</p></li>
 <li><p><strong>trade_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 每次交易数量。默认100。</p></li>
 <li><p><strong>tax_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 印花税费率。默认0.001。</p></li>
@@ -203,6 +203,7 @@
 <li><p><strong>min_commission</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最小印花税费。默认5。</p></li>
 <li><p><strong>col_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)"><em>str</em></a>) – 计算用的列名。默认为 <cite>close</cite> 。
 这个列名必须包含在参数 <cite>data</cite> 中。是用来进行回测计算的列，用来标记回测时使用的价格数据。</p></li>
+<li><p><strong>(</strong><strong>[</strong> (<em>callback</em>) – py:class: <cite>finance_tools_py.backtest.CallBack</cite>]): 回调函数集合。</p></li>
 </ul>
 </dd>
 </dl>
@@ -215,14 +216,23 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="finance_tools_py.backtest.BackTest.available_hold_df">
+<em class="property">property </em><code class="sig-name descname">available_hold_df</code><a class="headerlink" href="#finance_tools_py.backtest.BackTest.available_hold_df" title="永久链接至目标">¶</a></dt>
+<dd><p>获取可用持仓</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="finance_tools_py.backtest.BackTest.calc_trade_history">
-<code class="sig-name descname">calc_trade_history</code><span class="sig-paren">(</span><em class="sig-param">signal_buy_date</em>, <em class="sig-param">signal_sell_date</em>, <em class="sig-param">verbose=0</em>, <em class="sig-param">allin=False</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.calc_trade_history" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">calc_trade_history</code><span class="sig-paren">(</span><em class="sig-param">verbose=0</em>, <em class="sig-param">allin=False</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.calc_trade_history" title="永久链接至目标">¶</a></dt>
 <dd><p>计算交易记录</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>signal_buy_date</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(在 Python v3.8)"><em>datetime.datetime</em></a><em>]</em>) – 计划买入日期的集合。</p></li>
-<li><p><strong>signal_sell_date</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="(在 Python v3.8)"><em>datetime.datetime</em></a><em>]</em>) – 计划卖出日期的集合。</p></li>
 <li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。</p></li>
 <li><p><strong>allin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 是否每次都全下（所有资金买入或所有持仓卖出）。默认为 <code class="docutils literal notranslate"><span class="pre">False</span></code>。
 如果为 <code class="docutils literal notranslate"><span class="pre">True</span></code> ，则不使用构造函数中传入的 <cite>trade_amount</cite> 属性。</p></li>
@@ -238,6 +248,31 @@
 </dd></dl>
 
 <dl class="method">
+<dt id="finance_tools_py.backtest.BackTest.hold_price_cur">
+<em class="property">property </em><code class="sig-name descname">hold_price_cur</code><a class="headerlink" href="#finance_tools_py.backtest.BackTest.hold_price_cur" title="永久链接至目标">¶</a></dt>
+<dd><p>计算目前持仓的成本  如果给的是日期,则返回当日开盘前的持仓</p>
+<dl class="field-list simple">
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="finance_tools_py.backtest.BackTest.hold_time">
+<code class="sig-name descname">hold_time</code><span class="sig-paren">(</span><em class="sig-param">dt=None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.hold_time" title="永久链接至目标">¶</a></dt>
+<dd><p>持仓时间。根据参数 <cite>dt</cite> 查询截止时间之前的交易，并与当前时间计算差异。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><p><strong>dt</strong> (<em>datetime</em>) – 交易截止时间。如果为 <cite>None</cite> 则表示计算所有交易。默认为 <cite>None</cite> 。</p>
+</dd>
+<dt class="field-even">返回</dt>
+<dd class="field-even"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
 <dt id="finance_tools_py.backtest.BackTest.report">
 <code class="sig-name descname">report</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.report" title="永久链接至目标">¶</a></dt>
 <dd><p>获取计算结果</p>
@@ -249,6 +284,13 @@
 <dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="finance_tools_py.backtest.BackTest.total_assets_cur">
+<em class="property">property </em><code class="sig-name descname">total_assets_cur</code><a class="headerlink" href="#finance_tools_py.backtest.BackTest.total_assets_cur" title="永久链接至目标">¶</a></dt>
+<dd><p>获取当前总资产</p>
+<p>当前可用资金+当前持仓。</p>
 </dd></dl>
 
 </dd></dl>
