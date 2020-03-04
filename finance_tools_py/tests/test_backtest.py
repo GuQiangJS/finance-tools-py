@@ -36,14 +36,14 @@ class BuyOrSellCheck(CallBack):
 
 
 def test_backtest_calc(init_global_data):
-    bt = BackTest(pytest.global_data, callback=[BuyOrSellCheck(
+    bt = BackTest(pytest.global_data, callbacks=[BuyOrSellCheck(
         buy_dict={pytest.global_code: [dt(1999, 1, 1), dt(2001, 1, 1)]},
         sell_dict={pytest.global_code: [dt(2000, 1, 1), dt(2002, 1, 1)]}, )])
     bt.calc_trade_history()
     assert not bt.history_df.empty
     print(bt.report())
     assert bt.available_hold_df.empty
-    bt = BackTest(pytest.global_data, callback=[BuyOrSellCheck(
+    bt = BackTest(pytest.global_data, callbacks=[BuyOrSellCheck(
         buy_dict={pytest.global_code: [dt(1999, 1, 1), dt(2001, 1, 1)]},
         sell_dict={pytest.global_code: [dt(2000, 1, 1)]}, )])
     bt.calc_trade_history()
@@ -65,7 +65,7 @@ def test_backtest_calc_mutil(init_global_data):
         'close': [41.5, 71.9, 61.7, 131.4, 151.3],
     }))
 
-    bt = BackTest(data, callback=[BuyOrSellCheck(
+    bt = BackTest(data, callbacks=[BuyOrSellCheck(
         buy_dict={'000001': [dt(1999, 1, 1), dt(2001, 1, 1)],
                   '000002': [dt(1998, 12, 31)]},
         sell_dict={'000001': [dt(2000, 1, 1), dt(2002, 1, 1)]}, )])
@@ -81,7 +81,7 @@ def test_backtest_calc_mutil(init_global_data):
     assert 41.5 == bt.hold_price_cur['000002'][0]
     assert 100 == bt.hold_price_cur['000002'][1]
     print(bt.report())
-    bt = BackTest(data, callback=[BuyOrSellCheck(
+    bt = BackTest(data, callbacks=[BuyOrSellCheck(
         buy_dict={'000001': [dt(1999, 1, 1), dt(2001, 1, 1)],
                   '000002': [dt(1998, 12, 31)]},
         sell_dict={'000001': [dt(2000, 1, 1)]}, )])
@@ -111,7 +111,7 @@ def test_backtest_holdprice(init_global_data):
         'date': [dt(1998, 12, 31), dt(1999, 12, 31), dt(2000, 12, 31), dt(2001, 12, 31), dt(2002, 12, 31)],
         'close': [41.5, 71.9, 61.7, 131.4, 151.3],
     }))
-    bt = BackTest(data, init_cash=100000, callback=[BuyOrSellCheck(
+    bt = BackTest(data, init_cash=100000, callbacks=[BuyOrSellCheck(
         buy_dict={'000001': [dt(1999, 1, 1), dt(2001, 1, 1)],
                   '000002': [dt(1999, 12, 31), dt(2000, 12, 31), dt(2002, 12, 31)]},
         sell_dict={})])
