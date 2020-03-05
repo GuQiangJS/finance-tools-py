@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0.0.7 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0.0.7+1.g00a04d7 文档</title>
   
 
   
@@ -363,7 +363,7 @@
 <dt id="finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount">
 <code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量。
-当 <cite>hold</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="finance_tools_py.backtest.AHundredChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
+当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="finance_tools_py.backtest.AHundredChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
 <span class="pre">否则返回</span> <span class="pre">`0</span></code>。</p>
 </dd></dl>
 
