@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测工具 &mdash; finance-tools-py 0.0.8 文档</title>
+  <title>回测工具 &mdash; finance-tools-py 0.0.9 文档</title>
   
 
   
@@ -61,7 +61,7 @@
             
             
               <div class="version">
-                0.0.8
+                0.0.9
               </div>
             
           
@@ -255,12 +255,8 @@
 <dl class="method">
 <dt id="finance_tools_py.backtest.BackTest.hold_price_cur">
 <em class="property">property </em><code class="sig-name descname">hold_price_cur</code><a class="headerlink" href="#finance_tools_py.backtest.BackTest.hold_price_cur" title="永久链接至目标">¶</a></dt>
-<dd><p>计算目前持仓的成本  如果给的是日期,则返回当日开盘前的持仓</p>
-<dl class="field-list simple">
-<dt class="field-odd">返回</dt>
-<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code></p>
-</dd>
-</dl>
+<dd><p>目前持仓的成本。是 :py:class: <cite>pandas.Series</cite> 类型或 :py:class: <cite>pandas.DataFrame</cite> 类型。
+其中 <cite>code</cite> 是索引，通过索引访问会返回一个数组（price,amount）</p>
 </dd></dl>
 
 <dl class="method">
