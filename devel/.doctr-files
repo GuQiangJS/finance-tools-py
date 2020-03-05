@@ -1,5 +1,5 @@
+devel/_sources/backtest/backtest.rst.txt
 devel/_sources/backtest/callback.rst.txt
-devel/_sources/backtest/index.rst.txt
 devel/_sources/index.rst.txt
 devel/_static/basic.css
 devel/_static/css/badge_only.css
@@ -55,8 +55,8 @@ devel/_static/searchtools.js
 devel/_static/translations.js
 devel/_static/underscore-1.3.1.js
 devel/_static/underscore.js
+devel/backtest/backtest.html
 devel/backtest/callback.html
-devel/backtest/index.html
 devel/genindex.html
 devel/index.html
 devel/objects.inv

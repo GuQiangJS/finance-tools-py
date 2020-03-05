@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测工具 &mdash; finance-tools-py 0.0.3 文档</title>
+  <title>回测工具 &mdash; finance-tools-py 0.0.3+1.gf596b88 文档</title>
   
 
   
@@ -141,7 +141,7 @@
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../_sources/backtest/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../_sources/backtest/backtest.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -161,52 +161,45 @@
 <p>简单的回测工具。根据指定的买入、卖出日期，计算收益、持仓等。</p>
 <dl class="class">
 <dt id="finance_tools_py.backtest.BackTest">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">BackTest</code><span class="sig-paren">(</span><em class="sig-param">data, init_cash=10000, trade_amount=100, tax_coeff=0.001, commission_coeff=0.001, min_commission=5, col_name='close', callbacks=[&lt;finance_tools_py.backtest.CallBack object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">BackTest</code><span class="sig-paren">(</span><em class="sig-param">data, init_cash=10000, tax_coeff=0.001, commission_coeff=0.001, min_commission=5, col_name='close', callbacks=[&lt;finance_tools_py.backtest.CallBack object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest" title="永久链接至目标">¶</a></dt>
 <dd><p>简单的回测系统。根据传入的购买日期和卖出日期，计算收益。</p>
 <p class="rubric">Example</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.backtest</span> <span class="kn">import</span> <span class="n">BackTest</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.backtest</span> <span class="kn">import</span> <span class="n">AHundredChecker</span>
+<span class="go">&gt;&gt;&gt;</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;000001&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">7.9</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">,</span> <span class="mf">13.4</span><span class="p">,</span> <span class="mf">15.3</span><span class="p">],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;000001&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">7.9</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">,</span> <span class="mi">10</span><span class="p">],</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="p">})</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;000002&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">41.5</span><span class="p">,</span> <span class="mf">71.9</span><span class="p">,</span> <span class="mf">61.7</span><span class="p">,</span> <span class="mf">131.4</span><span class="p">,</span> <span class="mf">151.3</span><span class="p">],</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="p">}))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bt</span> <span class="o">=</span> <span class="n">BackTest</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">init_cash</span><span class="o">=</span><span class="mi">100000</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="p">[</span><span class="n">BuyOrSellCheck</span><span class="p">(</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">buy_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;000001&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2001</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>              <span class="s1">&#39;000002&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2002</span><span class="p">,</span> <span class="mi">12</span><span class="p">,</span> <span class="mi">31</span><span class="p">)]},</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="n">sell_dict</span><span class="o">=</span><span class="p">{})])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bt</span> <span class="o">=</span> <span class="n">BackTest</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">init_cash</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">AHundredChecker</span><span class="p">(</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">buy_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;000001&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dt</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]},</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;000001&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">dt</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]})])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">bt</span><span class="o">.</span><span class="n">calc_trade_history</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">bt</span><span class="o">.</span><span class="n">report</span><span class="p">()</span>
-<span class="go">数据时间:1998-01-01~2002-12-31（可交易天数10）</span>
-<span class="go">初始资金:100000.00</span>
-<span class="go">交易次数:5 (买入/卖出各算1次)</span>
-<span class="go">可用资金:69310.89</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">bt</span><span class="o">.</span><span class="n">report</span><span class="p">())</span>
+<span class="go">数据时间:1998-01-01~2001-01-01（可交易天数4）</span>
+<span class="go">初始资金:1000.00</span>
+<span class="go">交易次数:3 (买入/卖出各算1次)</span>
+<span class="go">可用资金:653.09</span>
 <span class="go">当前持仓:code</span>
-<span class="go">000001                (10.65, 200.0)</span>
-<span class="go">000002    (94.96666666666667, 300.0)</span>
-<span class="go">当前总资产:99930.89</span>
-<span class="go">资金变化率:69.31%</span>
-<span class="go">资产变化率:99.93%</span>
-<span class="go">总手续费:38.49</span>
-<span class="go">总印花税:30.62</span>
+<span class="go">000001    (6.7, 100.0)</span>
+<span class="go">当前总资产:1323.09</span>
+<span class="go">资金变化率:65.31%</span>
+<span class="go">资产变化率:132.31%</span>
+<span class="go">总手续费:15.00</span>
+<span class="go">总印花税:1.91</span>
 <span class="go">交易历史：</span>
-<span class="go">     datetime    code  price  amount      cash  commission    tax     total  toward</span>
-<span class="go">0  1999-01-01  000001    7.9     100  99204.21        5.00   0.79    795.79       1</span>
-<span class="go">2  1999-12-31  000002   71.9     100  90653.49        7.19   7.19   7204.38       1</span>
-<span class="go">3  2000-12-31  000002   61.7     100  84471.15        6.17   6.17   6182.34       1</span>
-<span class="go">1  2001-01-01  000001   13.4     100  97857.87        5.00   1.34   1346.34       1</span>
-<span class="go">4  2002-12-31  000002  151.3     100  69310.89       15.13  15.13  15160.26       1</span>
+<span class="go">     datetime    code  price  amount     cash  commission   tax   total  toward</span>
+<span class="go">0  1998-01-01  000001    4.5     100   544.55           5  0.45  455.45       1</span>
+<span class="go">1  1999-01-01  000001    7.9    -100  1328.76           5  0.79  795.79      -1</span>
+<span class="go">2  2000-01-01  000001    6.7     100   653.09           5  0.67  675.67       1</span>
 </pre></div>
 </div>
 <dl class="method">
 <dt id="finance_tools_py.backtest.BackTest.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">data, init_cash=10000, trade_amount=100, tax_coeff=0.001, commission_coeff=0.001, min_commission=5, col_name='close', callbacks=[&lt;finance_tools_py.backtest.CallBack object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">data, init_cash=10000, tax_coeff=0.001, commission_coeff=0.001, min_commission=5, col_name='close', callbacks=[&lt;finance_tools_py.backtest.CallBack object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -214,7 +207,6 @@
 <li><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) – 完整的日线数据。数据中需要包含 <cite>date</cite> 列，用来标记日期。
 数据中至少需要包含 <cite>date</cite> 列、 <cite>code</cite> 列和 <cite>close</cite> 列，其中 <cite>close</cite> 列可以由参数 <cite>colname</cite> 参数指定。</p></li>
 <li><p><strong>init_cash</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 初始资金。</p></li>
-<li><p><strong>trade_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 每次交易数量。默认100。</p></li>
 <li><p><strong>tax_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 印花税费率。默认0.001。</p></li>
 <li><p><strong>commission_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 手续费率。默认0.001。</p></li>
 <li><p><strong>min_commission</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最小印花税费。默认5。</p></li>
@@ -245,15 +237,11 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.BackTest.calc_trade_history">
-<code class="sig-name descname">calc_trade_history</code><span class="sig-paren">(</span><em class="sig-param">verbose=0</em>, <em class="sig-param">allin=False</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.calc_trade_history" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">calc_trade_history</code><span class="sig-paren">(</span><em class="sig-param">verbose=0</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.calc_trade_history" title="永久链接至目标">¶</a></dt>
 <dd><p>计算交易记录</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。</p></li>
-<li><p><strong>allin</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 是否每次都全下（所有资金买入或所有持仓卖出）。默认为 <code class="docutils literal notranslate"><span class="pre">False</span></code>。
-如果为 <code class="docutils literal notranslate"><span class="pre">True</span></code> ，则不使用构造函数中传入的 <cite>trade_amount</cite> 属性。</p></li>
-</ul>
+<dd class="field-odd"><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。</p>
 </dd>
 </dl>
 </dd></dl>

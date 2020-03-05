@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>索引 &mdash; finance-tools-py 0.0.3 文档</title>
+  <title>索引 &mdash; finance-tools-py 0.0.3+1.gf596b88 文档</title>
   
 
   
@@ -85,7 +85,7 @@
             
             
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="backtest/index.html">回测工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtest/backtest.html">回测工具</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backtest/callback.html">回测时的回调</a></li>
 </ul>
 
@@ -158,27 +158,39 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#H"><strong>H</strong></a>
+ | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
  | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
  
 </div>
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.__init__">__init__() (finance_tools_py.backtest.BackTest 方法)</a>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.__init__">__init__() (finance_tools_py.backtest.AHundredChecker 方法)</a>
+
+      <ul>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker.__init__">(finance_tools_py.backtest.AllInChecker 方法)</a>
 </li>
+        <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.__init__">(finance_tools_py.backtest.BackTest 方法)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="A">A</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.available_cash">available_cash() (finance_tools_py.backtest.BackTest property)</a>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker">AHundredChecker (finance_tools_py.backtest 中的类)</a>
+</li>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker">AllInChecker (finance_tools_py.backtest 中的类)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.available_hold_df">available_hold_df() (finance_tools_py.backtest.BackTest property)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.available_cash">available_cash() (finance_tools_py.backtest.BackTest property)</a>
+</li>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.available_hold_df">available_hold_df() (finance_tools_py.backtest.BackTest property)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -186,7 +198,11 @@
 <h2 id="B">B</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest">BackTest (finance_tools_py.backtest 中的类)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest">BackTest (finance_tools_py.backtest 中的类)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.buy_dict">buy_dict (finance_tools_py.backtest.AHundredChecker 属性)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -194,11 +210,13 @@
 <h2 id="C">C</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.calc_trade_history">calc_trade_history() (finance_tools_py.backtest.BackTest 方法)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.calc_trade_history">calc_trade_history() (finance_tools_py.backtest.BackTest 方法)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack">CallBack (finance_tools_py.backtest 中的类)</a>
+</li>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.commission_coeff">commission_coeff (finance_tools_py.backtest.AHundredChecker 属性)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -206,13 +224,25 @@
 <h2 id="H">H</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.history_df">history_df() (finance_tools_py.backtest.BackTest property)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.history_df">history_df() (finance_tools_py.backtest.BackTest property)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.hold_price_cur">hold_price_cur() (finance_tools_py.backtest.BackTest property)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.hold_price_cur">hold_price_cur() (finance_tools_py.backtest.BackTest property)</a>
 </li>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.hold_time">hold_time() (finance_tools_py.backtest.BackTest 方法)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.hold_time">hold_time() (finance_tools_py.backtest.BackTest 方法)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.min_amount">min_amount (finance_tools_py.backtest.AHundredChecker 属性)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.min_commission">min_commission (finance_tools_py.backtest.AHundredChecker 属性)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -220,19 +250,55 @@
 <h2 id="O">O</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_calc_buy_check">on_calc_buy_check() (finance_tools_py.backtest.CallBack 方法)</a>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.on_calc_buy_amount">on_calc_buy_amount() (finance_tools_py.backtest.AHundredChecker 方法)</a>
+
+      <ul>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker.on_calc_buy_amount">(finance_tools_py.backtest.AllInChecker 方法)</a>
 </li>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_calc_buy_amount">(finance_tools_py.backtest.CallBack 方法)</a>
+</li>
+      </ul></li>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount">on_calc_sell_amount() (finance_tools_py.backtest.AHundredChecker 方法)</a>
+
+      <ul>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker.on_calc_sell_amount">(finance_tools_py.backtest.AllInChecker 方法)</a>
+</li>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_calc_sell_amount">(finance_tools_py.backtest.CallBack 方法)</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_calc_sell_check">on_calc_sell_check() (finance_tools_py.backtest.CallBack 方法)</a>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.on_check_buy">on_check_buy() (finance_tools_py.backtest.AHundredChecker 方法)</a>
+
+      <ul>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker.on_check_buy">(finance_tools_py.backtest.AllInChecker 方法)</a>
 </li>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_check_buy">(finance_tools_py.backtest.CallBack 方法)</a>
+</li>
+      </ul></li>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.on_check_sell">on_check_sell() (finance_tools_py.backtest.AHundredChecker 方法)</a>
+
+      <ul>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker.on_check_sell">(finance_tools_py.backtest.AllInChecker 方法)</a>
+</li>
+        <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_check_sell">(finance_tools_py.backtest.CallBack 方法)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.report">report() (finance_tools_py.backtest.BackTest 方法)</a>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.report">report() (finance_tools_py.backtest.BackTest 方法)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.sell_dict">sell_dict (finance_tools_py.backtest.AHundredChecker 属性)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -240,7 +306,11 @@
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="backtest/index.html#finance_tools_py.backtest.BackTest.total_assets_cur">total_assets_cur() (finance_tools_py.backtest.BackTest property)</a>
+      <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.tax_coeff">tax_coeff (finance_tools_py.backtest.AHundredChecker 属性)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.total_assets_cur">total_assets_cur() (finance_tools_py.backtest.BackTest property)</a>
 </li>
   </ul></td>
 </tr></table>
