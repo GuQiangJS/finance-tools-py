@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import datetime
+import abc
 
 
 class CallBack():
@@ -9,6 +10,7 @@ class CallBack():
     def __init__(self):
         pass
 
+    @abc.abstractmethod
     def on_check_buy(self,
                      date: datetime.datetime.timestamp,
                      code: str) -> bool:
@@ -23,6 +25,7 @@ class CallBack():
         """
         return False
 
+    @abc.abstractmethod
     def on_check_sell(self,
                       date: datetime.datetime.timestamp,
                       code: str) -> bool:
@@ -37,6 +40,7 @@ class CallBack():
         """
         return False
 
+    @abc.abstractmethod
     def on_calc_buy_amount(self,
                            date: datetime.datetime.timestamp,
                            code: str,
@@ -55,6 +59,7 @@ class CallBack():
         """
         return 0
 
+    @abc.abstractmethod
     def on_calc_sell_amount(self,
                             date: datetime.datetime.timestamp,
                             code: str,
