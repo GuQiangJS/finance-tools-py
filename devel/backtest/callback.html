@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0.0.4 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0.0.6+3.g451f379 文档</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.4
+                0.0.6
               </div>
             
           
@@ -252,13 +252,13 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AHundredChecker.on_calc_buy_amount">
-<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。当交易实际花费金额小于 <cite>cash</cite> （可用现金） 时，返回参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="finance_tools_py.backtest.AHundredChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount">
-<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。
 当 <cite>hold</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="finance_tools_py.backtest.AHundredChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
 <span class="pre">否则返回</span> <span class="pre">`False</span></code>。</p>
@@ -266,13 +266,13 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AHundredChecker.on_check_buy">
-<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.buy_dict" title="finance_tools_py.backtest.AHundredChecker.buy_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">buy_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AHundredChecker.on_check_sell">
-<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.sell_dict" title="finance_tools_py.backtest.AHundredChecker.sell_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sell_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
@@ -305,7 +305,7 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_calc_buy_amount">
-<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。
 根据 <cite>cash</cite> （可用现金）及 <cite>price</cite> （当前价格）计算实际可以买入的数量（参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code> 的倍数）</p>
 <blockquote>
@@ -315,20 +315,20 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_calc_sell_amount">
-<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量
 直接返回 <cite>hold</cite> 。表示全部可以卖出。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_check_buy">
-<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">buy_dict</span></code> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_check_sell">
-<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">sell_dict</span></code> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
@@ -344,7 +344,7 @@
 <dd><p>回测时的回调。</p>
 <dl class="method">
 <dt id="finance_tools_py.backtest.CallBack.on_calc_buy_amount">
-<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -366,7 +366,7 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.CallBack.on_calc_sell_amount">
-<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -389,7 +389,7 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.CallBack.on_check_buy">
-<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_buy" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_buy" title="永久链接至目标">¶</a></dt>
 <dd><p>检查是否需要买入。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -409,7 +409,7 @@
 
 <dl class="method">
 <dt id="finance_tools_py.backtest.CallBack.on_check_sell">
-<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: datetime.datetime</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_sell" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_sell" title="永久链接至目标">¶</a></dt>
 <dd><p>检查是否需要卖出。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
