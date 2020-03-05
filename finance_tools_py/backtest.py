@@ -109,7 +109,7 @@ class AHundredChecker(CallBack):
 
     def on_check_buy(self,
                      date: datetime.datetime.timestamp,
-                     code: str)->bool:
+                     code: str) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`buy_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.buy_dict.keys() and date in self.buy_dict[code]:
             return True
@@ -127,13 +127,13 @@ class AHundredChecker(CallBack):
 
     def _calc_commission(self,
                          price: float,
-                         amount:int) -> float:
+                         amount: int) -> float:
         """计算交易手续费"""
         return max(price * amount * self.commission_coeff, self.min_commission)
 
     def _calc_tax(self,
                   price: float,
-                  amount:int) -> float:
+                  amount: int) -> float:
         """计算印花税"""
         return price * amount * self.tax_coeff
 
@@ -474,10 +474,11 @@ class BackTest():
                                    tax,
                                    1, )
                     if verbose > 0:
-                        print('{} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, price, amount, self.available_cash))
+                        print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
+                                                                                  self.available_cash))
                 else:
                     if verbose > 1:
-                        print('{} 可用资金不足，跳过购买。'.format(date))
+                        print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(date, code, price))
             if self._check_callback_sell(date, code):
                 amount = self._calc_sell_amount(date, code, price)
                 if amount > 0:
@@ -495,10 +496,11 @@ class BackTest():
                                    tax,
                                    -1, )
                     if verbose > 0:
-                        print('{} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, price, amount, self.available_cash))
+                        print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
+                                                                                  self.available_cash))
                 else:
                     if verbose > 1:
-                        print('{} 没有持仓，跳过卖出。'.format(date))
+                        print('{:%Y-%m-%d} {} 没有持仓，跳过卖出。'.format(date, code))
         if verbose > 0:
             print('计算完成！')
         self._calced = True
