@@ -181,11 +181,10 @@ class AHundredChecker(CallBack):
                             hold_amount: float,
                             hold_price: float) -> float:
         """计算卖出数量。
-            当 `hold` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
+            当 `hold_amount` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
             否则返回 `0`。"""
-        amount = self.min_amount
-        if hold_amount >= amount:
-            return amount
+        if hold_amount >= self.min_amount:
+            return self.min_amount
         return 0
 
 
