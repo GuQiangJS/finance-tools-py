@@ -13,12 +13,16 @@ class CallBack():
     @abc.abstractmethod
     def on_check_buy(self,
                      date: datetime.datetime.timestamp,
-                     code: str) -> bool:
+                     code: str,
+                     price: float,
+                     cash: float) -> bool:
         """检查是否需要买入。
 
         Args:
             date: 检查时间。
             code: 股票代码。
+            price: 当前价格。
+            cash: 持有现金。
 
         Returns:
             bool: 是否买入。返回 `False`。
@@ -28,12 +32,18 @@ class CallBack():
     @abc.abstractmethod
     def on_check_sell(self,
                       date: datetime.datetime.timestamp,
-                      code: str) -> bool:
+                      code: str,
+                      price: float,
+                      cash: float,
+                      hold: float) -> bool:
         """检查是否需要卖出。
 
         Args:
             date: 检查时间。
             code: 股票代码。
+            price: 当前价格。
+            cash: 持有现金。
+            hold: 可卖数量。
 
         Returns:
             bool: 是否卖出。返回 `False`。
@@ -114,7 +124,9 @@ class AHundredChecker(CallBack):
 
     def on_check_buy(self,
                      date: datetime.datetime.timestamp,
-                     code: str) -> bool:
+                     code: str,
+                     price: float,
+                     cash: float) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`buy_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.buy_dict.keys() and date in self.buy_dict[code]:
             return True
@@ -123,7 +135,10 @@ class AHundredChecker(CallBack):
 
     def on_check_sell(self,
                       date: datetime.datetime.timestamp,
-                      code: str) -> bool:
+                      code: str,
+                      price: float,
+                      cash: float,
+                      hold: float) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`sell_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.sell_dict.keys() and date in self.sell_dict[code]:
             return True
@@ -159,9 +174,9 @@ class AHundredChecker(CallBack):
                             price: float,
                             cash: float,
                             hold: float) -> float:
-        """计算买入数量。
+        """计算卖出数量。
             当 `hold` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
-            否则返回 `False`。"""
+            否则返回 `0`。"""
         amount = self.min_amount
         if hold >= amount:
             return amount
@@ -410,15 +425,18 @@ class BackTest():
         """计算印花税"""
         return price * amount * self.tax_coeff
 
-    def _check_callback_buy(self, date, code) -> bool:
+    def _check_callback_buy(self, date, code, price) -> bool:
         for cb in self._calbacks:
-            if cb.on_check_buy(date, code):
+            if cb.on_check_buy(date, code, price, self.available_cash):
                 return True
         return False
 
-    def _check_callback_sell(self, date, code) -> bool:
+    def _check_callback_sell(self, date, code, price) -> bool:
         for cb in self._calbacks:
-            if cb.on_check_sell(date, code):
+            hold = 0
+            if not self.available_hold_df.empty and code in self.available_hold_df.index:
+                hold = self.available_hold_df[code]
+            if cb.on_check_sell(date, code, price, self.available_cash, hold):
                 return True
         return False
 
@@ -462,7 +480,7 @@ class BackTest():
             date = row['date']
             code = row['code']
             price = row['close']  # 价格
-            if self._check_callback_buy(date, code):
+            if self._check_callback_buy(date, code, price):
                 amount = self._calc_buy_amount(date, code, price)  # 买入数量
                 commission = self._calc_commission(price, amount)
                 tax = self._calc_tax(price, amount)
@@ -480,11 +498,11 @@ class BackTest():
                                    1, )
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
-                                                                                  self.available_cash))
+                                                                                   self.available_cash))
                 else:
                     if verbose > 1:
                         print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(date, code, price))
-            if self._check_callback_sell(date, code):
+            if self._check_callback_sell(date, code, price):
                 amount = self._calc_sell_amount(date, code, price)
                 if amount > 0:
                     commission = self._calc_commission(price, amount)
@@ -502,7 +520,7 @@ class BackTest():
                                    -1, )
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
-                                                                                  self.available_cash))
+                                                                                   self.available_cash))
                 else:
                     if verbose > 1:
                         print('{:%Y-%m-%d} {} 没有持仓，跳过卖出。'.format(date, code))
@@ -526,7 +544,8 @@ class BackTest():
         if not self._calced:
             result = '没有经过计算。请先调用 `calc_trade_history` 方法进行计算。'
             return result
-        result = '数据时间:{}~{}（可交易天数{}）'.format(self.data.iloc[0]['date'], self.data.iloc[-1]['date'], len(self.data))
+        result = '数据时间:{}~{}（可交易天数{}）'.format(self.data.iloc[0]['date'], self.data.iloc[-1]['date'],
+                                              len(self.data['date'].unique()))
         result = result + '\n初始资金:{:.2f}'.format(self.init_cash)
         result = result + '\n交易次数:{} (买入/卖出各算1次)'.format(len(self.history))
         result = result + '\n可用资金:{:.2f}'.format(self.available_cash)
