@@ -4,7 +4,7 @@
 .. toctree::
    :maxdepth: 5
 
-   backtest/index
+   backtest/backtest
    backtest/callback
 
 .. include:: ../../dep.rst
