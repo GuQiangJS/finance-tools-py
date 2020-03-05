@@ -1,6 +1,5 @@
 import os
 import datetime
-import talib
 import traceback
 from finance_tools_py.backtest import BackTest
 from finance_tools_py.backtest import AHundredChecker
@@ -12,6 +11,7 @@ import pytest
                     reason="Skipping this test on Travis CI.")
 def test_example():
     import QUANTAXIS as QA
+    import talib
     list = QA.QA_fetch_get_stock_list('pytdx')
     list = list[:4]
 
