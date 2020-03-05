@@ -35,7 +35,8 @@ class CallBack():
                       code: str,
                       price: float,
                       cash: float,
-                      hold: float) -> bool:
+                      hold_amount: float,
+                      hold_price: float) -> bool:
         """检查是否需要卖出。
 
         Args:
@@ -43,7 +44,8 @@ class CallBack():
             code: 股票代码。
             price: 当前价格。
             cash: 持有现金。
-            hold: 可卖数量。
+            hold_amount: 当前持仓数量。
+            hold_price: 当前持仓成本。
 
         Returns:
             bool: 是否卖出。返回 `False`。
@@ -75,7 +77,8 @@ class CallBack():
                             code: str,
                             price: float,
                             cash: float,
-                            hold: float) -> float:
+                            hold_amount: float,
+                            hold_price: float) -> float:
         """计算卖出数量
 
         Args:
@@ -83,7 +86,8 @@ class CallBack():
             code: 股票代码。
             price: 当前价格。
             cash: 持有现金。
-            hold: 可卖数量。
+            hold_amount: 当前持仓数量。
+            hold_price: 当前持仓成本。
 
         Return:
             float: 返回卖出数量。返回 `0`。
@@ -138,7 +142,8 @@ class AHundredChecker(CallBack):
                       code: str,
                       price: float,
                       cash: float,
-                      hold: float) -> bool:
+                      hold_amount: float,
+                      hold_price: float) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`sell_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.sell_dict.keys() and date in self.sell_dict[code]:
             return True
@@ -173,12 +178,13 @@ class AHundredChecker(CallBack):
                             code: str,
                             price: float,
                             cash: float,
-                            hold: float) -> float:
+                            hold_amount: float,
+                            hold_price: float) -> float:
         """计算卖出数量。
             当 `hold` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
             否则返回 `0`。"""
         amount = self.min_amount
-        if hold >= amount:
+        if hold_amount >= amount:
             return amount
         return 0
 
@@ -206,10 +212,11 @@ class AllInChecker(AHundredChecker):
                             code: str,
                             price: float,
                             cash: float,
-                            hold: float) -> float:
+                            hold_amount: float,
+                            hold_price: float) -> float:
         """计算买入数量
-        直接返回 `hold` 。表示全部可以卖出。"""
-        return hold
+        直接返回 `hold_amount` 。表示全部可以卖出。"""
+        return hold_amount
 
 
 class BackTest():
@@ -433,10 +440,10 @@ class BackTest():
 
     def _check_callback_sell(self, date, code, price) -> bool:
         for cb in self._calbacks:
-            hold = 0
-            if not self.available_hold_df.empty and code in self.available_hold_df.index:
-                hold = self.available_hold_df[code]
-            if cb.on_check_sell(date, code, price, self.available_cash, hold):
+            hold_amount, hold_price = 0, 0
+            if not self.hold_price_cur.empty and code in self.hold_price_cur.index:
+                hold_price, hold_amount = self.hold_price_cur[code]
+            if cb.on_check_sell(date, code, price, self.available_cash, hold_amount, hold_price):
                 return True
         return False
 
@@ -449,9 +456,9 @@ class BackTest():
 
     def _calc_sell_amount(self, date, code, price) -> float:
         for cb in self._calbacks:
-            if not self.available_hold_df.empty and code in self.available_hold_df.index:
-                hold = self.available_hold_df[code]
-                amount = cb.on_calc_sell_amount(date, code, price, self.available_cash, hold)
+            if not self.hold_price_cur.empty and code in self.hold_price_cur.index:
+                hold_price, hold_amount = self.hold_price_cur[code]
+                amount = cb.on_calc_sell_amount(date, code, price, self.available_cash, hold_amount, hold_price)
                 if amount:
                     return amount
         return 0
