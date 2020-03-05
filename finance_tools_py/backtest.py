@@ -290,6 +290,7 @@ class BackTest():
         self._calced = False
         self._colname = col_name
         self._calbacks = callbacks
+        self._hold_price_cur = pd.DataFrame()
         self._history_headers = [
             'datetime',  # 时间
             'code',  # 代码
@@ -344,9 +345,10 @@ class BackTest():
     #         aggfunc=np.sum
     #     ).fillna(0).sort_index()
 
-    @property
-    def hold_price_cur(self):
-        """计算目前持仓的成本  如果给的是日期,则返回当日开盘前的持仓
+    def __hold_price_cur(self):
+        """计算目前持仓的成本。
+
+        因为这个属性可能会频繁调用apply，造成性能极低。所以改为内部属性。
 
         Returns:
             :py:class:`pandas.Series`
@@ -367,6 +369,15 @@ class BackTest():
                 return np.nan
 
         return self.history_df.set_index('datetime', drop=False).sort_index().groupby('code').apply(weights).dropna()
+
+    @property
+    def hold_price_cur(self):
+        """目前持仓的成本。是 :py:class: `pandas.Series` 类型或 :py:class: `pandas.DataFrame` 类型。
+            其中 `code` 是索引，通过索引访问会返回一个数组（price,amount）"""
+        return self._hold_price_cur
+
+    def _update_hold_price_cur(self):
+        self._hold_price_cur = self.__hold_price_cur()
 
     def hold_time(self, dt=None):
         """持仓时间。根据参数 `dt` 查询截止时间之前的交易，并与当前时间计算差异。
@@ -502,6 +513,7 @@ class BackTest():
                                    commission,
                                    tax,
                                    1, )
+                    self._update_hold_price_cur()
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
                                                                                    self.available_cash))
@@ -524,6 +536,7 @@ class BackTest():
                                    commission,
                                    tax,
                                    -1, )
+                    self._update_hold_price_cur()
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
                                                                                    self.available_cash))

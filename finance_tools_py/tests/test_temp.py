@@ -66,8 +66,23 @@ def test_example():
             continue
     print('Datas processed.')
 
-    all_data = pd.concat([x.data for x in datas.values() if x is not None])
+    all_data = pd.concat([x.data for x in datas.values() if x is not None]).sort_index(level=0)
 
     bt = BackTest(all_data.reset_index(), 50000, callbacks=[AHundredChecker(buy_dict, sell_dict)])
     bt.calc_trade_history(verbose=2)
     print(bt.report())
+
+
+@pytest.mark.skip(reason="性能测试用")
+def test_sas():
+    import cProfile, pstats, io
+    from pstats import SortKey
+    pr = cProfile.Profile()
+    pr.enable()
+    test_example()
+    pr.disable()
+    s = io.StringIO()
+    sortby = SortKey.CUMULATIVE
+    ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+    ps.print_stats()
+    print(s.getvalue())
