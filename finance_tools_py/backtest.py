@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import datetime
 import abc
-
+from tqdm.auto import tqdm
 
 class CallBack():
     """回测时的回调。"""
@@ -493,7 +493,7 @@ class BackTest():
                 toward,  # 方向
             ])
 
-        for index, row in self.data.iterrows():
+        for index, row in tqdm(self.data.iterrows()):
             date = row['date']
             code = row['code']
             price = row['close']  # 价格
