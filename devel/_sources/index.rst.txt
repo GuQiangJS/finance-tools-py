@@ -6,5 +6,7 @@
 
    backtest/backtest
    backtest/callback
+   simulation/simulation
+   simulation/callback
 
 .. include:: ../../dep.rst

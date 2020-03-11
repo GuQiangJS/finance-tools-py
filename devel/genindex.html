@@ -9,7 +9,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>索引 &mdash; finance-tools-py 0.0.9 文档</title>
+  <title>索引 &mdash; finance-tools-py 0.0.12+1.g5427f25 文档</title>
   
 
   
@@ -60,7 +60,7 @@
             
             
               <div class="version">
-                0.0.9
+                0.0.12
               </div>
             
           
@@ -87,6 +87,8 @@
               <ul>
 <li class="toctree-l1"><a class="reference internal" href="backtest/backtest.html">回测工具</a></li>
 <li class="toctree-l1"><a class="reference internal" href="backtest/callback.html">回测时的回调</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation/simulation.html">模拟工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation/callback.html">模拟工具使用的回调</a></li>
 </ul>
 
             
@@ -158,8 +160,10 @@
  | <a href="#B"><strong>B</strong></a>
  | <a href="#C"><strong>C</strong></a>
  | <a href="#H"><strong>H</strong></a>
+ | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#O"><strong>O</strong></a>
+ | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
  | <a href="#T"><strong>T</strong></a>
@@ -174,6 +178,14 @@
         <li><a href="backtest/callback.html#finance_tools_py.backtest.AllInChecker.__init__">(finance_tools_py.backtest.AllInChecker 方法)</a>
 </li>
         <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.__init__">(finance_tools_py.backtest.BackTest 方法)</a>
+</li>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.Bolling.__init__">(finance_tools_py.simulation.Bolling 方法)</a>
+</li>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.Linear_Angle.__init__">(finance_tools_py.simulation.Linear_Angle 方法)</a>
+</li>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.Pandas_Rolling.__init__">(finance_tools_py.simulation.Pandas_Rolling 方法)</a>
+</li>
+        <li><a href="simulation/simulation.html#finance_tools_py.simulation.Simulation.__init__">(finance_tools_py.simulation.Simulation 方法)</a>
 </li>
       </ul></li>
   </ul></td>
@@ -202,6 +214,8 @@
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="simulation/callback.html#finance_tools_py.simulation.Bolling">Bolling (finance_tools_py.simulation 中的类)</a>
+</li>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.buy_dict">buy_dict (finance_tools_py.backtest.AHundredChecker 属性)</a>
 </li>
   </ul></td>
@@ -212,10 +226,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.calc_trade_history">calc_trade_history() (finance_tools_py.backtest.BackTest 方法)</a>
 </li>
+      <li><a href="simulation/callback.html#finance_tools_py.simulation.CalcTradePoint">CalcTradePoint (finance_tools_py.simulation 中的类)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack">CallBack (finance_tools_py.backtest 中的类)</a>
+
+      <ul>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.CallBack">(finance_tools_py.simulation 中的类)</a>
 </li>
+      </ul></li>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.commission_coeff">commission_coeff (finance_tools_py.backtest.AHundredChecker 属性)</a>
 </li>
   </ul></td>
@@ -231,6 +251,18 @@
       <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.hold_price_cur">hold_price_cur() (finance_tools_py.backtest.BackTest property)</a>
 </li>
       <li><a href="backtest/backtest.html#finance_tools_py.backtest.BackTest.hold_time">hold_time() (finance_tools_py.backtest.BackTest 方法)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="simulation/simulation.html#finance_tools_py.simulation.Simulation.lastest_signal">lastest_signal() (finance_tools_py.simulation.Simulation property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="simulation/callback.html#finance_tools_py.simulation.Linear_Angle">Linear_Angle (finance_tools_py.simulation 中的类)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -266,8 +298,6 @@
         <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_calc_sell_amount">(finance_tools_py.backtest.CallBack 方法)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.on_check_buy">on_check_buy() (finance_tools_py.backtest.AHundredChecker 方法)</a>
 
       <ul>
@@ -276,6 +306,8 @@
         <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_check_buy">(finance_tools_py.backtest.CallBack 方法)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.on_check_sell">on_check_sell() (finance_tools_py.backtest.AHundredChecker 方法)</a>
 
       <ul>
@@ -284,6 +316,30 @@
         <li><a href="backtest/callback.html#finance_tools_py.backtest.CallBack.on_check_sell">(finance_tools_py.backtest.CallBack 方法)</a>
 </li>
       </ul></li>
+      <li><a href="simulation/callback.html#finance_tools_py.simulation.Bolling.on_preparing_data">on_preparing_data() (finance_tools_py.simulation.Bolling 方法)</a>
+
+      <ul>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.CalcTradePoint.on_preparing_data">(finance_tools_py.simulation.CalcTradePoint 方法)</a>
+</li>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.CallBack.on_preparing_data">(finance_tools_py.simulation.CallBack 方法)</a>
+</li>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.Linear_Angle.on_preparing_data">(finance_tools_py.simulation.Linear_Angle 方法)</a>
+</li>
+        <li><a href="simulation/callback.html#finance_tools_py.simulation.Pandas_Rolling.on_preparing_data">(finance_tools_py.simulation.Pandas_Rolling 方法)</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="simulation/callback.html#finance_tools_py.simulation.Pandas_Rolling">Pandas_Rolling (finance_tools_py.simulation 中的类)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="simulation/simulation.html#finance_tools_py.simulation.Simulation.plot_sns">plot_sns() (finance_tools_py.simulation.Simulation 方法)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -299,6 +355,14 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="backtest/callback.html#finance_tools_py.backtest.AHundredChecker.sell_dict">sell_dict (finance_tools_py.backtest.AHundredChecker 属性)</a>
+</li>
+      <li><a href="simulation/simulation.html#finance_tools_py.simulation.Simulation.signaldf">signaldf() (finance_tools_py.simulation.Simulation property)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="simulation/simulation.html#finance_tools_py.simulation.Simulation.simulate">simulate() (finance_tools_py.simulation.Simulation 方法)</a>
+</li>
+      <li><a href="simulation/simulation.html#finance_tools_py.simulation.Simulation">Simulation (finance_tools_py.simulation 中的类)</a>
 </li>
   </ul></td>
 </tr></table>

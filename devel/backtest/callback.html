@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0.0.9 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0.0.12+1.g5427f25 文档</title>
   
 
   
@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="模拟工具" href="../simulation/simulation.html" />
     <link rel="prev" title="回测工具" href="backtest.html" /> 
 </head>
 
@@ -60,7 +61,7 @@
             
             
               <div class="version">
-                0.0.9
+                0.0.12
               </div>
             
           
@@ -92,6 +93,8 @@
 <li class="toctree-l2"><a class="reference internal" href="#id4">全部资金出的回调</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../simulation/simulation.html">模拟工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulation/callback.html">模拟工具使用的回调</a></li>
 </ul>
 
             
@@ -411,10 +414,8 @@
 <dt id="finance_tools_py.backtest.AllInChecker.on_calc_buy_amount">
 <code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。
-根据 <cite>cash</cite> （可用现金）及 <cite>price</cite> （当前价格）计算实际可以买入的数量（参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code> 的倍数）</p>
-<blockquote>
-<div><p>（计算时包含考虑了交易时可能产生的印花税和手续费）</p>
-</div></blockquote>
+根据 <cite>cash</cite> （可用现金）及 <cite>price</cite> （当前价格）计算实际可以买入的数量（参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code> 的倍数）
+（计算时包含考虑了交易时可能产生的印花税和手续费）</p>
 </dd></dl>
 
 <dl class="method">
@@ -448,6 +449,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../simulation/simulation.html" class="btn btn-neutral float-right" title="模拟工具" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="backtest.html" class="btn btn-neutral float-left" title="回测工具" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

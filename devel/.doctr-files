@@ -1,6 +1,8 @@
 devel/_sources/backtest/backtest.rst.txt
 devel/_sources/backtest/callback.rst.txt
 devel/_sources/index.rst.txt
+devel/_sources/simulation/callback.rst.txt
+devel/_sources/simulation/simulation.rst.txt
 devel/_static/basic.css
 devel/_static/css/badge_only.css
 devel/_static/css/theme.css
@@ -62,3 +64,5 @@ devel/index.html
 devel/objects.inv
 devel/search.html
 devel/searchindex.js
+devel/simulation/callback.html
+devel/simulation/simulation.html
