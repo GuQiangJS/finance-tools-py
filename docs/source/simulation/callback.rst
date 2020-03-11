@@ -25,7 +25,7 @@
 
 根据 pandas 中的简单移动平均函数，计算平均值和标准差。
 
-.. autoclass:: finance_tools_py.simulation.CallBack_Pandas_Rolling
+.. autoclass:: finance_tools_py.simulation.Pandas_Rolling
     :members:
     :special-members: __init__,
 
@@ -34,7 +34,7 @@
 
 调用 ``talib.LINEARREG_ANGLE`` 线性角度。
 
-.. autoclass:: finance_tools_py.simulation.CallBack_Linear_Angle
+.. autoclass:: finance_tools_py.simulation.Linear_Angle
     :members:
     :special-members: __init__,
 
@@ -42,10 +42,10 @@
 ----------------------------------------
 
 自动合并 :py:class:`finance_tools_py.simulation.CallBack_Bolling` ,
-:py:class:`finance_tools_py.simulation.CallBack_Pandas_Rolling` ,
-:py:class:`finance_tools_py.simulation.CallBack_Linear_Angle` 回调
+:py:class:`finance_tools_py.simulation.Pandas_Rolling` ,
+:py:class:`finance_tools_py.simulation.Linear_Angle` 回调
 生成的数据，并产生买入卖出信号列。
 
-.. autoclass:: finance_tools_py.simulation.CallBack_CalcTradePoint
+.. autoclass:: finance_tools_py.simulation.CalcTradePoint
     :members:
     :special-members: __init__,

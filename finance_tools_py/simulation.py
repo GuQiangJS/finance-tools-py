@@ -2,9 +2,7 @@
 
 import pandas as pd
 import numpy as np
-import QUANTAXIS as QA
 import datetime
-import seaborn as sns
 import matplotlib.pyplot as plt
 import abc
 import talib
@@ -23,7 +21,7 @@ class CallBack():
         pass
 
 
-class CallBack_Bolling(CallBack):
+class Bolling(CallBack):
     """调用 ``talib.BBANDS`` 方法生成布林线。并根据布林线计算简单的买入卖出点"""
 
     def __init__(self, timeperiod, nbdevup, nbdevdn, difupstd, diflowstd):
@@ -54,7 +52,7 @@ class CallBack_Bolling(CallBack):
         context['m2'] = data['diff_low'].max() - data['diff_low'].std() * self.diflowstd  # 买入点
 
 
-class CallBack_Pandas_Rolling(CallBack):
+class Pandas_Rolling(CallBack):
     """根据 pandas 中的简单移动平均函数，计算平均值和标准差"""
 
     def __init__(self, min_periods=30, window=250):
@@ -78,7 +76,7 @@ class CallBack_Pandas_Rolling(CallBack):
                                                     min_periods=self.min_periods).std()  # x日均价
 
 
-class CallBack_Linear_Angle(CallBack):
+class Linear_Angle(CallBack):
     """调用 ``talib.LINEARREG_ANGLE`` 线性角度"""
 
     def __init__(self, max_linear_angle="MED", linear_angle=[3, 5, 10, 30]):
@@ -116,7 +114,7 @@ class CallBack_Linear_Angle(CallBack):
         context['max_angles'] = max_angles
 
 
-class CallBack_CalcTradePoint(CallBack):
+class CalcTradePoint(CallBack):
     """计算交易时间点"""
 
     def on_preparing_data(self, symbol, data, context: {}):
@@ -149,8 +147,17 @@ class Simulation():
     """模拟类
 
     Example:
-        >>> sim=Simulation()
-        >>> sim.simulate('300378', start='2016-01-01', end=datetime.date(2020, 3, 9))
+        >>> from finance_tools_py.simulation import Simulation
+        >>> import matplotlib.pyplot as plt
+        >>> import datetime
+        >>> import QUANTAXIS as QA
+        
+        >>> symbol='300378'
+        >>> start = '2016-01-01'
+        >>> end = datetime.date(2020, 3, 9)
+        >>> data = QA.QA_fetch_stock_day_adv(symbol, start=start, end=end).to_qfq().data
+        >>> sim = Simulation(data,symbol)
+        >>> sim.simulate()
         >>> print(sim.lastest_signal)
         (False, Timestamp('2019-04-10 00:00:00'))
         >>> print(sim.signaldf)
@@ -164,14 +171,25 @@ class Simulation():
 
     """
 
-    def simulate(self, symbol, start='2010-01-01', end=datetime.date.today(),
-                 callbacks=[CallBack_Bolling(30, 2.6, 2.6, 0.3, 0.3),
-                            CallBack_Pandas_Rolling(30, 250),
-                            CallBack_Linear_Angle('MEAN', [60, 30, 10, 5, 3]),
-                            CallBack_CalcTradePoint()
+    def __init__(self, data: pd.DataFrame, symbol: str):
+        """初始化
+
+        Args:
+            data (:py:class: `pandas.DataFrame`): 日线数据源，
+            symbol (str): 股票代码。
+
+        """
+        self.__data = data.copy()
+        self.__symbol = symbol
+
+    def simulate(self,
+                 callbacks=[Bolling(30, 2.6, 2.6, 0.3, 0.3),
+                            Pandas_Rolling(30, 250),
+                            Linear_Angle('MEAN', [60, 30, 10, 5, 3]),
+                            CalcTradePoint()
                             ]):
         """执行模拟计算"""
-        self.__df = self.__read_df(symbol, start=start, end=end, callbacks=callbacks)
+        self.__df = self.__parse_data(callbacks=callbacks)
         if not self.__df.empty:
             self.__df = self.__df.reset_index()
             self.__buys = self.__df[self.__df['opt'] == 2]['date']
@@ -200,26 +218,16 @@ class Simulation():
         """根据模拟计算的结果，返回只包含买入卖出信号的数据表"""
         return self.__parse_df(self.__df, self.__buys, self.__sells)
 
-    def __read_df(self, symbol, start='2010-01-01', end=datetime.date.today(), fq='01', callbacks=[]) -> pd.DataFrame:
+    def __parse_data(self, callbacks=[]) -> pd.DataFrame:
         """读取指定股票的数据
         Args:
             fq (str): 是否复权。`00`:不复权，`01`:前复权，`02`:后复权
             callbacks  :CallBack的派生类集合。
         """
-        data = QA.QA_fetch_stock_day_adv(symbol, start=start, end=end)
-        if data:
-            if fq == '00':
-                data = data.data
-            elif fq == '01':
-                data = data.to_qfq().data
-            elif fq == '02':
-                data = data.to_hfq().data
-            else:
-                raise NotImplementedError()
         context = {}
         for cb in callbacks:
-            cb.on_preparing_data(symbol, data, context)
-        return data
+            cb.on_preparing_data(self.__symbol, self.__data, context)
+        return self.__data
 
     def __plot_sns(self, df, x='date', y=['close'], buys=[], sells=[], figsize=(20, 10),
                    fontsize='x-large') -> plt.axes:
