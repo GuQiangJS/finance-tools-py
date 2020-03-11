@@ -22,9 +22,23 @@ class CallBack():
 
 
 class Bolling(CallBack):
-    """调用 ``talib.BBANDS`` 方法生成布林线。并根据布林线计算简单的买入卖出点"""
+    """调用 `talib.BBANDS`_ 方法生成布林线。并根据布林线计算简单的买入卖出点
+
+    .. _talib.BBANDS:
+        https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
+    """
 
     def __init__(self, timeperiod, nbdevup, nbdevdn, difupstd, diflowstd):
+        """构造。
+
+        Args:
+            timeperiod: 参考 `talib.BBANDS`_ 方法中的 `timeperiod` 参数。
+            nbdevup: 参考 `talib.BBANDS`_ 方法中的 `nbdevup` 参数。
+            nbdevdn: 参考 `talib.BBANDS`_ 方法中的 `nbdevdn` 参数。
+
+        .. _talib.BBANDS:
+            https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
+        """
         self.timeperiod = timeperiod
         self.nbdevup = nbdevup
         self.nbdevdn = nbdevdn
@@ -32,10 +46,15 @@ class Bolling(CallBack):
         self.diflowstd = diflowstd
 
     def on_preparing_data(self, symbol, data, context: {}):
-        """根据 `timeperiod` , `nbdevup` , `nbdevdn` 调用 ``talib.BBANDS``
+        """根据 `timeperiod` , `nbdevup` , `nbdevdn` 调用 `talib.BBANDS`_
             生成 ``bool_x_up`` , ``bool_x_mean`` , ``bool_x_low`` 列；
+
             再分别除以 `close` 列，生成 ``diff_up`` , ``diff_mean`` , ``diff_low``；
-            最后分别生成 ``m1`` 和 ``m2`` 。作为简易的卖出点和买入点。
+
+            最后分别生成简易的买入/卖出比较价格，存放在 ``context`` 中，key值分别对应为 `m1` 和 `m2`
+
+        .. _talib.BBANDS:
+            https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
         """
         up = 'boll_{}_up'.format(self.timeperiod)
         mean = 'boll_{}_mean'.format(self.timeperiod)
@@ -77,7 +96,11 @@ class Pandas_Rolling(CallBack):
 
 
 class Linear_Angle(CallBack):
-    """调用 ``talib.LINEARREG_ANGLE`` 线性角度"""
+    """调用 `talib.LINEARREG_ANGLE`_ 线性角度
+
+    .. _talib.LINEARREG_ANGLE:
+        https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html
+    """
 
     def __init__(self, max_linear_angle="MED", linear_angle=[3, 5, 10, 30]):
         """
@@ -91,11 +114,14 @@ class Linear_Angle(CallBack):
         self.max_linear_angle = max_linear_angle
 
     def on_preparing_data(self, symbol, data, context: {}):
-        """循环对 `linear_angle` 指定的日期区间，调用 ``talib.LINEARREG_ANGLE`` ，生成角度值。
+        """循环对 :py:attr:`linear_angle` 指定的日期区间，调用 `talib.LINEARREG_ANGLE`_ ，生成角度值。
             所有计算得到的值取绝对值，对没有值的内容填充 `99` （以示角度超大）。
             取到的所有值会放在 ``context`` 中，key值为 `angle` ；
-            根据 `max_linear_angle` 设置的值对每隔日期区间的角度制取平均值或中位数。
+            根据 :py:attr:`max_linear_angle` 设置的值对每隔日期区间的角度制取平均值或中位数。
             取得的值会放在 ``context`` 中，key值为 `max_angles` ；
+
+        .. _talib.LINEARREG_ANGLE:
+            https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html
         """
         angles = []
         max_angles = {}
@@ -151,7 +177,7 @@ class Simulation():
         >>> import matplotlib.pyplot as plt
         >>> import datetime
         >>> import QUANTAXIS as QA
-        
+        >>>
         >>> symbol='300378'
         >>> start = '2016-01-01'
         >>> end = datetime.date(2020, 3, 9)
@@ -175,7 +201,7 @@ class Simulation():
         """初始化
 
         Args:
-            data (:py:class: `pandas.DataFrame`): 日线数据源，
+            data (:py:class:`pandas.DataFrame`): 日线数据源，
             symbol (str): 股票代码。
 
         """
@@ -188,7 +214,13 @@ class Simulation():
                             Linear_Angle('MEAN', [60, 30, 10, 5, 3]),
                             CalcTradePoint()
                             ]):
-        """执行模拟计算"""
+        """执行模拟计算。默认使用 :py:class:`finance_tools_py.simulation.Bolling` ,
+            :py:class:`finance_tools_py.simulation.Pandas_Rolling` ,
+            :py:class:`finance_tools_py.simulation.Linear_Angle` 回调生成的数据。并最终由
+            :py:class:`finance_tools_py.simulation.CalcTradePoint` 对数据进行合并计算，生成买入信号和卖出信号。
+            可以在计算后，通过调用 :py:attr:`signaldf` 来获取信号表或
+            通过调用 :py:attr:`lastest_signal` 来获取最后信号日期。
+        """
         self.__df = self.__parse_data(callbacks=callbacks)
         if not self.__df.empty:
             self.__df = self.__df.reset_index()
@@ -203,8 +235,8 @@ class Simulation():
 
         Returns:
             [bool,Timestamp]: 第一个参数返回true表示当前返回的时间时买入信号的时间，否则为卖出信号的时间。
-                第二个参数为信号点的时间。注意：当信号点的时间为 `1970-01-01` 这个特殊时间时，
-                返回数据是无意义的，表示卖出和买入均无信号点。
+            第二个参数为信号点的时间。**注意：当信号点的时间为 `1970-01-01` 这个特殊时间时，
+            返回数据是无意义的，表示卖出和买入均无信号点。**
         """
         s, d = self.__get_max_date(self.__buys, self.__sells)
         return s, d

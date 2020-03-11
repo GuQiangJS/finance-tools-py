@@ -197,7 +197,7 @@ class AllInChecker(AHundredChecker):
                            price: float,
                            cash: float) -> float:
         """计算买入数量。
-        根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr:`min_amount` 的倍数）
+            根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr:`min_amount` 的倍数）
             （计算时包含考虑了交易时可能产生的印花税和手续费）
         """
         amount = self.min_amount
