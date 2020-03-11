@@ -15,13 +15,22 @@ matrix:
     include:
     - python: '3.6'
       env: DOCBUILD=true
-  
+before_install:
+    - wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+    - tar -xzf ta-lib-0.4.0-src.tar.gz
+    - cd ta-lib/
+    - ./configure --prefix=/usr
+    - make
+    - sudo make install
+    - cd ..
 install:
   - pip install coverage
   - pip install pandas
   - pip install numpy
   - pip install coveralls
   - pip install pytest pytest-cov python-coveralls
+  - pip install tqdm
+  - pip install matplotlib
   - python setup.py install
   - if [[ $DOCBUILD ]]; then
     pip install sphinx sphinx_rtd_theme doctr sphinxcontrib-napoleon;

@@ -1,5 +1,8 @@
 pandas
 numpy
+tqdm
+TA-Lib
+matplotlib
 # Documentation Only
 sphinx
 sphinxcontrib-napoleon
