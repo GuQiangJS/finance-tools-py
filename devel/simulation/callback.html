@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.13 文档</title>
+  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.13+1.g9928d0f 文档</title>
   
 
   
@@ -298,7 +298,8 @@
 <dl class="method">
 <dt id="finance_tools_py.simulation.CalcTradePoint.on_preparing_data">
 <code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">symbol</em>, <em class="sig-param">data</em>, <em class="sig-param">context: {}</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.CalcTradePoint.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>计算买入点和卖出点。分别标记在 <code class="docutils literal notranslate"><span class="pre">opt</span></code> 列中，卖出为 <code class="docutils literal notranslate"><span class="pre">1</span></code> ，买入为 <code class="docutils literal notranslate"><span class="pre">2</span></code> 。</p>
+<dd><p>计算买入点和卖出点。分别标记在 <code class="docutils literal notranslate"><span class="pre">opt</span></code> 列中，卖出为 <code class="docutils literal notranslate"><span class="pre">1</span></code> ，买入为 <code class="docutils literal notranslate"><span class="pre">2</span></code> 。
+会将买入条件和卖出条件放入context中，key值分别为 <cite>buy_query</cite> 和 <cite>sell_query</cite> 。</p>
 </dd></dl>
 
 </dd></dl>
