@@ -1,10 +1,11 @@
 """模拟"""
 
-import pandas as pd
-import numpy as np
-import datetime
-import matplotlib.pyplot as plt
 import abc
+import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
 import talib
 
 
@@ -144,13 +145,14 @@ class CalcTradePoint(CallBack):
     """计算交易时间点"""
 
     def on_preparing_data(self, symbol, data, context: {}):
-        """计算买入点和卖出点。分别标记在 ``opt`` 列中，卖出为 ``1`` ，买入为 ``2`` 。"""
+        """计算买入点和卖出点。分别标记在 ``opt`` 列中，卖出为 ``1`` ，买入为 ``2`` 。
+            会将买入条件和卖出条件放入context中，key值分别为 `buy_query` 和 `sell_query` 。"""
         data['opt'] = 0
 
         m1 = context.pop('m1', None)
         m2 = context.pop('m2', None)
 
-        data.loc[data['diff_up'] < m1, 'opt'] = 1  # 卖出点
+        data.loc[data.query('diff_up<{:.2f}'.format(m1)).index, 'opt'] = 1  # 卖出点
 
         # 买入点计算开始
         # 买入条件：股价偏离30日均线上限或下线(diff_up,diff_low)
@@ -164,13 +166,17 @@ class CalcTradePoint(CallBack):
         # 买入条件：均线角度绝对值小于平均值
         if angles and max_angles:
             query = query + (' & '.join(['{}<{:.2f}'.format(a, max_angles[a]) for a in angles]))
-        #         print(query)
+        context['buy_query'] = query  # 买入条件
+        context['sell_query'] = 'diff_up<{:.2f}'.format(m1)  # 卖出条件
         data.loc[data.query(query).index, 'opt'] = 2
         # 买入点计算结束
 
 
 class Simulation():
     """模拟类
+
+    .. todo::
+        传入数据时尽量传入完整数据。因为不完整的数据可能会造成判断不准确。参考测试中的 ``test_simulate2`` 。
 
     Example:
         >>> from finance_tools_py.simulation import Simulation
@@ -207,6 +213,17 @@ class Simulation():
         """
         self.__data = data.copy()
         self.__symbol = symbol
+        self.__query = {}
+
+    @property
+    def buy_query(self):
+        '''买入点筛选条件'''
+        return self.__query['buy'] if 'buy' in self.__query else ''
+
+    @property
+    def sell_query(self):
+        '''卖出点筛选条件'''
+        return self.__query['sell'] if 'sell' in self.__query else ''
 
     def simulate(self,
                  callbacks=[Bolling(30, 2.6, 2.6, 0.3, 0.3),
@@ -221,13 +238,11 @@ class Simulation():
             可以在计算后，通过调用 :py:attr:`signaldf` 来获取信号表或
             通过调用 :py:attr:`lastest_signal` 来获取最后信号日期。
         """
-        self.__df = self.__parse_data(callbacks=callbacks)
-        if not self.__df.empty:
-            self.__df = self.__df.reset_index()
-            self.__buys = self.__df[self.__df['opt'] == 2]['date']
-            self.__sells = self.__df[self.__df['opt'] == 1]['date']
-        else:
-            self.__df = None
+        self.__parse_data(callbacks=callbacks)
+        if not self.__data.empty:
+            self.__data = self.__data.reset_index()
+            self.__buys = self.__data[self.__data['opt'] == 2]['date']
+            self.__sells = self.__data[self.__data['opt'] == 1]['date']
 
     @property
     def lastest_signal(self):
@@ -241,14 +256,39 @@ class Simulation():
         s, d = self.__get_max_date(self.__buys, self.__sells)
         return s, d
 
-    def plot_sns(self) -> plt.axes:
-        """绘制买入卖出信号图像"""
-        return self.__plot_sns(self.__df, buys=self.__buys, sells=self.__sells)
+    @property
+    def data(self):
+        """获取数据。调用 :py:func:`simulate` 方法后，会返回完整的数据集。"""
+        return self.__data
+
+    def plot_sns(self, **kwargs) -> plt.axes:
+        """绘制买入卖出信号图像
+
+        Args:
+            data: 数据。默认为 :py:attr:`data` 。
+            x: x轴。默认为 `date` 。
+            y: y轴。可以传入列表。默认为 `[close]` 、
+            buys: 买入点。时间集合。默认为当前模拟计算后的买入时间点集合。
+            sells: 卖出点。时间集合。默认为当前模拟计算后的卖出时间点集合。
+            figsize: 图片大小。默认为 `(20,10)`。
+            annotate_fontsize： 买入点卖出点的文字大小。默认为 `x-large` 。
+        """
+        data = kwargs.pop('data', self.__data)
+        x = kwargs.pop('x', 'date')
+        y = kwargs.pop('y', ['close'])
+        buys = kwargs.pop('buys', self.__buys)
+        sells = kwargs.pop('sells', self.__sells)
+        figsize = kwargs.pop('figsize', (20, 10))
+        annotate_fontsize = kwargs.pop('annotate_fontsize', 'x-large')
+        return self.__plot_sns(data, x=x, y=y,
+                               buys=buys, sells=sells,
+                               figsize=figsize,
+                               annotate_fontsize=annotate_fontsize)
 
     @property
-    def signaldf(self) -> pd.DataFrame:
+    def signaldata(self) -> pd.DataFrame:
         """根据模拟计算的结果，返回只包含买入卖出信号的数据表"""
-        return self.__parse_df(self.__df, self.__buys, self.__sells)
+        return self.__parse_df(self.__data, self.__buys, self.__sells)
 
     def __parse_data(self, callbacks=[]) -> pd.DataFrame:
         """读取指定股票的数据
@@ -259,17 +299,19 @@ class Simulation():
         context = {}
         for cb in callbacks:
             cb.on_preparing_data(self.__symbol, self.__data, context)
-        return self.__data
+        self.__query['buy'] = context['buy_query']
+        self.__query['sell'] = context['sell_query']
 
     def __plot_sns(self, df, x='date', y=['close'], buys=[], sells=[], figsize=(20, 10),
-                   fontsize='x-large') -> plt.axes:
+                   annotate_fontsize='x-large') -> plt.axes:
         ax = df.plot(x=x, y=y, figsize=figsize)
         for buy in df[df['date'].isin(buys)][['date', 'close']].values:
             ax.scatter(x=buy[0], y=buy[1], c='r')
-            ax.annotate('Buy:{:.2f}\n{}'.format(buy[1], buy[0].strftime('%Y-%m-%d')), buy, fontsize=fontsize)
+            ax.annotate('Buy:{:.2f}\n{}'.format(buy[1], buy[0].strftime('%Y-%m-%d')), buy, fontsize=annotate_fontsize)
         for sell in df[df['date'].isin(sells)][['date', 'close']].values:
             ax.scatter(x=sell[0], y=sell[1], c='g')
-            ax.annotate('Sell:{:.2f}\n{}'.format(sell[1], sell[0].strftime('%Y-%m-%d')), sell, fontsize=fontsize)
+            ax.annotate('Sell:{:.2f}\n{}'.format(sell[1], sell[0].strftime('%Y-%m-%d')), sell,
+                        fontsize=annotate_fontsize)
         return ax
 
     def __parse_df(self, df, buys, sells, cols=None):
