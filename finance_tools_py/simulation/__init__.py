@@ -2,7 +2,7 @@ class Simulation():
     """模拟类
 
     Attributes:
-        data: 数据源。
+        data: 数据源。调用 :func:`simulate` 方法后，会返回处理后的数据集，否则返回原始数据集。
         symbol: 股票代码
         callbacks: 处理数据时会使用到的回调 :class:`callbacks.CallBack` 集合。
 
@@ -36,11 +36,6 @@ class Simulation():
         if not self.data.empty:
             if kwargs.pop('reset_index', True):
                 self.data = self.data.reset_index()
-
-    @property
-    def data(self):
-        """获取数据。调用 :func:`simulate` 方法后，会返回处理后的数据集，否则返回原始数据集。"""
-        return self.data
 
     # def plot_sns(self, **kwargs) -> plt.axes:
     #     """绘制买入卖出信号图像
