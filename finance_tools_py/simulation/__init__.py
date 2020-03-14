@@ -63,7 +63,7 @@ class Simulation():
         """读取指定股票的数据"""
         context = {}
         for cb in self.callbacks:
-            cb.on_preparing_data(self.symbol, self.data, context)
+            cb.on_preparing_data(self.data, context)
         # self.__query['buy'] = context['buy_query']
         # self.__query['sell'] = context['sell_query']
 
