@@ -7,7 +7,6 @@ class Simulation():
         callbacks: 处理数据时会使用到的回调 :class:`callbacks.CallBack` 集合。
 
     """
-
     def __init__(
             self,
             data,
@@ -32,7 +31,7 @@ class Simulation():
             reset_index (bool): 是否对 :attr:`data` 做 :meth:`pandas.DataFrame.reset_index` 处理。
                 默认为 `True`。
         """
-        self.__parse_data()
+        self.__parse_data(**kwargs)
         if not self.data.empty:
             if kwargs.pop('reset_index', True):
                 self.data = self.data.reset_index()
@@ -59,11 +58,10 @@ class Simulation():
     #                            figsize=figsize,
     #                            annotate_fontsize=annotate_fontsize)
     #
-    def __parse_data(self):
+    def __parse_data(self, **kwargs):
         """读取指定股票的数据"""
-        context = {}
         for cb in self.callbacks:
-            cb.on_preparing_data(self.data, context)
+            cb.on_preparing_data(self.data, **kwargs)
         # self.__query['buy'] = context['buy_query']
         # self.__query['sell'] = context['sell_query']
 

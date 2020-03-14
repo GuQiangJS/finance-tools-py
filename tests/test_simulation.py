@@ -5,6 +5,7 @@ import pandas as pd
 import pytest
 import talib
 
+from finance_tools_py.simulation import Simulation
 from finance_tools_py.simulation.callbacks import talib as cb_talib
 
 
@@ -218,6 +219,25 @@ def test_talib_Linear_Angle(init_global_data):
     pd.Series.equals(
         talib.LINEARREG_ANGLE(pytest.global_data['close'], timeperiod),
         pytest.global_data['linear_angle_close_{}'.format(timeperiod)])
+
+
+def test_simulation1(init_global_data):
+    timeperiod = 3
+    nbdevup = 2.1
+    nbdevdn = 2.4
+    sim = Simulation(pytest.global_data,
+                     '123',
+                     callbacks=[cb_talib.BBANDS(timeperiod, nbdevup, nbdevdn)])
+    sim.simulate()
+    print(sim.data)
+    n_up = 'boll_close_{}_{}_{}_up'.format(timeperiod, nbdevup, nbdevdn)
+    n_mean = 'boll_close_{}_{}_{}_mean'.format(timeperiod, nbdevup, nbdevdn)
+    n_low = 'boll_close_{}_{}_{}_low'.format(timeperiod, nbdevup, nbdevdn)
+    up, mean, low = talib.BBANDS(pytest.global_data['close'], timeperiod,
+                                 nbdevup, nbdevdn)
+    pd.Series.equals(sim.data[n_up], up)
+    pd.Series.equals(sim.data[n_mean], mean)
+    pd.Series.equals(sim.data[n_low], low)
 
 # def test_Pandas_Rolling(init_global_data):
 #     min_periods = 3
