@@ -2,6 +2,7 @@ devel/_sources/backtest/backtest.rst.txt
 devel/_sources/backtest/callback.rst.txt
 devel/_sources/index.rst.txt
 devel/_sources/simulation/callback.rst.txt
+devel/_sources/simulation/callback_talib.rst.txt
 devel/_sources/simulation/simulation.rst.txt
 devel/_static/basic.css
 devel/_static/css/badge_only.css
@@ -62,7 +63,9 @@ devel/backtest/callback.html
 devel/genindex.html
 devel/index.html
 devel/objects.inv
+devel/py-modindex.html
 devel/search.html
 devel/searchindex.js
 devel/simulation/callback.html
+devel/simulation/callback_talib.html
 devel/simulation/simulation.html

@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>模拟工具 &mdash; finance-tools-py 0.0.14 文档</title>
+  <title>模拟工具 &mdash; finance-tools-py 0.0.14+1.ge4ad832 文档</title>
   
 
   
@@ -34,6 +34,7 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
     <link rel="next" title="模拟工具使用的回调" href="callback.html" />
@@ -156,121 +157,50 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="id1">
+  <span class="target" id="module-finance_tools_py.simulation"></span><div class="section" id="id1">
 <h1>模拟工具<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
 <p>模拟工具。可以通过编写不同的回调对数据进行加工和筛选，达到创建买入卖出信号点的功能。</p>
 <dl class="class">
 <dt id="finance_tools_py.simulation.Simulation">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param">data: pandas.core.frame.DataFrame</em>, <em class="sig-param">symbol: str</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation" title="永久链接至目标">¶</a></dt>
-<dd><p>模拟类</p>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">QUANTAXIS</span> <span class="k">as</span> <span class="nn">QA</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;300378&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">start</span> <span class="o">=</span> <span class="s1">&#39;2016-01-01&#39;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">date</span><span class="p">(</span><span class="mi">2020</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">QA</span><span class="o">.</span><span class="n">QA_fetch_stock_day_adv</span><span class="p">(</span><span class="n">symbol</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span><span class="o">.</span><span class="n">to_qfq</span><span class="p">()</span><span class="o">.</span><span class="n">data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="n">symbol</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">lastest_signal</span><span class="p">)</span>
-<span class="go">(False, Timestamp(&#39;2019-04-10 00:00:00&#39;))</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sim</span><span class="o">.</span><span class="n">signaldf</span><span class="p">)</span>
-<span class="go">          date    code       open  ...    angle_5    angle_3  opt</span>
-<span class="go">792 2019-04-04  300378  19.424380  ...  53.300611  59.359946    1</span>
-<span class="go">793 2019-04-08  300378  21.370790  ...  59.448386  61.697846    1</span>
-<span class="go">794 2019-04-09  300378  23.039142  ...  61.774397  63.894428    1</span>
-<span class="go">795 2019-04-10  300378  24.826661  ...  63.982287  65.983814    1</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">plot_sns</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
-</pre></div>
-</div>
-<dl class="method">
-<dt id="finance_tools_py.simulation.Simulation.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">data: pandas.core.frame.DataFrame</em>, <em class="sig-param">symbol: str</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation.__init__" title="永久链接至目标">¶</a></dt>
-<dd><p>初始化</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code>) – 日线数据源，</p></li>
-<li><p><strong>symbol</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)"><em>str</em></a>) – 股票代码。</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Simulation.buy_query">
-<em class="property">property </em><code class="sig-name descname">buy_query</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.buy_query" title="永久链接至目标">¶</a></dt>
-<dd><p>买入点筛选条件</p>
-</dd></dl>
-
-<dl class="method">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">symbol</em>, <em class="sig-param">callbacks=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>模拟类</p>
+<dl class="attribute">
 <dt id="finance_tools_py.simulation.Simulation.data">
-<em class="property">property </em><code class="sig-name descname">data</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.data" title="永久链接至目标">¶</a></dt>
-<dd><p>获取数据。调用 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.simulate" title="finance_tools_py.simulation.Simulation.simulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">simulate()</span></code></a> 方法后，会返回完整的数据集。</p>
+<code class="sig-name descname">data</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.data" title="永久链接至目标">¶</a></dt>
+<dd><p>数据源。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.Simulation.symbol">
+<code class="sig-name descname">symbol</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.symbol" title="永久链接至目标">¶</a></dt>
+<dd><p>股票代码</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.Simulation.callbacks">
+<code class="sig-name descname">callbacks</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.callbacks" title="永久链接至目标">¶</a></dt>
+<dd><p>处理数据时会使用到的回调 <a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">callbacks.CallBack</span></code></a> 集合。</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="finance_tools_py.simulation.Simulation.lastest_signal">
-<em class="property">property </em><code class="sig-name descname">lastest_signal</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.lastest_signal" title="永久链接至目标">¶</a></dt>
-<dd><p>获取最后信号日期</p>
-<dl class="field-list simple">
-<dt class="field-odd">返回</dt>
-<dd class="field-odd"><p>第一个参数返回true表示当前返回的时间时买入信号的时间，否则为卖出信号的时间。
-第二个参数为信号点的时间。<strong>注意：当信号点的时间为 `1970-01-01` 这个特殊时间时，
-返回数据是无意义的，表示卖出和买入均无信号点。</strong></p>
-</dd>
-<dt class="field-even">返回类型</dt>
-<dd class="field-even"><p>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a>,Timestamp]</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Simulation.plot_sns">
-<code class="sig-name descname">plot_sns</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span> &#x2192; matplotlib.pyplot.axes<a class="headerlink" href="#finance_tools_py.simulation.Simulation.plot_sns" title="永久链接至目标">¶</a></dt>
-<dd><p>绘制买入卖出信号图像</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – 数据。默认为 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.data" title="finance_tools_py.simulation.Simulation.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> 。</p></li>
-<li><p><strong>x</strong> – x轴。默认为 <cite>date</cite> 。</p></li>
-<li><p><strong>y</strong> – y轴。可以传入列表。默认为 <cite>[close]</cite> 、</p></li>
-<li><p><strong>buys</strong> – 买入点。时间集合。默认为当前模拟计算后的买入时间点集合。</p></li>
-<li><p><strong>sells</strong> – 卖出点。时间集合。默认为当前模拟计算后的卖出时间点集合。</p></li>
-<li><p><strong>figsize</strong> – 图片大小。默认为 <cite>(20,10)</cite>。</p></li>
-<li><p><strong>买入点卖出点的文字大小。默认为 x-large 。</strong> (<em>annotate_fontsize：</em>) – </p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Simulation.sell_query">
-<em class="property">property </em><code class="sig-name descname">sell_query</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.sell_query" title="永久链接至目标">¶</a></dt>
-<dd><p>卖出点筛选条件</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Simulation.signaldata">
-<em class="property">property </em><code class="sig-name descname">signaldata</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.signaldata" title="永久链接至目标">¶</a></dt>
-<dd><p>根据模拟计算的结果，返回只包含买入卖出信号的数据表</p>
+<dt>
+<em class="property">property </em><code class="sig-name descname">data</code></dt>
+<dd><p>获取数据。调用 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.simulate" title="finance_tools_py.simulation.Simulation.simulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">simulate()</span></code></a> 方法后，会返回处理后的数据集，否则返回原始数据集。</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="finance_tools_py.simulation.Simulation.simulate">
-<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param">callbacks=[&lt;finance_tools_py.simulation.Bolling object&gt;, &lt;finance_tools_py.simulation.Pandas_Rolling object&gt;, &lt;finance_tools_py.simulation.Linear_Angle object&gt;, &lt;finance_tools_py.simulation.CalcTradePoint object&gt;]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation.simulate" title="永久链接至目标">¶</a></dt>
-<dd><p>执行模拟计算。默认使用 <a class="reference internal" href="callback.html#finance_tools_py.simulation.Bolling" title="finance_tools_py.simulation.Bolling"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Bolling</span></code></a> ,
-<a class="reference internal" href="callback.html#finance_tools_py.simulation.Pandas_Rolling" title="finance_tools_py.simulation.Pandas_Rolling"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Pandas_Rolling</span></code></a> ,
-<a class="reference internal" href="callback.html#finance_tools_py.simulation.Linear_Angle" title="finance_tools_py.simulation.Linear_Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Linear_Angle</span></code></a> 回调生成的数据。并最终由
-<a class="reference internal" href="callback.html#finance_tools_py.simulation.CalcTradePoint" title="finance_tools_py.simulation.CalcTradePoint"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.CalcTradePoint</span></code></a> 对数据进行合并计算，生成买入信号和卖出信号。
-可以在计算后，通过调用 <code class="xref py py-attr docutils literal notranslate"><span class="pre">signaldf</span></code> 来获取信号表或
-通过调用 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.lastest_signal" title="finance_tools_py.simulation.Simulation.lastest_signal"><code class="xref py py-attr docutils literal notranslate"><span class="pre">lastest_signal</span></code></a> 来获取最后信号日期。</p>
+<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation.simulate" title="永久链接至目标">¶</a></dt>
+<dd><p>执行模拟计算。默认使用 <a class="reference internal" href="callback.html#module-finance_tools_py.simulation.callbacks" title="finance_tools_py.simulation.callbacks"><code class="xref py py-attr docutils literal notranslate"><span class="pre">callbacks</span></code></a> 回调生成的数据。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><p><strong>reset_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 是否对 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.data" title="finance_tools_py.simulation.Simulation.data"><code class="xref py py-attr docutils literal notranslate"><span class="pre">data</span></code></a> 做 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.reset_index.html#pandas.DataFrame.reset_index" title="(在 pandas v1.0.2)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">pandas.DataFrame.reset_index()</span></code></a> 处理。
+默认为 <cite>True</cite>。</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>

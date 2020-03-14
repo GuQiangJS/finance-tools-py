@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.14 文档</title>
+  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.14+1.ge4ad832 文档</title>
   
 
   
@@ -34,8 +34,10 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="趋势型指标计算回调" href="callback_talib.html" />
     <link rel="prev" title="模拟工具" href="simulation.html" /> 
 </head>
 
@@ -89,11 +91,13 @@
 <li class="toctree-l1"><a class="reference internal" href="../backtest/callback.html">回测时的回调</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation.html">模拟工具</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">模拟工具使用的回调</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id2">回调基类</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id3">布林带回调</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">简单移动平均回调</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">线性角度回调</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id9">合并多个回调生成买入卖出标记的回调</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#talib">talib函数相关</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="callback_talib.html#id15">动量型指标计算回调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="callback_talib.html#id16">统计相关计算回调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">模拟计算的回调基类</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -160,58 +164,98 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="id1">
+  <span class="target" id="module-finance_tools_py.simulation.callbacks"></span><div class="section" id="id1">
 <h1>模拟工具使用的回调<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<div class="section" id="talib">
+<h2>talib函数相关<a class="headerlink" href="#talib" title="永久链接至标题">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#bbands">布林带  BBANDS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#hilbert-transform">希尔伯特变换-瞬时趋势 Hilbert Transform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#dema">双指数移动平均 DEMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#t3">双指数移动均线改进指标 T3</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#tema">三重指数移动均线指标 TEMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#wma">加权移动均线指标 WMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#trima">三指数移动平均 TRIMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#ema">指数移动平均 EMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#kama">考夫曼自适应移动平均 KAMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#ma">移动平均 MA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#mesa-mama">MESA自适应移动平均 MAMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#midpoint">中间点指标 MIDPOINT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#sma">简单移动均线指标 SMA</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id15">动量型指标计算回调</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#adx">平均趋向指数 ADX</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id16">统计相关计算回调</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#linearreg-angle">线性回归角度 LINEARREG_ANGLE</a></li>
+</ul>
+</li>
+</ul>
+</div>
 <div class="section" id="id2">
-<h2>回调基类<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
-<p>所有回调均派生自此类型</p>
+<h3>模拟计算的回调基类<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
 <dl class="class">
-<dt id="finance_tools_py.simulation.CallBack">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">CallBack</code><a class="headerlink" href="#finance_tools_py.simulation.CallBack" title="永久链接至目标">¶</a></dt>
-<dd><p>读取数据时的回调。次类型为基类，所有回调需要派生自此基类</p>
+<dt id="finance_tools_py.simulation.callbacks.CallBack">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.</code><code class="sig-name descname">CallBack</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>读取数据时的回调。次类型为基类，所有回调需要派生自此基类</p>
+<dl class="simple">
+<dt>Atrributes:</dt><dd><p>close_name (str): 计算时取值的列名。默认为 <cite>close</cite>。</p>
+</dd>
+</dl>
 <dl class="method">
-<dt id="finance_tools_py.simulation.CallBack.on_preparing_data">
-<em class="property">abstract </em><code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">symbol</em>, <em class="sig-param">data</em>, <em class="sig-param">context: {}</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.CallBack.on_preparing_data" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.simulation.callbacks.CallBack.on_preparing_data">
+<em class="property">abstract </em><code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.on_preparing_data" title="永久链接至目标">¶</a></dt>
 <dd><p>数据读取完成后的准备事件</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>context</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – 不同的回调之间传递数据用的上下文字典。</p>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
 </dd>
 </dl>
 </dd></dl>
 
 </dd></dl>
 
-</div>
-<div class="section" id="id3">
-<h2>布林带回调<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
-<p>调用 <code class="docutils literal notranslate"><span class="pre">talib.BBANDS</span></code> 方法生成布林线。并工具布林线计算简单的买入卖出点。</p>
 <dl class="class">
-<dt id="finance_tools_py.simulation.Bolling">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Bolling</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">nbdevup</em>, <em class="sig-param">nbdevdn</em>, <em class="sig-param">difupstd</em>, <em class="sig-param">diflowstd</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Bolling" title="永久链接至目标">¶</a></dt>
-<dd><p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法生成布林线。并根据布林线计算简单的买入卖出点</p>
+<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MomentumCallBcak</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>动量型指标基类</p>
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.high_name">
+<code class="sig-name descname">high_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.high_name" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时 <cite>high</cite> 参数取值的列名。默认为 <cite>high</cite>。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.low_name">
+<code class="sig-name descname">low_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.low_name" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时 <cite>low</cite> 参数取值的列名。默认为 <cite>low</cite>。</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type</dt>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="method">
-<dt id="finance_tools_py.simulation.Bolling.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">nbdevup</em>, <em class="sig-param">nbdevdn</em>, <em class="sig-param">difupstd</em>, <em class="sig-param">diflowstd</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Bolling.__init__" title="永久链接至目标">¶</a></dt>
-<dd><p>构造。</p>
+<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.on_preparing_data">
+<em class="property">abstract </em><code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.on_preparing_data" title="永久链接至目标">¶</a></dt>
+<dd><p>数据读取完成后的准备事件</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>timeperiod</strong> – 参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法中的 <cite>timeperiod</cite> 参数。</p></li>
-<li><p><strong>nbdevup</strong> – 参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法中的 <cite>nbdevup</cite> 参数。</p></li>
-<li><p><strong>nbdevdn</strong> – 参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法中的 <cite>nbdevdn</cite> 参数。</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Bolling.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">symbol</em>, <em class="sig-param">data</em>, <em class="sig-param">context: {}</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Bolling.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><dl>
-<dt>根据 <cite>timeperiod</cite> , <cite>nbdevup</cite> , <cite>nbdevdn</cite> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a></dt><dd><p>生成 <code class="docutils literal notranslate"><span class="pre">bool_x_up</span></code> , <code class="docutils literal notranslate"><span class="pre">bool_x_mean</span></code> , <code class="docutils literal notranslate"><span class="pre">bool_x_low</span></code> 列；</p>
-<p>再分别除以 <cite>close</cite> 列，生成 <code class="docutils literal notranslate"><span class="pre">diff_up</span></code> , <code class="docutils literal notranslate"><span class="pre">diff_mean</span></code> , <code class="docutils literal notranslate"><span class="pre">diff_low</span></code>；</p>
-<p>最后分别生成简易的买入/卖出比较价格，存放在 <code class="docutils literal notranslate"><span class="pre">context</span></code> 中，key值分别对应为 <cite>m1</cite> 和 <cite>m2</cite></p>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
 </dd>
 </dl>
 </dd></dl>
@@ -219,91 +263,6 @@
 </dd></dl>
 
 </div>
-<div class="section" id="id6">
-<h2>简单移动平均回调<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
-<p>根据 pandas 中的简单移动平均函数，计算平均值和标准差。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.Pandas_Rolling">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Pandas_Rolling</code><span class="sig-paren">(</span><em class="sig-param">min_periods=30</em>, <em class="sig-param">window=250</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Pandas_Rolling" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 pandas 中的简单移动平均函数，计算平均值和标准差</p>
-<dl class="method">
-<dt id="finance_tools_py.simulation.Pandas_Rolling.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">min_periods=30</em>, <em class="sig-param">window=250</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Pandas_Rolling.__init__" title="永久链接至目标">¶</a></dt>
-<dd><p>构造函数</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>window</strong> – 参考 <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame.rolling</span></code> 方法中的 window 参数。</p></li>
-<li><p><strong>min_periods</strong> – 参考 <code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame.rolling</span></code> 方法中的 min_periods 参数。</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Pandas_Rolling.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">symbol</em>, <em class="sig-param">data</em>, <em class="sig-param">context: {}</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Pandas_Rolling.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <cite>min_periods</cite> 和 <cite>window</cite> 分别生成 <code class="docutils literal notranslate"><span class="pre">rolling_mean</span></code> 列和 <code class="docutils literal notranslate"><span class="pre">rolling_std</span></code> 列。</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="id7">
-<h2>线性角度回调<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
-<p>调用 <code class="docutils literal notranslate"><span class="pre">talib.LINEARREG_ANGLE</span></code> 线性角度。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.Linear_Angle">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Linear_Angle</code><span class="sig-paren">(</span><em class="sig-param">max_linear_angle='MED', linear_angle=[3, 5, 10, 30]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Linear_Angle" title="永久链接至目标">¶</a></dt>
-<dd><p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.LINEARREG_ANGLE</a> 线性角度</p>
-<dl class="method">
-<dt id="finance_tools_py.simulation.Linear_Angle.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">max_linear_angle='MED', linear_angle=[3, 5, 10, 30]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Linear_Angle.__init__" title="永久链接至目标">¶</a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>max_linear_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)"><em>str</em></a>) – 计算角度最大值取值时的参数。
-可以取平均值（MEAN）为最大值，也可以取中位数（MED）为最大值</p></li>
-<li><p><strong>linear_angle</strong> (<em>[</em><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a><em>]</em>) – 计算角度的日期区间。默认会分别计算 <cite>3,5,10,30</cite> 日的线性角度。</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.Linear_Angle.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">symbol</em>, <em class="sig-param">data</em>, <em class="sig-param">context: {}</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Linear_Angle.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><dl class="simple">
-<dt>循环对 <code class="xref py py-attr docutils literal notranslate"><span class="pre">linear_angle</span></code> 指定的日期区间，调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.LINEARREG_ANGLE</a> ，生成角度值。</dt><dd><p>所有计算得到的值取绝对值，对没有值的内容填充 <cite>99</cite> （以示角度超大）。
-取到的所有值会放在 <code class="docutils literal notranslate"><span class="pre">context</span></code> 中，key值为 <cite>angle</cite> ；
-根据 <code class="xref py py-attr docutils literal notranslate"><span class="pre">max_linear_angle</span></code> 设置的值对每隔日期区间的角度制取平均值或中位数。
-取得的值会放在 <code class="docutils literal notranslate"><span class="pre">context</span></code> 中，key值为 <cite>max_angles</cite> ；</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="id9">
-<h2>合并多个回调生成买入卖出标记的回调<a class="headerlink" href="#id9" title="永久链接至标题">¶</a></h2>
-<p>自动合并 <a class="reference internal" href="#finance_tools_py.simulation.Bolling" title="finance_tools_py.simulation.Bolling"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Bolling</span></code></a> ,
-<a class="reference internal" href="#finance_tools_py.simulation.Pandas_Rolling" title="finance_tools_py.simulation.Pandas_Rolling"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Pandas_Rolling</span></code></a> ,
-<a class="reference internal" href="#finance_tools_py.simulation.Linear_Angle" title="finance_tools_py.simulation.Linear_Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Linear_Angle</span></code></a> 回调
-生成的数据，并产生买入卖出信号列。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.CalcTradePoint">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">CalcTradePoint</code><a class="headerlink" href="#finance_tools_py.simulation.CalcTradePoint" title="永久链接至目标">¶</a></dt>
-<dd><p>计算交易时间点</p>
-<dl class="method">
-<dt id="finance_tools_py.simulation.CalcTradePoint.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">symbol</em>, <em class="sig-param">data</em>, <em class="sig-param">context: {}</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.CalcTradePoint.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>计算买入点和卖出点。分别标记在 <code class="docutils literal notranslate"><span class="pre">opt</span></code> 列中，卖出为 <code class="docutils literal notranslate"><span class="pre">1</span></code> ，买入为 <code class="docutils literal notranslate"><span class="pre">2</span></code> 。
-会将买入条件和卖出条件放入context中，key值分别为 <cite>buy_query</cite> 和 <cite>sell_query</cite> 。</p>
-</dd></dl>
-
-</dd></dl>
-
 </div>
 </div>
 
@@ -314,6 +273,8 @@
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="callback_talib.html" class="btn btn-neutral float-right" title="趋势型指标计算回调" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="simulation.html" class="btn btn-neutral float-left" title="模拟工具" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
