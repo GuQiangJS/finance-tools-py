@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.18+1.g590f7c4 文档</title>
+  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.18+2.gf162b29 文档</title>
   
 
   
@@ -34,7 +34,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
     <link rel="prev" title="模拟工具使用的回调" href="callback.html" /> 
@@ -92,27 +91,11 @@
 <li class="toctree-l1 current"><a class="reference internal" href="callback.html">模拟工具使用的回调</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="callback.html#talib">talib函数相关</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">趋势型指标计算回调</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#bbands">布林带  BBANDS</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#hilbert-transform">希尔伯特变换-瞬时趋势 Hilbert Transform</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#dema">双指数移动平均 DEMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#t3">双指数移动均线改进指标 T3</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#tema">三重指数移动均线指标 TEMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#wma">加权移动均线指标 WMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#trima">三指数移动平均 TRIMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#ema">指数移动平均 EMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#kama">考夫曼自适应移动平均 KAMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#ma">移动平均 MA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#mesa-mama">MESA自适应移动平均 MAMA</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#midpoint">中间点指标 MIDPOINT</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#sma">简单移动均线指标 SMA</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bbands-bollinger-bands">BBANDS - Bollinger Bands</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id15">动量型指标计算回调</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#adx">平均趋向指数 ADX</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="#id16">统计相关计算回调</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#linearreg-angle">线性回归角度 LINEARREG_ANGLE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">动量指标计算回调</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#willr-williams-r">WILLR - Williams’ %R 威廉指标</a></li>
 </ul>
 </li>
 <li class="toctree-l3"><a class="reference internal" href="callback.html#id2">模拟计算的回调基类</a></li>
@@ -192,548 +175,142 @@
 <h1>趋势型指标计算回调<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">Overlap Studies</a> 相关函数的回调。</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="finance_tools_py.simulation.callbacks.talib.BBANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">BBANDS</span></code></a> 布林带 BBANDS</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.DEMA" title="finance_tools_py.simulation.callbacks.talib.DEMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">DEMA</span></code></a> 双指数移动平均 DEMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.EMA" title="finance_tools_py.simulation.callbacks.talib.EMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">EMA</span></code></a> 指数移动平均 EMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.HT_TRENDLINE" title="finance_tools_py.simulation.callbacks.talib.HT_TRENDLINE"><code class="xref py py-class docutils literal notranslate"><span class="pre">HT_TRENDLINE</span></code></a> 希尔伯特变换-瞬时趋势 Hilbert Transform</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.KAMA" title="finance_tools_py.simulation.callbacks.talib.KAMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">KAMA</span></code></a> 考夫曼自适应移动平均 KAMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MA" title="finance_tools_py.simulation.callbacks.talib.MA"><code class="xref py py-class docutils literal notranslate"><span class="pre">MA</span></code></a> 移动平均 MA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MAMA" title="finance_tools_py.simulation.callbacks.talib.MAMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">MAMA</span></code></a> MESA自适应移动平均 MAMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MIDPOINT" title="finance_tools_py.simulation.callbacks.talib.MIDPOINT"><code class="xref py py-class docutils literal notranslate"><span class="pre">MIDPOINT</span></code></a> 中间点指标 MIDPOINT</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.SMA" title="finance_tools_py.simulation.callbacks.talib.SMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">SMA</span></code></a> 简单移动均线指标 SMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.T3" title="finance_tools_py.simulation.callbacks.talib.T3"><code class="xref py py-class docutils literal notranslate"><span class="pre">T3</span></code></a> 双指数移动均线改进指标 T3</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TEMA" title="finance_tools_py.simulation.callbacks.talib.TEMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">TEMA</span></code></a> 三重指数移动均线指标 TEMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TRIMA" title="finance_tools_py.simulation.callbacks.talib.TRIMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">TRIMA</span></code></a> 三指数移动平均 TRIMA</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WMA" title="finance_tools_py.simulation.callbacks.talib.WMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">WMA</span></code></a> 加权移动均线指标 WMA</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="finance_tools_py.simulation.callbacks.talib.BBANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">BBANDS</span></code></a> BBANDS - Bollinger Bands</p></li>
 </ul>
-<div class="section" id="bbands">
-<h2>布林带  BBANDS<a class="headerlink" href="#bbands" title="永久链接至标题">¶</a></h2>
-<p>BBANDS - Bollinger Bands</p>
+<div class="section" id="bbands-bollinger-bands">
+<h2>BBANDS - Bollinger Bands<a class="headerlink" href="#bbands-bollinger-bands" title="永久链接至标题">¶</a></h2>
 <p>简介：其利用统计原理，求出股价的标准差及其信赖区间，从而确定股价的波动范围及未来走势，利用波带显示股价的安全高低价位，因而也被称为布林带。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/bollinger%20bands/1612394?fr=aladdin">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/56d0d9be66b4f7a0?rid=53">同花顺学院</a></p>
 <dl class="class">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">BBANDS</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">nbdevup</em>, <em class="sig-param">nbdevdn</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法生成布林线。</p>
+<dd><p>附加计算布林带数据。</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>bbands_x_up: n日布林带上线</p></li>
+<li><p>bbands_x_mean: n日布林带中线</p></li>
+<li><p>bbands_x_low: n日布林带下线</p></li>
+<li><p>bbands_x_up/close: n日布林带上线/close的比率</p></li>
+<li><p>bbands_x_up/bbands_x_low: n日布林带上线/n日布林带下线的比率</p></li>
+<li><p>close/bbands_x_low: close/n日布林带下线的比率</p></li>
+</ul>
+<p><cite>x</cite> 生成规则为 <cite>timeperiod_nbdevup_nbdevup</cite> 。</p>
+</div></blockquote>
 <dl class="attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
+<dd><p>参考 <cite>talib.BBANDS</cite> 中的相关参数。</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup">
 <code class="sig-name descname">nbdevup</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法中的 <cite>nbdevup</cite> 参数。</p>
+<dd><p>参考 <cite>talib.BBANDS</cite> 中的相关参数。</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevdn">
-<code class="sig-name descname">nbdevdn</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevdn" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.BBANDS</a> 方法中的 <cite>nbdevdn</cite> 参数。</p>
+<dt>
+<code class="sig-name descname">nbdevup</code></dt>
+<dd><p>参考 <cite>talib.BBANDS</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.BBANDS.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod" title="finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> , <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup" title="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup"><code class="xref py py-attr docutils literal notranslate"><span class="pre">nbdevup</span></code></a> , <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevdn" title="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevdn"><code class="xref py py-attr docutils literal notranslate"><span class="pre">nbdevdn</span></code></a>
-调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.DEMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">boll_x_y_m_n_up</span></code> , <code class="docutils literal notranslate"><span class="pre">boll_x_y_m_n_mean</span></code> , <code class="docutils literal notranslate"><span class="pre">boll_x_y_m_n_low</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod" title="finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> ，<cite>m</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup" title="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup"><code class="xref py py-attr docutils literal notranslate"><span class="pre">nbdevup</span></code></a> ，<cite>n</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevdn" title="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevdn"><code class="xref py py-attr docutils literal notranslate"><span class="pre">nbdevdn</span></code></a> )。
-示例：<cite>boll_close_30_2_2_mean</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">      close      high       low</span>
+<span class="go">0  0.469006  0.171093  0.917249</span>
+<span class="go">1  0.878187  0.006180  0.113431</span>
+<span class="go">2  0.653001  0.723537  0.502946</span>
+<span class="go">3  0.852284  0.827910  0.496305</span>
+<span class="go">4  0.603522  0.894394  0.020531</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">u</span><span class="o">=</span><span class="mf">2.4</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">d</span><span class="o">=</span><span class="mf">2.7</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">BBANDS</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">d</span><span class="p">)</span><span class="o">.</span><span class="n">on_preparing_data</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;bbands&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">RangeIndex: 5 entries, 0 to 4</span>
+<span class="go">Data columns (total 6 columns):</span>
+<span class="go">bbands_3_2.4_2.7_up                         3 non-null float64</span>
+<span class="go">bbands_3_2.4_2.7_mean                       3 non-null float64</span>
+<span class="go">bbands_3_2.4_2.7_low                        3 non-null float64</span>
+<span class="go">bbands_3_2.4_2.7_up/close                   3 non-null float64</span>
+<span class="go">bbands_3_2.4_2.7_up/bbands_3_2.4_2.7_low    3 non-null float64</span>
+<span class="go">close/bbands_3_2.4_2.7_low                  3 non-null float64</span>
+<span class="go">dtypes: float64(6)</span>
+<span class="go">memory usage: 320.0 bytes</span>
+<span class="go">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">])</span>
+<span class="go">   bbands_3_2.4_2.7_up  ...  close/bbands_3_2.4_2.7_low</span>
+<span class="go">0                  NaN  ...                         NaN</span>
+<span class="go">1                  NaN  ...                         NaN</span>
+<span class="go">2             1.068322  ...                    3.038042</span>
+<span class="go">3             1.035945  ...                    1.630058</span>
+<span class="go">4             0.960984  ...                    1.462615</span>
+</pre></div>
 </div>
-<div class="section" id="hilbert-transform">
-<h2>希尔伯特变换-瞬时趋势 Hilbert Transform<a class="headerlink" href="#hilbert-transform" title="永久链接至标题">¶</a></h2>
-<p>HT_TRENDLINE - Hilbert Transform - Instantaneous Trendline</p>
-<p>简介：是一种趋向类指标，其构造原理是仍然对价格收盘价进行算术平均，并根据计算结果来进行分析，用于判断价格未来走势的变动趋势。</p>
-<p>分析和应用： <a class="reference external" href="https://wenku.baidu.com/view/0e35f6eead51f01dc281f18e.html">百度文库</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.HT_TRENDLINE">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">HT_TRENDLINE</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.HT_TRENDLINE" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.HT_TRENDLINE</a> 方法生成希尔伯特变换-瞬时趋势。</p>
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.HT_TRENDLINE.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.HT_TRENDLINE.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><dl class="simple">
-<dt>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.HT_TRENDLINE</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">ht_trendline_x</span></code> 列.</dt><dd><p>(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> )。示例：<cite>ht_trendline_close</cite> 。</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="dema">
-<h2>双指数移动平均 DEMA<a class="headerlink" href="#dema" title="永久链接至标题">¶</a></h2>
-<p>Double Exponential Moving Average</p>
-<p>简介：两条移动平均线来产生趋势信号，较长期者用来识别趋势，较短期者用来选择时机。正是两条平均线及价格三者的相互作用，才共同产生了趋势信号。</p>
-<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%8F%8C%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/1831921?fr=aladdin">百度百科</a>
-<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/a04d723659318237">同花顺学院</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.DEMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">DEMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.DEMA</a> 方法生成双指数移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.DEMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.DEMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.DEMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">dema_x_y</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为参数 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。示例：<cite>dema_close_30</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="t3">
-<h2>双指数移动均线改进指标 T3<a class="headerlink" href="#t3" title="永久链接至标题">¶</a></h2>
-<p>简介：双指数移动均线改进指标T3是对DEMA指标的简单改进。
-TRIX长线操作时采用本指标的讯号，长时间按照本指标讯号交易，获利百分比大于损失百分比，利润相当可观。
-比如日线MA5指5天内的收盘价除以5 。</p>
-<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E4%B8%89%E9%87%8D%E6%8C%87%E6%95%B0%E5%B9%B3%E6%BB%91%E5%B9%B3%E5%9D%87%E7%BA%BF/15749345?fr=aladdin">百度百科</a>
-<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/6c22c15ccbf24e64?rid=80">同花顺学院</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.T3">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">T3</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">vfactor</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.T3" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.T3</a> 方法生成双指数移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.T3.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.T3.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.T3</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.T3.vfactor">
-<code class="sig-name descname">vfactor</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.T3.vfactor" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.T3</a> 方法中的 <cite>vfactor</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.T3.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.T3.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.T3.timeperiod" title="finance_tools_py.simulation.callbacks.talib.T3.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 和 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.T3.vfactor" title="finance_tools_py.simulation.callbacks.talib.T3.vfactor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">vfactor</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.T3</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">t3_x_y_z</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为参数 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.T3.timeperiod" title="finance_tools_py.simulation.callbacks.talib.T3.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a>，<cite>z</cite> 为参数 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.T3.vfactor" title="finance_tools_py.simulation.callbacks.talib.T3.vfactor"><code class="xref py py-attr docutils literal notranslate"><span class="pre">vfactor</span></code></a> )。
-示例：<cite>t3_close_30_0</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="tema">
-<h2>三重指数移动均线指标 TEMA<a class="headerlink" href="#tema" title="永久链接至标题">¶</a></h2>
-<p>简介：与T3类似，三重指数移动均线指标TEMA也是对价格进行迭代计算。不同的是，这里采用的是指数移动平均EMA。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.TEMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">TEMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TEMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.TEMA</a> 方法生成双指数移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.TEMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TEMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.TEMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.TEMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TEMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TEMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.TEMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.TEMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">tema_x_y</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为参数 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TEMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.TEMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。
-示例：<cite>tema_close_30</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="wma">
-<h2>加权移动均线指标 WMA<a class="headerlink" href="#wma" title="永久链接至标题">¶</a></h2>
-<p>WMA - Weighted Moving Average</p>
-<p>简介：加权移动平均线WMA，其比重是以平均线的长度设定，愈近期的收市价，对市况影响愈重要。
-计算方式是基于加权移动平均线日数，将每一个之前日数比重提升。
-每一价格会乘以一个比重，最新的价格会有最大的比重，其之前的每一日的比重将会递减。</p>
-<p>移动加权平均法是指以每次进货的成本加上原有库存存货的成本，除以每次进货数量与原有库存存货的数量之和，
-据以计算加权平均单位成本，以此为基础计算当月发出存货的成本和期末存货的成本的一种方法。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.WMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.WMA</a> 方法生成双指数移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.WMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.WMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.WMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.WMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.WMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">wma_x_y</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为参数 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.WMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。
-示例：<cite>wma_close_30</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="trima">
-<h2>三指数移动平均 TRIMA<a class="headerlink" href="#trima" title="永久链接至标题">¶</a></h2>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.TRIMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">TRIMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TRIMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.TRIMA</a> 方法生成双指数移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.TRIMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TRIMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.TRIMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.TRIMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TRIMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TRIMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.TRIMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.TRIMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">trima_x_y</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为参数 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TRIMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.TRIMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。
-示例：<cite>trima_close_30</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="ema">
-<h2>指数移动平均 EMA<a class="headerlink" href="#ema" title="永久链接至标题">¶</a></h2>
-<p>EMA - Exponential Moving Average</p>
-<p>简介：是一种趋向类指标，其构造原理是仍然对价格收盘价进行算术平均，并根据计算结果来进行分析，用于判断价格未来走势的变动趋势。</p>
-<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/EMA/12646151">百度百科</a>
-<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/b7a39d74783ad689?rid=589">同花顺学院</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.EMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">EMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.EMA</a> 方法生成指数移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.EMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.EMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.EMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.EMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.EMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.EMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">ema_x_y</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.EMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.EMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。示例：<cite>ema_close_30</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="kama">
-<h2>考夫曼自适应移动平均 KAMA<a class="headerlink" href="#kama" title="永久链接至标题">¶</a></h2>
-<p>KAMA - Kaufman Adaptive Moving Average</p>
-<p>简介：短期均线贴近价格走势，灵敏度高，但会有很多噪声，产生虚假信号；长期均线在判断趋势上一般比较准确 ，
-但是长期均线有着严重滞后的问题。我们想得到这样的均线，当价格沿一个方向快速移动时，短期的移动 平均线是最合适的；
-当价格在横盘的过程中，长期移动平均线是合适的。</p>
-<p>分析和应用：<a class="reference external" href="http://blog.sina.com.cn/s/blog_62d0bbc701010p7d.html">参考1</a>
-<a class="reference external" href="https://wenku.baidu.com/view/bc4bc9c59ec3d5bbfd0a7454.html?from=search">参考2</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.KAMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">KAMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.KAMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.KAMA</a> 方法生成考夫曼自适应移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.KAMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.KAMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.KAMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.KAMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.KAMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><dl class="simple">
-<dt>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.KAMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.KAMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.KAMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">kama_x_y</span></code> 列.</dt><dd><p>(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.KAMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.KAMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。示例：<cite>kama_close_30</cite> 。</p>
-</dd>
-</dl>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="ma">
-<h2>移动平均 MA<a class="headerlink" href="#ma" title="永久链接至标题">¶</a></h2>
-<p>MA - Moving average 移动平均线</p>
-<p>简介：移动平均线，Moving Average，简称MA，原本的意思是移动平均，由于我们将其制作成线形，所以一般称之为移动平均线，简称均线。它是将某一段时间的收盘价之和除以该周期。 比如日线MA5指5天内的收盘价除以5 。</p>
-<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/217887?fromtitle=MA&amp;fromid=1511750#viewPageContent">百度百科</a>
-<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/a04d723659318237?rid=96">同花顺学院</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.MA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">matype=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MA</a> 方法生成移动平均。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MA.matype">
-<code class="sig-name descname">matype</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MA.matype" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MA</a> 方法中的 <cite>matype</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.MA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.MA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 和 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MA.matype" title="finance_tools_py.simulation.callbacks.talib.MA.matype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">matype</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">ma_x_y_z</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.MA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> ，<cite>z</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MA.matype" title="finance_tools_py.simulation.callbacks.talib.MA.matype"><code class="xref py py-attr docutils literal notranslate"><span class="pre">matype</span></code></a> )。
-示例：<cite>ma_close_30_0</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="mesa-mama">
-<h2>MESA自适应移动平均 MAMA<a class="headerlink" href="#mesa-mama" title="永久链接至标题">¶</a></h2>
-<p>MESA自适应移动平均</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.MAMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MAMA</code><span class="sig-paren">(</span><em class="sig-param">fastlimit=0</em>, <em class="sig-param">slowlimit=0</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MAMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MAMA</a> 方法生成MESA自适应移动平均。</p>
-<div class="admonition warning">
-<p class="admonition-title">警告</p>
-<p>按照talib网站介绍。这个方法并不稳定。</p>
-</div>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MAMA.fastlimit">
-<code class="sig-name descname">fastlimit</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MAMA.fastlimit" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <cite>talib.MAMA `_ 方法中的 `fastlimit</cite> 参数。</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MAMA.slowlimit">
-<code class="sig-name descname">slowlimit</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MAMA.slowlimit" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MAMA</a> 方法中的 <cite>slowlimit</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.MAMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MAMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MAMA.fastlimit" title="finance_tools_py.simulation.callbacks.talib.MAMA.fastlimit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fastlimit</span></code></a> 和 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MAMA.slowlimit" title="finance_tools_py.simulation.callbacks.talib.MAMA.slowlimit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">slowlimit</span></code></a> 调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.MAMA</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">mama_x_y_z</span></code>
-列和 <code class="docutils literal notranslate"><span class="pre">fama_x_y_z</span></code>。(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>y</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MAMA.fastlimit" title="finance_tools_py.simulation.callbacks.talib.MAMA.fastlimit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">fastlimit</span></code></a> ，<cite>z</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MAMA.slowlimit" title="finance_tools_py.simulation.callbacks.talib.MAMA.slowlimit"><code class="xref py py-attr docutils literal notranslate"><span class="pre">slowlimit</span></code></a> )。
-示例：<cite>mama_close_0_0</cite> 或 <cite>fama_close_0_0</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="midpoint">
-<h2>中间点指标 MIDPOINT<a class="headerlink" href="#midpoint" title="永久链接至标题">¶</a></h2>
-<p>简介：MIDPOINT用来反映价格在某一个周期区间内的总体平均水平。它反映了该价格在某一时间范围内的水平。
-与简单移动平均不同的是，MIDPOINT不关心价格的变动轨迹，而只反映价格变动的极值，是收盘价最大值和最小值的平均值。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.MIDPOINT">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MIDPOINT</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MIDPOINT" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.MIDPOINT</a> 线性角度。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MIDPOINT.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MIDPOINT.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>计算角度的日期区间。参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.MIDPOINT</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.MIDPOINT.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MIDPOINT.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>对 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MIDPOINT.timeperiod" title="finance_tools_py.simulation.callbacks.talib.MIDPOINT.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 指定的日期区间，调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.MIDPOINT</a>
-在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">midpoint_x_y</span></code> 列（<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，y表示 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MIDPOINT.timeperiod" title="finance_tools_py.simulation.callbacks.talib.MIDPOINT.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> ）。
-示例：<cite>midpoint_close_30</cite> 。</p>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-<div class="section" id="sma">
-<h2>简单移动均线指标 SMA<a class="headerlink" href="#sma" title="永久链接至标题">¶</a></h2>
-<p>简介：简单移动平均线SMA，又称“算术移动平均线”，是指对特定期间的收盘价进行简单平均化。
-一般所提及之移动平均线即指简单移动平均线。</p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.SMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">SMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.SMA</a>。</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.SMA.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.SMA</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.SMA.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>对 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.SMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.SMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 指定的日期区间，调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.SMA</a>
-在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">sma_x_y</span></code> 列（<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，y表示 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.SMA.timeperiod" title="finance_tools_py.simulation.callbacks.talib.SMA.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> ）。
-示例：<cite>sma_close_30</cite> 。</p>
-</dd></dl>
-
 </dd></dl>
 
 </div>
 </div>
-<div class="section" id="id15">
-<h1>动量型指标计算回调<a class="headerlink" href="#id15" title="永久链接至标题">¶</a></h1>
-<p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">Statistic Functions</a> 相关函数的回调。</p>
+<div class="section" id="id2">
+<h1>动量指标计算回调<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h1>
+<p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/momentum_indicators.html">Momentum Indicators</a> 相关函数的回调。</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.ADX" title="finance_tools_py.simulation.callbacks.talib.ADX"><code class="xref py py-class docutils literal notranslate"><span class="pre">ADX</span></code></a> 平均趋向指数 ADX</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="finance_tools_py.simulation.callbacks.talib.WILLR"><code class="xref py py-class docutils literal notranslate"><span class="pre">WILLR</span></code></a> WILLR - Williams’ %R 威廉指标</p></li>
 </ul>
-<div class="section" id="adx">
-<h2>平均趋向指数 ADX<a class="headerlink" href="#adx" title="永久链接至标题">¶</a></h2>
-<p>简介：平均趋向指数ADX是一种常用的趋势衡量指标。ADX指数是反映趋向变动的程度，而不是方向本身。
-也即是说，ADX无法告诉你趋势的发展方向，但如果趋势存在，它可以衡量趋势的强度。
-使用ADX指标，指标判断盘整、振荡和单边趋势。</p>
-<p><strong>特点：</strong></p>
-<ul class="simple">
-<li><p>ADX无法告诉你趋势的发展方向。</p></li>
-<li><p>如果趋势存在，ADX可以衡量趋势的强度。不论上升趋势或下降趋势，ADX看起来都一样。</p></li>
-<li><p>ADX的读数越大，趋势越明显。衡量趋势强度时，需要比较几天的ADX 读数，观察ADX究竟是上升或下降。ADX读数上升，代表趋势转强；如果ADX读数下降，意味着趋势转弱。</p></li>
-<li><p>当ADX曲线向上攀升，趋势越来越强，应该会持续发展。如果ADX曲线下滑，代表趋势开始转弱，反转的可能性增加。</p></li>
-<li><p>单就ADX本身来说，由于指标落后价格走势，所以算不上是很好的指标，不适合单就ADX进行操作。可是，如果与其他指标配合运用，ADX可以确认市场是否存在趋势，并衡量趋势的强度。</p></li>
-</ul>
-<p><strong>指标应用：</strong></p>
-<ul class="simple">
-<li><p>+DI与–DI表示多空相反的二个动向，当据此绘出的两条曲线彼此纠结相缠时，代表上涨力道与下跌力道相当，多空势均力敌。当 +DI与–DI彼此穿越时，由下往上的一方其力道开始压过由上往下的另一方，此时出现买卖讯号。</p></li>
-<li><p>ADX可作为趋势行情的判断依据，当行情明显朝多空任一方向进行时，ADX数值都会显著上升，趋势走强。若行情呈现盘整格局时，ADX会低于 +DI与–DI二条线。若ADX数值低于20，则不论DI表现如何，均显示市场没有明显趋势。</p></li>
-<li><p>ADX持续偏高时，代表“超买”（Overbought）或“超卖”（Oversold）的现象，行情反转的机会将增加，此时则不适宜顺势操作。当ADX数值从上升趋势转为下跌时，则代表行情即将反转；若ADX数值由下跌趋势转为上升时，行情将止跌回升。</p></li>
-<li><p>总言之，DMI指标包含4条线：+DI、-DI、ADX和ADXR。+DI代表买盘的强度、-DI代表卖盘的强度；ADX代表趋势的强度、ADXR则为ADX的移动平均。</p></li>
-</ul>
+<div class="section" id="willr-williams-r">
+<h2>WILLR - Williams’ %R 威廉指标<a class="headerlink" href="#willr-williams-r" title="永久链接至标题">¶</a></h2>
+<p>简介：WMS表示的是市场处于超买还是超卖状态。股票投资分析方法主要有如下三种：基本分析、技术分析、演化分析。在实际应用中，它们既相互联系，又有重要区别。</p>
+<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%A8%81%E5%BB%89%E6%8C%87%E6%A0%87?fr=aladdin">百度百科</a>
+<a class="reference external" href="https://zh.wikipedia.org/wiki/%E5%A8%81%E5%BB%89%E6%8C%87%E6%A8%99">维基百科</a>
+<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/967febb0316c57c1">同花顺学院</a></p>
 <dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.ADX">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">ADX</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.ADX" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak" title="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.talib.MomentumCallBcak</span></code></a></p>
-<p>平均趋向指数</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.ADX.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.ADX.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>计算时 <cite>timeperiod</cite> 参数取值的列名。默认为 <cite>14</cite>。</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)">int</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.ADX.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.ADX.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>根据 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.ADX.timeperiod" title="finance_tools_py.simulation.callbacks.talib.ADX.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> , <code class="xref py py-attr docutils literal notranslate"><span class="pre">high_name</span></code> , <code class="xref py py-attr docutils literal notranslate"><span class="pre">low_name</span></code> , <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code>
-调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">talib.ADX</a> 在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">adx_x_y_m_n</span></code> , <code class="docutils literal notranslate"><span class="pre">boll_x_y_m_n</span></code> , <code class="docutils literal notranslate"><span class="pre">boll_x_y_m_n</span></code> 列。
-(<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">high_name</span></code> ，<cite>y</cite> 为 <code class="xref py py-attr docutils literal notranslate"><span class="pre">low_name</span></code> ，<cite>m</cite> 为 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，<cite>n</cite> 为 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.ADX.timeperiod" title="finance_tools_py.simulation.callbacks.talib.ADX.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> )。
-示例：<cite>adx_high_low_close_14</cite> 。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-</div>
-</div>
-<div class="section" id="id16">
-<h1>统计相关计算回调<a class="headerlink" href="#id16" title="永久链接至标题">¶</a></h1>
-<p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">Statistic Functions</a> 相关函数的回调。</p>
+<dt id="finance_tools_py.simulation.callbacks.talib.WILLR">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WILLR</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="永久链接至目标">¶</a></dt>
+<dd><p>附加计算威廉指标。</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.Linear_Angle" title="finance_tools_py.simulation.callbacks.talib.Linear_Angle"><code class="xref py py-class docutils literal notranslate"><span class="pre">Linear_Angle</span></code></a> 线性回归角度 LINEARREG_ANGLE - Linear Regression Angle</p></li>
+<li><p>willr_x: x日威廉指标。（ <cite>x</cite> 为 <cite>timeperiod</cite> ）。</p></li>
 </ul>
-<div class="section" id="linearreg-angle">
-<h2>线性回归角度 LINEARREG_ANGLE<a class="headerlink" href="#linearreg-angle" title="永久链接至标题">¶</a></h2>
-<p>简介：来确定价格的角度变化.</p>
-<p>分析和应用：<a class="reference external" href="http://blog.sina.com.cn/s/blog_14c9f45b20102vv8p.md">参考</a></p>
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.Linear_Angle">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">Linear_Angle</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.Linear_Angle" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.LINEARREG_ANGLE</a> 线性角度。</p>
+</div></blockquote>
 <dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.Linear_Angle.timeperiod">
-<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.Linear_Angle.timeperiod" title="永久链接至目标">¶</a></dt>
-<dd><p>计算角度的日期区间。参考 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.LINEARREG_ANGLE</a> 方法中的 <cite>timeperiod</cite> 参数。</p>
+<dt id="finance_tools_py.simulation.callbacks.talib.WILLR.timeperiod">
+<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WILLR.timeperiod" title="永久链接至目标">¶</a></dt>
+<dd><p>参考 <cite>talib.WILLR</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.Linear_Angle.on_preparing_data">
-<code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.Linear_Angle.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>对 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.Linear_Angle.timeperiod" title="finance_tools_py.simulation.callbacks.talib.Linear_Angle.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> 指定的日期区间，调用 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/statistic_functions.html">talib.LINEARREG_ANGLE</a> ，生成角度值。
-在 <cite>data</cite> 中增加 <code class="docutils literal notranslate"><span class="pre">linear_angle_x_y</span></code> 列（<cite>x</cite> 为参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">close_name</span></code> ，y表示 <a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.Linear_Angle.timeperiod" title="finance_tools_py.simulation.callbacks.talib.Linear_Angle.timeperiod"><code class="xref py py-attr docutils literal notranslate"><span class="pre">timeperiod</span></code></a> ）。
-示例：<cite>linear_angle_close_30</cite> 。</p>
-</dd></dl>
-
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">      close      high       low</span>
+<span class="go">0  0.199431  0.192223  0.800428</span>
+<span class="go">1  0.028853  0.778810  0.482552</span>
+<span class="go">2  0.107672  0.468091  0.663075</span>
+<span class="go">3  0.996489  0.252303  0.370167</span>
+<span class="go">4  0.021458  0.663419  0.706077</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">WILLR</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">on_preparing_data</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;willr&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">]</span><span class="o">.</span><span class="n">info</span><span class="p">())</span>
+<span class="go">&lt;class &#39;pandas.core.frame.DataFrame&#39;&gt;</span>
+<span class="go">RangeIndex: 5 entries, 0 to 4</span>
+<span class="go">Data columns (total 1 columns):</span>
+<span class="go">willr_3    3 non-null float64</span>
+<span class="go">dtypes: float64(1)</span>
+<span class="go">memory usage: 120.0 bytes</span>
+<span class="go">None</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">cols</span><span class="p">])</span>
+<span class="go">      willr_3</span>
+<span class="go">0         NaN</span>
+<span class="go">1         NaN</span>
+<span class="go">2 -226.538462</span>
+<span class="go">3   53.268973</span>
+<span class="go">4 -218.911650</span>
+</pre></div>
+</div>
 </dd></dl>
 
 </div>

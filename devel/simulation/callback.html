@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.18+1.g590f7c4 文档</title>
+  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.18+2.gf162b29 文档</title>
   
 
   
@@ -34,7 +34,6 @@
   
   <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-  <link rel="stylesheet" href="../_static/default.css" type="text/css" />
     <link rel="index" title="索引" href="../genindex.html" />
     <link rel="search" title="搜索" href="../search.html" />
     <link rel="next" title="趋势型指标计算回调" href="callback_talib.html" />
@@ -93,8 +92,7 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">模拟工具使用的回调</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#talib">talib函数相关</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a></li>
-<li class="toctree-l3"><a class="reference internal" href="callback_talib.html#id15">动量型指标计算回调</a></li>
-<li class="toctree-l3"><a class="reference internal" href="callback_talib.html#id16">统计相关计算回调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="callback_talib.html#id2">动量指标计算回调</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">模拟计算的回调基类</a></li>
 </ul>
 </li>
@@ -173,27 +171,11 @@
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#bbands">布林带  BBANDS</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#hilbert-transform">希尔伯特变换-瞬时趋势 Hilbert Transform</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#dema">双指数移动平均 DEMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#t3">双指数移动均线改进指标 T3</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#tema">三重指数移动均线指标 TEMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#wma">加权移动均线指标 WMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#trima">三指数移动平均 TRIMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#ema">指数移动平均 EMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#kama">考夫曼自适应移动平均 KAMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#ma">移动平均 MA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#mesa-mama">MESA自适应移动平均 MAMA</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#midpoint">中间点指标 MIDPOINT</a></li>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#sma">简单移动均线指标 SMA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#bbands-bollinger-bands">BBANDS - Bollinger Bands</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id15">动量型指标计算回调</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#adx">平均趋向指数 ADX</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id16">统计相关计算回调</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#linearreg-angle">线性回归角度 LINEARREG_ANGLE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id2">动量指标计算回调</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#willr-williams-r">WILLR - Williams’ %R 威廉指标</a></li>
 </ul>
 </li>
 </ul>
@@ -203,55 +185,28 @@
 <dl class="class">
 <dt id="finance_tools_py.simulation.callbacks.CallBack">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.</code><code class="sig-name descname">CallBack</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
-<p>读取数据时的回调。次类型为基类，所有回调需要派生自此基类</p>
-<dl class="simple">
-<dt>Atrributes:</dt><dd><p>close_name (str): 计算时取值的列名。默认为 <cite>close</cite>。</p>
-</dd>
-</dl>
+<dd><p>读取数据时的回调。此类型为基类，所有回调需要派生自此基类</p>
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.CallBack.col_close">
+<code class="sig-name descname">col_close</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.col_close" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时取值的列名。默认为 <cite>close</cite>。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.CallBack.col_high">
+<code class="sig-name descname">col_high</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.col_high" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时取值的列名。默认为 <cite>high</cite>。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.CallBack.col_low">
+<code class="sig-name descname">col_low</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.col_low" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时取值的列名。默认为 <cite>low</cite>。</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="finance_tools_py.simulation.callbacks.CallBack.on_preparing_data">
 <em class="property">abstract </em><code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>数据读取完成后的准备事件</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="class">
-<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MomentumCallBcak</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
-<p>动量型指标基类</p>
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.high_name">
-<code class="sig-name descname">high_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.high_name" title="永久链接至目标">¶</a></dt>
-<dd><p>计算时 <cite>high</cite> 参数取值的列名。默认为 <cite>high</cite>。</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.low_name">
-<code class="sig-name descname">low_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.low_name" title="永久链接至目标">¶</a></dt>
-<dd><p>计算时 <cite>low</cite> 参数取值的列名。默认为 <cite>low</cite>。</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.on_preparing_data">
-<em class="property">abstract </em><code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MomentumCallBcak.on_preparing_data" title="永久链接至目标">¶</a></dt>
 <dd><p>数据读取完成后的准备事件</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
