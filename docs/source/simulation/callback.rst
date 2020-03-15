@@ -21,7 +21,3 @@ talib函数相关
 
 .. autoclass:: CallBack
     :members:
-
-.. autoclass:: finance_tools_py.simulation.callbacks.talib.MomentumCallBcak
-    :members:
-    :inherited-members: close_name

@@ -173,9 +173,5 @@ autodoc_default_options = {
     'member-order': 'alphabetical',
     'autodoc_member_order': 'alphabetical',
     # 'special-members': '__init__',
-    'show-inheritance': True
+    # 'show-inheritance': True
 }
-
-
-def setup(app):
-    app.add_css_file('default.css')
