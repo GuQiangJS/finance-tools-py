@@ -36,43 +36,63 @@ def _mock_data(size):
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
-def test_example_BBANDS(init_global_data):
-    print('>>> print(data)')
-    data = _mock_data(5)
-    print(data)
+def test_example_BBANDS():
+    print('>>> from finance_tools_py.simulation.callbacks.talib import BBANDS')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import BBANDS
+    print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(0.0, 8.0)]
+    })
+    print(">>> print(data['close'].values)")
+    print(data['close'].values)
     t = 3
     u = 2.4
     d = 2.7
-    print('>>> t={}'.format(t))
-    print('>>> u={}'.format(u))
-    print('>>> d={}'.format(d))
-    print('>>> print(BBANDS(t, u, d).on_preparing_data(data))')
-    cb_talib.BBANDS(t, u, d).on_preparing_data(data)
-    print(">>> cols=[col for col in data.columns if 'bbands' in col]")
-    cols = [col for col in data.columns if 'bbands' in col]
-    print('>>> print(data[cols].info())')
-    print(data[cols].info())
-    print('>>> print(data[cols])')
-    print(data[cols])
+    print('>>> t = {}'.format(t))
+    print('>>> u = {}'.format(u))
+    print('>>> d = {}'.format(d))
+    print('>>> s = Simulation(data,'',callbacks=[BBANDS(t, u, d)])')
+    print('>>> s.simulate()')
+    s=Simulation(data,'',callbacks=[BBANDS(t, u, d)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'bbands' in col]")
+    cols = [col for col in s.data.columns if 'bbands' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col,np.round(s.data[col].values,2)))
 
 
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
 def test_example_WILLR(init_global_data):
-    print('>>> print(data)')
-    data = _mock_data(5)
+    print('>>> from finance_tools_py.simulation.callbacks.talib import WILLR')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import WILLR
+    print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)],\n\
+                        'high': [y for y in range(0.1, 8.2)],\n\
+                        'low': [y for y in range(0.2, 8.2)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(0.0, 8.0)],
+        'high': [y for y in np.arange(0.1, 8.1)],
+        'low': [y for y in np.arange(0.2, 8.2)]
+    })
+    print(">>> print(data)")
     print(data)
     t = 3
     print('>>> t={}'.format(t))
-    print('>>> print(WILLR(t).on_preparing_data(data))')
-    cb_talib.WILLR(t).on_preparing_data(data)
-    print(">>> cols=[col for col in data.columns if 'willr' in col]")
-    cols = [col for col in data.columns if 'willr' in col]
-    print('>>> print(data[cols].info())')
-    print(data[cols].info())
-    print('>>> print(data[cols])')
-    print(data[cols])
+    print('>>> s = Simulation(data,'',callbacks=[WILLR(t)])')
+    print('>>> s.simulate()')
+    s=Simulation(data,'',callbacks=[WILLR(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'willr' in col]")
+    cols = [col for col in s.data.columns if 'willr' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col,np.round(s.data[col].values,2)))
 
 
 @pytest.mark.skipif(
