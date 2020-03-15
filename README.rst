@@ -14,4 +14,4 @@ Python 金融量化计算工具包
 .. image:: https://coveralls.io/repos/github/GuQiangJS/finance-tools-py/badge.svg
     :target: https://coveralls.io/github/GuQiangJS/finance-tools-py
 
-.. include:: dep.rst
+.. include:: dep.md
