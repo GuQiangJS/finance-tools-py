@@ -1,4 +1,4 @@
-.. module:: finance_tools_py.simulation.callbacks.talib
+.. py:currentmodule:: finance_tools_py.simulation.callbacks.talib
 
 .. toctree::
    :maxdepth: 5
@@ -10,10 +10,9 @@
 
 .. _Overlap Studies: https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
 
-* :py:class:`BBANDS` BBANDS - Bollinger Bands
+* :py:class:`BBANDS` BBANDS
 
-BBANDS - Bollinger Bands
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+**BBANDS - Bollinger Bands**
 
 简介：其利用统计原理，求出股价的标准差及其信赖区间，从而确定股价的波动范围及未来走势，利用波带显示股价的安全高低价位，因而也被称为布林带。
 
@@ -22,7 +21,7 @@ BBANDS - Bollinger Bands
 
 .. autoclass:: BBANDS
     :exclude-members: on_preparing_data
-    :inherited-members: CallBack
+    :inherited-members: col_close
 
 
 动量指标计算回调
@@ -32,10 +31,9 @@ BBANDS - Bollinger Bands
 
 .. _Momentum Indicators: https://mrjbq7.github.io/ta-lib/func_groups/momentum_indicators.html
 
-* :py:class:`WILLR` WILLR - Williams’ %R 威廉指标
+* :py:class:`WILLR` 威廉指标
 
-WILLR - Williams’ %R 威廉指标
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+**WILLR - Williams’ %R 威廉指标**
 
 简介：WMS表示的是市场处于超买还是超卖状态。股票投资分析方法主要有如下三种：基本分析、技术分析、演化分析。在实际应用中，它们既相互联系，又有重要区别。
 

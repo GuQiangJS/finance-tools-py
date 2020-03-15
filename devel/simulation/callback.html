@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.18+3.g31b87a1 文档</title>
+  <title>模拟工具使用的回调 &mdash; finance-tools-py 0.0.18+4.g1e29aba 文档</title>
   
 
   
@@ -93,9 +93,9 @@
 <li class="toctree-l2"><a class="reference internal" href="#talib">talib函数相关</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a></li>
 <li class="toctree-l3"><a class="reference internal" href="callback_talib.html#id2">动量指标计算回调</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">模拟计算的回调基类</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#id2">其他回调</a></li>
 </ul>
 </li>
 </ul>
@@ -162,7 +162,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-finance_tools_py.simulation.callbacks"></span><div class="section" id="id1">
+  <div class="section" id="id1">
 <h1>模拟工具使用的回调<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
@@ -170,22 +170,78 @@
 <h2>talib函数相关<a class="headerlink" href="#talib" title="永久链接至标题">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#bbands-bollinger-bands">BBANDS - Bollinger Bands</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id2">动量指标计算回调</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="callback_talib.html#willr-williams-r">WILLR - Williams’ %R 威廉指标</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="callback_talib.html">趋势型指标计算回调</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callback_talib.html#id2">动量指标计算回调</a></li>
 </ul>
 </div>
+</div>
 <div class="section" id="id2">
-<h3>模拟计算的回调基类<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h3>
+<h2>其他回调<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
+<p><strong>计算未来数据的回调</strong></p>
+<dl class="class">
+<dt id="finance_tools_py.simulation.callbacks.Rolling_Future">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.</code><code class="sig-name descname">Rolling_Future</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">skip=None</em>, <em class="sig-param">col_name=None</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.Rolling_Future" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>取未来 n 天的最低，最高，平均，中位数价格。</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>rolling_x_min: 未来n日取值最低</p></li>
+<li><p>rolling_x_max: 未来n日取值最高</p></li>
+<li><p>rolling_x_mean: 未来n日取值平均</p></li>
+<li><p>rolling_x_mean: 未来n日取值中位数</p></li>
+<li><p>rolling_x_mean/col_name: 未来n日取值平均/当前取值</p></li>
+<li><p>rolling_x_med/col_name: 未来n日取值中位数/当前取值</p></li>
+<li><p>rolling_x_max/col_name: 未来n日取值最高/当前取值</p></li>
+<li><p>rolling_x_min/col_name: 未来n日取值最低/当前取值</p></li>
+</ul>
+<p><cite>x</cite> 生成规则为 <cite>col_name_timeperiod</cite> 。</p>
+</div></blockquote>
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.Rolling_Future.timeperiod">
+<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.Rolling_Future.timeperiod" title="永久链接至目标">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.Rolling_Future.skip">
+<code class="sig-name descname">skip</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.Rolling_Future.skip" title="永久链接至目标">¶</a></dt>
+<dd><p>跳过的日期数。默认取 <cite>timeperiod</cite>。
+与其他回调方法方法共同使用时，需要保证 <cite>timeperiod</cite> 参数给值一致。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.Rolling_Future.col_name">
+<code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.Rolling_Future.col_name" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时使用的列名。默认使用 <cite>col_close</cite> 。</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="go">[0 1 2 3 4 5 6 7]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">Rolling_Future</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">on_preparing_data</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span><span class="o">=</span><span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="n">col</span><span class="o">!=</span><span class="s1">&#39;close&#39;</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="se">\n</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">rolling_close_3_min:[nan nan  3.  4.  5. nan nan nan]</span>
+<span class="go">rolling_close_3_max:[nan nan  5.  6.  7. nan nan nan]</span>
+<span class="go">rolling_close_3_mean:[nan nan  4.  5.  6. nan nan nan]</span>
+<span class="go">rolling_close_3_med:[nan nan  4.  5.  6. nan nan nan]</span>
+<span class="go">rolling_close_3_mean/close:[ nan  nan 2.   1.67 1.5   nan  nan  nan]</span>
+<span class="go">rolling_close_3_med/close:[ nan  nan 2.   1.67 1.5   nan  nan  nan]</span>
+<span class="go">rolling_close_3_max/close:[ nan  nan 2.5  2.   1.75  nan  nan  nan]</span>
+<span class="go">rolling_close_3_min/close:[ nan  nan 1.5  1.33 1.25  nan  nan  nan]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>回调基类</strong></p>
 <dl class="class">
 <dt id="finance_tools_py.simulation.callbacks.CallBack">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.</code><code class="sig-name descname">CallBack</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack" title="永久链接至目标">¶</a></dt>
-<dd><p>读取数据时的回调。此类型为基类，所有回调需要派生自此基类</p>
+<dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>读取数据时的回调。此类型为基类，所有回调需要派生自此基类</p>
 <dl class="attribute">
 <dt id="finance_tools_py.simulation.callbacks.CallBack.col_close">
 <code class="sig-name descname">col_close</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.col_close" title="永久链接至目标">¶</a></dt>
@@ -207,7 +263,7 @@
 <dl class="method">
 <dt id="finance_tools_py.simulation.callbacks.CallBack.on_preparing_data">
 <em class="property">abstract </em><code class="sig-name descname">on_preparing_data</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.CallBack.on_preparing_data" title="永久链接至目标">¶</a></dt>
-<dd><p>数据读取完成后的准备事件</p>
+<dd><p>数据读取完成后的准备事件。派生类中实现该事件从而实现对数据的包装。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 待处理的数据。</p>
@@ -217,7 +273,6 @@
 
 </dd></dl>
 
-</div>
 </div>
 </div>
 

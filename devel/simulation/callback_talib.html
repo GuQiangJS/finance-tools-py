@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.18+3.g31b87a1 文档</title>
+  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.18+4.g1e29aba 文档</title>
   
 
   
@@ -90,17 +90,11 @@
 <li class="toctree-l1"><a class="reference internal" href="simulation.html">模拟工具</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="callback.html">模拟工具使用的回调</a><ul class="current">
 <li class="toctree-l2 current"><a class="reference internal" href="callback.html#talib">talib函数相关</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">趋势型指标计算回调</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#bbands-bollinger-bands">BBANDS - Bollinger Bands</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">趋势型指标计算回调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">动量指标计算回调</a></li>
 </ul>
 </li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">动量指标计算回调</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#willr-williams-r">WILLR - Williams’ %R 威廉指标</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="callback.html#id2">模拟计算的回调基类</a></li>
-</ul>
-</li>
+<li class="toctree-l2"><a class="reference internal" href="callback.html#id2">其他回调</a></li>
 </ul>
 </li>
 </ul>
@@ -169,23 +163,23 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <span class="target" id="module-finance_tools_py.simulation.callbacks.talib"></span><div class="toctree-wrapper compound">
+  <div class="toctree-wrapper compound">
 </div>
 <div class="section" id="id1">
 <h1>趋势型指标计算回调<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">Overlap Studies</a> 相关函数的回调。</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="finance_tools_py.simulation.callbacks.talib.BBANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">BBANDS</span></code></a> BBANDS - Bollinger Bands</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="finance_tools_py.simulation.callbacks.talib.BBANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">BBANDS</span></code></a> BBANDS</p></li>
 </ul>
-<div class="section" id="bbands-bollinger-bands">
-<h2>BBANDS - Bollinger Bands<a class="headerlink" href="#bbands-bollinger-bands" title="永久链接至标题">¶</a></h2>
+<p><strong>BBANDS - Bollinger Bands</strong></p>
 <p>简介：其利用统计原理，求出股价的标准差及其信赖区间，从而确定股价的波动范围及未来走势，利用波带显示股价的安全高低价位，因而也被称为布林带。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/bollinger%20bands/1612394?fr=aladdin">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/56d0d9be66b4f7a0?rid=53">同花顺学院</a></p>
 <dl class="class">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">BBANDS</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">nbdevup</em>, <em class="sig-param">nbdevdn</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="永久链接至目标">¶</a></dt>
-<dd><p>附加计算布林带数据。</p>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算布林带数据。</p>
 <blockquote>
 <div><p>执行后会对数据源中附加如下的列：</p>
 <ul class="simple">
@@ -254,15 +248,13 @@
 </dd></dl>
 
 </div>
-</div>
 <div class="section" id="id2">
 <h1>动量指标计算回调<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h1>
 <p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/momentum_indicators.html">Momentum Indicators</a> 相关函数的回调。</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="finance_tools_py.simulation.callbacks.talib.WILLR"><code class="xref py py-class docutils literal notranslate"><span class="pre">WILLR</span></code></a> WILLR - Williams’ %R 威廉指标</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="finance_tools_py.simulation.callbacks.talib.WILLR"><code class="xref py py-class docutils literal notranslate"><span class="pre">WILLR</span></code></a> 威廉指标</p></li>
 </ul>
-<div class="section" id="willr-williams-r">
-<h2>WILLR - Williams’ %R 威廉指标<a class="headerlink" href="#willr-williams-r" title="永久链接至标题">¶</a></h2>
+<p><strong>WILLR - Williams’ %R 威廉指标</strong></p>
 <p>简介：WMS表示的是市场处于超买还是超卖状态。股票投资分析方法主要有如下三种：基本分析、技术分析、演化分析。在实际应用中，它们既相互联系，又有重要区别。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%A8%81%E5%BB%89%E6%8C%87%E6%A0%87?fr=aladdin">百度百科</a>
 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E5%A8%81%E5%BB%89%E6%8C%87%E6%A8%99">维基百科</a>
@@ -270,7 +262,8 @@
 <dl class="class">
 <dt id="finance_tools_py.simulation.callbacks.talib.WILLR">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WILLR</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="永久链接至目标">¶</a></dt>
-<dd><p>附加计算威廉指标。</p>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算威廉指标。</p>
 <blockquote>
 <div><p>执行后会对数据源中附加如下的列：</p>
 <ul class="simple">
@@ -313,7 +306,6 @@
 </div>
 </dd></dl>
 
-</div>
 </div>
 
 
