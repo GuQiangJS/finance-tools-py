@@ -92,9 +92,9 @@ def test_example_Rolling_Future(init_global_data):
     print(">>> cols=[col for col in data.columns if col!='close']")
     cols = [col for col in data.columns if col!='close']
     print(">>> for col in cols:")
-    print(">>>     print('{}\n{}'.format(col,np.round(data[col].values,2)))")
+    print(">>>     print('{}:{}'.format(col,np.round(data[col].values,2)))")
     for col in cols:
-        print('{}\n{}'.format(col,np.round(data[col].values,2)))
+        print('{}:{}'.format(col,np.round(data[col].values,2)))
 
 
 def test_BBANDS(init_global_data):

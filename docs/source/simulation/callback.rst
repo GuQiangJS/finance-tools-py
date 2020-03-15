@@ -1,10 +1,11 @@
-.. module:: finance_tools_py.simulation.callbacks
+.. py:currentmodule:: finance_tools_py.simulation.callbacks
 
 模拟工具使用的回调
 ******************************
 
 .. toctree::
    :maxdepth: 5
+
 
 talib函数相关
 ----------------------
@@ -14,10 +15,19 @@ talib函数相关
 
    callback_talib
 
+其他回调
+----------------------
 
-================================
-模拟计算的回调基类
-================================
+**计算未来数据的回调**
+
+.. autoclass:: Rolling_Future
+    :members:
+    :inherited-members: col_close
+    :exclude-members: on_preparing_data
+
+
+**回调基类**
 
 .. autoclass:: CallBack
     :members:
+    :show-inheritance: False
