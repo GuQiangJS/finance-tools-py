@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.19+6.g2bd09cd 文档</title>
+  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.19+7.g6735a44 文档</title>
   
 
   
@@ -169,7 +169,8 @@
 <h1>趋势型指标计算回调<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
 <p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html">Overlap Studies</a> 相关函数的回调。</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="finance_tools_py.simulation.callbacks.talib.BBANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">BBANDS</span></code></a> BBANDS</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="finance_tools_py.simulation.callbacks.talib.BBANDS"><code class="xref py py-class docutils literal notranslate"><span class="pre">BBANDS</span></code></a> BBANDS - Bollinger Bands</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.DEMA" title="finance_tools_py.simulation.callbacks.talib.DEMA"><code class="xref py py-class docutils literal notranslate"><span class="pre">DEMA</span></code></a> DEMA - Double Exponential Moving Average 双移动平均线</p></li>
 </ul>
 <p><strong>BBANDS - Bollinger Bands</strong></p>
 <p>简介：其利用统计原理，求出股价的标准差及其信赖区间，从而确定股价的波动范围及未来走势，利用波带显示股价的安全高低价位，因而也被称为布林带。</p>
@@ -219,7 +220,7 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="mi">3</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">u</span> <span class="o">=</span> <span class="mf">2.4</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">d</span> <span class="o">=</span> <span class="mf">2.7</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">BBANDS</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">d</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">BBANDS</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">d</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;bbands&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
@@ -230,6 +231,50 @@
 <span class="go">bbands_3_2.4_2.7_up/close:[ nan  nan 1.48 1.32 1.24 1.19 1.16 1.14]</span>
 <span class="go">bbands_3_2.4_2.7_up/bbands_3_2.4_2.7_low:[   nan    nan  -2.46 -19.36   6.23   3.32   2.49   2.1 ]</span>
 <span class="go">close/bbands_3_2.4_2.7_low:[   nan    nan  -1.66 -14.67   5.03   2.78   2.15   1.84]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>DEMA - Double Exponential Moving Average 双移动平均线</strong></p>
+<p>简介：两条移动平均线来产生趋势信号，较长期者用来识别趋势，较短期者用来选择时机。正是两条平均线及价格三者的相互作用，才共同产生了趋势信号。</p>
+<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%8F%8C%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/1831921?fr=aladdin">百度百科</a>
+<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/a04d723659318237">同花顺学院</a></p>
+<dl class="class">
+<dt id="finance_tools_py.simulation.callbacks.talib.DEMA">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">DEMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算双移动平均线。</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>dema_x: x日双移动平均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
+</ul>
+</div></blockquote>
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod">
+<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod" title="永久链接至目标">¶</a></dt>
+<dd><p>参考 <cite>talib.DEMA</cite> 中的相关参数。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.DEMA.col_name">
+<code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA.col_name" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">DEMA</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="go">[0. 1. 2. 3. 4. 5. 6. 7.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">DEMA</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;dema&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">dema_close_3:[nan nan nan nan  4.  5.  6.  7.]</span>
 </pre></div>
 </div>
 </dd></dl>
@@ -280,7 +325,7 @@
 <span class="go">6    6.0   6.1  6.2</span>
 <span class="go">7    7.0   7.1  7.2</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="mi">3</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">WILLR</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">WILLR</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;willr&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
