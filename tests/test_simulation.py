@@ -52,7 +52,7 @@ def test_example_BBANDS():
     print('>>> t = {}'.format(t))
     print('>>> u = {}'.format(u))
     print('>>> d = {}'.format(d))
-    print('>>> s = Simulation(data,'',callbacks=[BBANDS(t, u, d)])')
+    print(">>> s = Simulation(data,'',callbacks=[BBANDS(t, u, d)])")
     print('>>> s.simulate()')
     s=Simulation(data,'',callbacks=[BBANDS(t, u, d)])
     s.simulate()
@@ -83,12 +83,39 @@ def test_example_WILLR(init_global_data):
     print(data)
     t = 3
     print('>>> t={}'.format(t))
-    print('>>> s = Simulation(data,'',callbacks=[WILLR(t)])')
+    print(">>> s = Simulation(data,'',callbacks=[WILLR(t)])")
     print('>>> s.simulate()')
     s=Simulation(data,'',callbacks=[WILLR(t)])
     s.simulate()
     print(">>> cols = [col for col in data.columns if 'willr' in col]")
     cols = [col for col in s.data.columns if 'willr' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
+def test_example_DEMA(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import DEMA')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import DEMA
+    print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(0.0, 8.0)]
+    })
+    print(">>> print(data['close'].values)")
+    print(data['close'].values)
+    t = 3
+    print('>>> t={}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[DEMA(t)])")
+    print('>>> s.simulate()')
+    s=Simulation(data,'',callbacks=[DEMA(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'dema' in col]")
+    cols = [col for col in s.data.columns if 'dema' in col]
     print(">>> for col in cols:")
     print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
     for col in cols:
@@ -183,6 +210,28 @@ def test_WILLR(init_global_data):
                        pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[w])
 
+
+def test_Sim_DEMA(init_global_data):
+    """测试通过回测调用DEMA，逻辑与`test_DEMA`一致"""
+    t = 5
+    b = cb_talib.DEMA(t)
+    s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'dema_{}_{}'.format('close',t)
+    assert w in s.data.columns
+    real = talib.DEMA(s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
+def test_DEMA(init_global_data):
+    t = 5
+    b = cb_talib.DEMA(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    w = 'dema_close_{}'.format(t)  # 威廉指标
+    assert w in pytest.global_data.columns
+    real = talib.DEMA(pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[w])
 
 
 def test_Sim_Rolling_Future(init_global_data):

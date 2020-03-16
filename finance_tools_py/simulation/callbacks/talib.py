@@ -31,7 +31,7 @@ class BBANDS(CallBack):
         >>> t = 3
         >>> u = 2.4
         >>> d = 2.7
-        >>> s = Simulation(data,,callbacks=[BBANDS(t, u, d)])
+        >>> s = Simulation(data,'',callbacks=[BBANDS(t, u, d)])
         >>> s.simulate()
         >>> cols = [col for col in data.columns if 'bbands' in col]
         >>> for col in cols:
@@ -97,7 +97,7 @@ class WILLR(CallBack):
         6    6.0   6.1  6.2
         7    7.0   7.1  7.2
         >>> t=3
-        >>> s = Simulation(data,,callbacks=[WILLR(t)])
+        >>> s = Simulation(data,'',callbacks=[WILLR(t)])
         >>> s.simulate()
         >>> cols = [col for col in data.columns if 'willr' in col]
         >>> for col in cols:
@@ -114,3 +114,39 @@ class WILLR(CallBack):
         data[willr] = talib.WILLR(data[self.col_high].values,
                                   data[self.col_low].values,
                                   data[self.col_close].values, self.timeperiod)
+
+
+class DEMA(CallBack):
+    """附加计算双移动平均线。
+
+        执行后会对数据源中附加如下的列：
+
+        * dema_x: x日双移动平均线。（ `x` 为 `col_name_timeperiod` ）。
+
+    Attributes:
+        timeperiod: 参考 `talib.DEMA` 中的相关参数。
+        col_name: 计算时使用的数据列。默认为 `col_close`。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import DEMA
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})
+        >>> print(data['close'].values)
+        [0. 1. 2. 3. 4. 5. 6. 7.]
+        >>> t=3
+        >>> s = Simulation(data,'',callbacks=[DEMA(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'dema' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        dema_close_3:[nan nan nan nan  4.  5.  6.  7.]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.col_name = kwargs.pop('col_name', self.col_close)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算双移动平均线"""
+        real = 'dema_{}_{}'.format(self.col_name, self.timeperiod)
+        data[real] = talib.DEMA(data[self.col_name].values, self.timeperiod)

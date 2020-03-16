@@ -10,7 +10,8 @@
 
 .. _Overlap Studies: https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
 
-* :py:class:`BBANDS` BBANDS
+* :py:class:`BBANDS` BBANDS - Bollinger Bands
+* :py:class:`DEMA` DEMA - Double Exponential Moving Average 双移动平均线
 
 **BBANDS - Bollinger Bands**
 
@@ -20,6 +21,17 @@
 `同花顺学院 <http://www.iwencai.com/yike/detail/auid/56d0d9be66b4f7a0?rid=53>`__
 
 .. autoclass:: BBANDS
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close
+
+**DEMA - Double Exponential Moving Average 双移动平均线**
+
+简介：两条移动平均线来产生趋势信号，较长期者用来识别趋势，较短期者用来选择时机。正是两条平均线及价格三者的相互作用，才共同产生了趋势信号。
+
+分析和应用：`百度百科 <https://baike.baidu.com/item/%E5%8F%8C%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/1831921?fr=aladdin>`__
+`同花顺学院 <http://www.iwencai.com/yike/detail/auid/a04d723659318237>`__
+
+.. autoclass:: DEMA
     :exclude-members: on_preparing_data
     :inherited-members: col_close
 
