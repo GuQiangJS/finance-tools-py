@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0.0.19+10.g189e66b 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0.0.19+12.g3572d06 文档</title>
   
 
   
@@ -269,13 +269,13 @@
 <div class="section" id="id3">
 <h2>最小买卖的回调<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
 <dl class="class">
-<dt id="finance_tools_py.backtest.AHundredChecker">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AHundredChecker</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">MinAmountChecker</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.CallBack" title="finance_tools_py.backtest.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.CallBack</span></code></a></p>
-<p>每次买入和卖出数量都是100股的回调</p>
+<p>每次买入和卖出数量都是最小数量（数量为 <cite>min_amount</cite> 定义）的回调。</p>
 <dl class="attribute">
-<dt id="finance_tools_py.backtest.AHundredChecker.buy_dict">
-<code class="sig-name descname">buy_dict</code><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.buy_dict" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.buy_dict">
+<code class="sig-name descname">buy_dict</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.buy_dict" title="永久链接至目标">¶</a></dt>
 <dd><p>购买日期字典。key值为股票代码，value值为日期集合。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -285,8 +285,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="finance_tools_py.backtest.AHundredChecker.sell_dict">
-<code class="sig-name descname">sell_dict</code><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.sell_dict" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.sell_dict">
+<code class="sig-name descname">sell_dict</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.sell_dict" title="永久链接至目标">¶</a></dt>
 <dd><p>卖出日期字典。key值为股票代码，value值为日期集合。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -296,8 +296,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="finance_tools_py.backtest.AHundredChecker.tax_coeff">
-<code class="sig-name descname">tax_coeff</code><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.tax_coeff" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.tax_coeff">
+<code class="sig-name descname">tax_coeff</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.tax_coeff" title="永久链接至目标">¶</a></dt>
 <dd><p>印花税费率。默认为 <cite>0.001</cite> 。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -307,8 +307,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="finance_tools_py.backtest.AHundredChecker.commission_coeff">
-<code class="sig-name descname">commission_coeff</code><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.commission_coeff" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.commission_coeff">
+<code class="sig-name descname">commission_coeff</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.commission_coeff" title="永久链接至目标">¶</a></dt>
 <dd><p>手续费费率。默认为 <cite>0.001</cite> 。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -318,8 +318,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="finance_tools_py.backtest.AHundredChecker.min_commission">
-<code class="sig-name descname">min_commission</code><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.min_commission" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.min_commission">
+<code class="sig-name descname">min_commission</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.min_commission" title="永久链接至目标">¶</a></dt>
 <dd><p>最小手续费费率。默认为 <cite>5</cite> 。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -329,8 +329,8 @@
 </dd></dl>
 
 <dl class="attribute">
-<dt id="finance_tools_py.backtest.AHundredChecker.min_amount">
-<code class="sig-name descname">min_amount</code><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.min_amount">
+<code class="sig-name descname">min_amount</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>每次交易最小交易数量。默认为 <cite>100</cite> （股）。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
@@ -340,8 +340,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="finance_tools_py.backtest.AHundredChecker.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.__init__" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.__init__">
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -355,32 +355,53 @@
 </ul>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<p>直接传入日期字典</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1234&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">date</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">7.9</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MinAmountChecker</span><span class="p">(</span><span class="n">buy_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:[</span><span class="n">date</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]},</span>
+<span class="gp">&gt;&gt;&gt; </span>                <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:[</span><span class="n">date</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]})</span>
+</pre></div>
+</div>
+<p>对于日期字典的处理。当准备直接使用 <cite>Series</cite> 类型对象时，可以使用 <cite>to_pydatetime</cite> 方法转换日期值。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1234&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">date</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">7.9</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MinAmountChecker</span><span class="p">(</span><span class="n">buy_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="s1">&#39;1999-1-1&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()},</span>
+<span class="gp">&gt;&gt;&gt; </span>                <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s1">&#39;1999-1-1&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()})</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
-<dt id="finance_tools_py.backtest.AHundredChecker.on_calc_buy_amount">
-<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
-<dd><p>计算买入数量。当交易实际花费金额小于 <cite>cash</cite> （可用现金） 时，返回参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="finance_tools_py.backtest.AHundredChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）。</p>
+<dt id="finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount">
+<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<dd><p>计算买入数量。当交易实际花费金额小于 <cite>cash</cite> （可用现金） 时，返回参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="finance_tools_py.backtest.MinAmountChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）。</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount">
-<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<dt id="finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount">
+<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量。
-当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.min_amount" title="finance_tools_py.backtest.AHundredChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
+当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="finance_tools_py.backtest.MinAmountChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
 <span class="pre">否则返回</span> <span class="pre">`0</span></code>。</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="finance_tools_py.backtest.AHundredChecker.on_check_buy">
-<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
-<dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.buy_dict" title="finance_tools_py.backtest.AHundredChecker.buy_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">buy_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
+<dt id="finance_tools_py.backtest.MinAmountChecker.on_check_buy">
+<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
+<dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.buy_dict" title="finance_tools_py.backtest.MinAmountChecker.buy_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">buy_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="finance_tools_py.backtest.AHundredChecker.on_check_sell">
-<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AHundredChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
-<dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker.sell_dict" title="finance_tools_py.backtest.AHundredChecker.sell_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sell_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
+<dt id="finance_tools_py.backtest.MinAmountChecker.on_check_sell">
+<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
+<dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.sell_dict" title="finance_tools_py.backtest.MinAmountChecker.sell_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sell_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
 </dd></dl>
@@ -391,7 +412,7 @@
 <dl class="class">
 <dt id="finance_tools_py.backtest.AllInChecker">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AllInChecker</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker" title="永久链接至目标">¶</a></dt>
-<dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.AHundredChecker" title="finance_tools_py.backtest.AHundredChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.AHundredChecker</span></code></a></p>
+<dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker" title="finance_tools_py.backtest.MinAmountChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.MinAmountChecker</span></code></a></p>
 <p>全部资金进入及全部持仓卖出的回调</p>
 <dl class="method">
 <dt id="finance_tools_py.backtest.AllInChecker.__init__">
@@ -409,6 +430,27 @@
 </ul>
 </dd>
 </dl>
+<p class="rubric">Example</p>
+<p>直接传入日期字典</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1234&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">date</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">7.9</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MinAmountChecker</span><span class="p">(</span><span class="n">buy_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:[</span><span class="n">date</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]},</span>
+<span class="gp">&gt;&gt;&gt; </span>                <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:[</span><span class="n">date</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)]})</span>
+</pre></div>
+</div>
+<p>对于日期字典的处理。当准备直接使用 <cite>Series</cite> 类型对象时，可以使用 <cite>to_pydatetime</cite> 方法转换日期值。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;code&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;1234&#39;</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;date&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">date</span><span class="p">(</span><span class="mi">1998</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">1999</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span><span class="n">date</span><span class="p">(</span><span class="mi">2000</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)],</span>
+<span class="gp">&gt;&gt;&gt; </span>                     <span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">4.5</span><span class="p">,</span> <span class="mf">7.9</span><span class="p">,</span> <span class="mf">6.7</span><span class="p">]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">MinAmountChecker</span><span class="p">(</span><span class="n">buy_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="s1">&#39;1999-1-1&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()},</span>
+<span class="gp">&gt;&gt;&gt; </span>                <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s1">&#39;1999-1-1&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()})</span>
+</pre></div>
+</div>
 </dd></dl>
 
 <dl class="method">
