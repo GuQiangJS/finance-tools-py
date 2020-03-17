@@ -20,8 +20,11 @@ def test_example():
     print('Reading datas...')
     datas = {}
     for index, symbol in enumerate(list['code'].values):
-        print('{}/{} {}:{}'.format(index + 1, len(list), symbol, datetime.datetime.now()))
-        datas[symbol] = QA.QA_fetch_stock_day_adv(symbol, start='2006-01-01', end='2019-12-31')
+        print('{}/{} {}:{}'.format(index + 1, len(list), symbol,
+                                   datetime.datetime.now()))
+        datas[symbol] = QA.QA_fetch_stock_day_adv(symbol,
+                                                  start='2006-01-01',
+                                                  end='2019-12-31')
     print('Datas readed.')
 
     result = {}
@@ -37,12 +40,18 @@ def test_example():
     print('Processing datas...')
     for index, (symbol, df) in enumerate(datas.items()):
         try:
-            print('{}/{} {}:{}'.format(index + 1, len(datas), symbol, datetime.datetime.now()))
-            df = QA.QA_fetch_stock_day_adv(symbol, start='2006-01-01', end='2019-12-31')
+            print('{}/{} {}:{}'.format(index + 1, len(datas), symbol,
+                                       datetime.datetime.now()))
+            df = QA.QA_fetch_stock_day_adv(symbol,
+                                           start='2006-01-01',
+                                           end='2019-12-31')
             if df and not df.data.empty and not df.to_qfq().data.empty:
                 bbands = df.to_qfq().data.reset_index().copy()
-                bbands['up'], bbands['mean'], bbands['low'] = talib.BBANDS(bbands['close'].values, timeperiod=30,
-                                                                           nbdevup=2.8, nbdevdn=2.8)
+                bbands['up'], bbands['mean'], bbands['low'] = talib.BBANDS(
+                    bbands['close'].values,
+                    timeperiod=30,
+                    nbdevup=2.8,
+                    nbdevdn=2.8)
                 bbands['diff_up'] = bbands['up'] / bbands['close']
                 bbands['diff_mean'] = bbands['mean'] / bbands['close']
                 bbands['diff_low'] = bbands['low'] / bbands['close']
@@ -57,8 +66,10 @@ def test_example():
                 bbands.loc[bbands['opt'] != 0][['date', 'close', 'opt']]
                 point = bbands.loc[bbands['opt'] != 0][1:]
 
-                buy_dict[symbol] = pd.DatetimeIndex(point.loc[point['opt'] == 2]['date'].values)
-                sell_dict[symbol] = pd.DatetimeIndex(point.loc[point['opt'] == 1]['date'].values)
+                buy_dict[symbol] = pd.DatetimeIndex(
+                    point.loc[point['opt'] == 2]['date'].values)
+                sell_dict[symbol] = pd.DatetimeIndex(
+                    point.loc[point['opt'] == 1]['date'].values)
 
         except Exception as e:
             print(str(e))
@@ -66,9 +77,12 @@ def test_example():
             continue
     print('Datas processed.')
 
-    all_data = pd.concat([x.data for x in datas.values() if x is not None]).sort_index(level=0)
+    all_data = pd.concat([x.data for x in datas.values()
+                          if x is not None]).sort_index(level=0)
 
-    bt = BackTest(all_data.reset_index(), 50000, callbacks=[MinAmountChecker(buy_dict, sell_dict)])
+    bt = BackTest(all_data.reset_index(),
+                  50000,
+                  callbacks=[MinAmountChecker(buy_dict, sell_dict)])
     bt.calc_trade_history(verbose=2)
     print(bt.report())
 
@@ -86,3 +100,34 @@ def test_sas():
     ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
     ps.print_stats()
     print(s.getvalue())
+
+
+def test_avg():
+    import numpy as np
+
+    for sell_amount in [100, 200, 300, 400]:
+        s = sell_amount
+        hold_price = [1, 2, 3, 4]
+        hold_amount = [100, 200, 300, 400]
+        while sell_amount > 0:
+            if sell_amount >= hold_amount[0]:
+                a = hold_amount[0]
+                hold_amount.remove(a)
+                hold_price.remove(hold_price[0])
+                sell_amount = sell_amount - a
+            else:
+                hold_amount[0] = hold_amount[0] - sell_amount
+                sell_amount = 0
+        print(s, hold_amount)
+        if s == 100:
+            assert hold_amount == [200, 300, 400]
+            assert hold_price == [2, 3, 4]
+        if s == 200:
+            assert hold_amount == [100, 300, 400]
+            assert hold_price == [2, 3, 4]
+        if s == 300:
+            assert hold_amount == [300, 400]
+            assert hold_price == [3, 4]
+        if s == 400:
+            assert hold_amount == [200, 400]
+            assert hold_price == [3, 4]

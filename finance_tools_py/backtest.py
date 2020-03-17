@@ -80,6 +80,7 @@ class CallBack():
         """
         return 0
 
+
 class MinAmountChecker(CallBack):
     """每次买入和卖出数量都是最小数量（数量为 `min_amount` 定义）的回调。
 
@@ -270,7 +271,7 @@ class BackTest():
         self._calced = False
         self._colname = col_name
         self._calbacks = callbacks
-        self._hold_price_cur = pd.DataFrame()
+        self._buy_price_cur = {}  #购买成本。
         self._history_headers = [
             'datetime',  # 时间
             'code',  # 代码
@@ -321,14 +322,33 @@ class BackTest():
     #         aggfunc=np.sum
     #     ).fillna(0).sort_index()
 
-    def __hold_price_cur(self):
-        """计算目前持仓的成本。
+    @property
+    def hold_price_cur_df(self):
+        """当前持仓成本附加最新价格的 DataFrame 格式数据
 
-        因为这个属性可能会频繁调用apply，造成性能极低。所以改为内部属性。
+        Examples:
+                buy_price  amount  price_cur
+        code
+        000001       13.4   100.0       15.3
 
         Returns:
-            :py:class:`pandas.Series`
+            :class:`pandas.DataFrame` : 结果数据
         """
+        if self._hold_price_cur.empty:
+            return pd.DataFrame(
+                columns=['buy_price', 'amount', 'price_cur']).sort_index()
+        d = self.data.sort_values('date')
+        df = pd.DataFrame(self._hold_price_cur.values.tolist(),
+                          columns=['buy_price', 'amount'],
+                          index=self._hold_price_cur.index)
+        df['price_cur'] = df.apply(
+            lambda row: d.loc[d['code'] == row.name, 'close'].iloc[-1], axis=1)
+        return df.sort_index()
+
+    @property
+    def _hold_price_cur(self):
+        """目前持仓的成本。是 :py:class: `pandas.Series` 类型或 :py:class: `pandas.DataFrame` 类型。
+            其中 `code` 是索引，通过索引访问会返回一个数组（price,amount）"""
         def weights(x):
             n = len(x)
             res = 1
@@ -348,15 +368,6 @@ class BackTest():
         return self.history_df.set_index(
             'datetime',
             drop=False).sort_index().groupby('code').apply(weights).dropna()
-
-    @property
-    def hold_price_cur(self):
-        """目前持仓的成本。是 :py:class: `pandas.Series` 类型或 :py:class: `pandas.DataFrame` 类型。
-            其中 `code` 是索引，通过索引访问会返回一个数组（price,amount）"""
-        return self._hold_price_cur
-
-    def _update_hold_price_cur(self):
-        self._hold_price_cur = self.__hold_price_cur()
 
     def hold_time(self, dt=None):
         """持仓时间。根据参数 `dt` 查询截止时间之前的交易，并与当前时间计算差异。
@@ -391,7 +402,7 @@ class BackTest():
         当前可用资金+当前持仓。
         """
         return self.available_cash + sum(
-            [x[0] * x[1] for x in self.hold_price_cur])
+            [x[0] * x[1] for x in self._hold_price_cur])
 
     # def hold_table(self, datetime=None):
     #     """到某一个时刻的持仓 如果给的是日期,则返回当日开盘前的持仓"""
@@ -427,11 +438,58 @@ class BackTest():
                 return True
         return False
 
+    def __get_buy_avg_price(self, code):
+        """当前买入平均成本
+
+        Returns:
+            (float,float): (成本,数量)
+        """
+        if code in self._buy_price_cur:
+            hold_amount, hold_price = self._buy_price_cur[code]
+            if hold_amount and hold_price:
+                return np.average(hold_price,
+                                  weights=hold_amount,
+                                  returned=True)
+        return (0.0, 0.0)
+
+    # def __get_hold_price(self,code):
+    #     pass
+
+    def __update_buy_price(self, code, amount, price, toward):
+        """更新买入成本"""
+        if toward == 1:
+            #买入
+            hold_amount = []
+            hold_price = []
+            if code not in self._buy_price_cur:
+                self._buy_price_cur[code] = [hold_amount, hold_price]
+            else:
+                hold_amount, hold_price = self._buy_price_cur[code]
+            self._buy_price_cur[code] = [
+                hold_amount + [amount], hold_price + [price]
+            ]
+        elif toward == -1:
+            #卖出
+            hold_amount = []
+            hold_price = []
+            if code not in self._buy_price_cur:
+                self._buy_price_cur[code] = [hold_amount, hold_price]
+            else:
+                hold_amount, hold_price = self._buy_price_cur[code]
+
+            while amount > 0:
+                if amount >= hold_amount[0]:
+                    a = hold_amount[0]
+                    hold_amount.remove(a)
+                    hold_price.remove(hold_price[0])
+                    amount = amount - a
+                else:
+                    hold_amount[0] = hold_amount[0] - amount
+                    amount = 0
+
     def _check_callback_sell(self, date, code, price) -> bool:
         for cb in self._calbacks:
-            hold_amount, hold_price = 0, 0
-            if not self.hold_price_cur.empty and code in self.hold_price_cur.index:
-                hold_price, hold_amount = self.hold_price_cur[code]
+            hold_price, hold_amount = self.__get_buy_avg_price(code)
             if cb.on_check_sell(date, code, price, self.available_cash,
                                 hold_amount, hold_price):
                 return True
@@ -447,8 +505,8 @@ class BackTest():
 
     def _calc_sell_amount(self, date, code, price) -> float:
         for cb in self._calbacks:
-            if not self.hold_price_cur.empty and code in self.hold_price_cur.index:
-                hold_price, hold_amount = self.hold_price_cur[code]
+            hold_price, hold_amount = self.__get_buy_avg_price(code)
+            if hold_amount > 0:
                 amount = cb.on_calc_sell_amount(date, code, price,
                                                 self.available_cash,
                                                 hold_amount, hold_price)
@@ -500,7 +558,7 @@ class BackTest():
                         tax,
                         1,
                     )
-                    self._update_hold_price_cur()
+                    self.__update_buy_price(code, amount, price, 1)
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
@@ -527,7 +585,7 @@ class BackTest():
                         tax,
                         -1,
                     )
-                    self._update_hold_price_cur()
+                    self.__update_buy_price(code, amount, price, -1)
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
@@ -547,8 +605,11 @@ class BackTest():
         return np.asarray(
             self.history).T[5].sum() if len(self.history) > 0 else 0
 
-    def report(self):
+    def report(self, **kwargs):
         """获取计算结果
+
+        Args:
+            show_history (bool): 是否包含交易明细。默认为True。
 
         Returns:
             str: 返回计算结果。
@@ -564,8 +625,8 @@ class BackTest():
         result = result + '\n交易次数:{} (买入/卖出各算1次)'.format(len(self.history))
         result = result + '\n可用资金:{:.2f}'.format(self.available_cash)
         result = result + '\n当前持仓:'
-        if not self.hold_price_cur.empty:
-            result = result + self.hold_price_cur.to_string()
+        if not self.hold_price_cur_df.empty:
+            result = result + self.hold_price_cur_df.to_string()
         else:
             result = result + '无'
         result = result + '\n当前总资产:{:.2f}'.format(self.total_assets_cur)
@@ -575,6 +636,8 @@ class BackTest():
             self.total_assets_cur / self.init_cash)
         result = result + '\n总手续费:{:.2f}'.format(self._calc_total_commission())
         result = result + '\n总印花税:{:.2f}'.format(self._calc_total_tax())
-        result = result + '\n交易历史：\n'
-        result = result + self.history_df.sort_values('datetime').to_string()
+        if kwargs.pop('show_history', True):
+            result = result + '\n交易历史：\n'
+            result = result + self.history_df.sort_values(
+                'datetime').to_string()
         return result
