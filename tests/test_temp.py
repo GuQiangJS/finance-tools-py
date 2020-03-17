@@ -2,7 +2,7 @@ import os
 import datetime
 import traceback
 from finance_tools_py.backtest import BackTest
-from finance_tools_py.backtest import AHundredChecker
+from finance_tools_py.backtest import MinAmountChecker
 import pandas as pd
 import pytest
 
@@ -68,7 +68,7 @@ def test_example():
 
     all_data = pd.concat([x.data for x in datas.values() if x is not None]).sort_index(level=0)
 
-    bt = BackTest(all_data.reset_index(), 50000, callbacks=[AHundredChecker(buy_dict, sell_dict)])
+    bt = BackTest(all_data.reset_index(), 50000, callbacks=[MinAmountChecker(buy_dict, sell_dict)])
     bt.calc_trade_history(verbose=2)
     print(bt.report())
 

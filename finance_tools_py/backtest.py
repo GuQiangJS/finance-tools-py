@@ -4,18 +4,15 @@ import datetime
 import abc
 from tqdm.auto import tqdm
 
+
 class CallBack():
     """回测时的回调。"""
-
     def __init__(self):
         pass
 
     @abc.abstractmethod
-    def on_check_buy(self,
-                     date: datetime.datetime.timestamp,
-                     code: str,
-                     price: float,
-                     cash: float) -> bool:
+    def on_check_buy(self, date: datetime.datetime.timestamp, code: str,
+                     price: float, cash: float) -> bool:
         """检查是否需要买入。
 
         Args:
@@ -30,12 +27,8 @@ class CallBack():
         return False
 
     @abc.abstractmethod
-    def on_check_sell(self,
-                      date: datetime.datetime.timestamp,
-                      code: str,
-                      price: float,
-                      cash: float,
-                      hold_amount: float,
+    def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
+                      price: float, cash: float, hold_amount: float,
                       hold_price: float) -> bool:
         """检查是否需要卖出。
 
@@ -53,11 +46,8 @@ class CallBack():
         return False
 
     @abc.abstractmethod
-    def on_calc_buy_amount(self,
-                           date: datetime.datetime.timestamp,
-                           code: str,
-                           price: float,
-                           cash: float) -> float:
+    def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
+                           price: float, cash: float) -> float:
         """计算买入数量
 
         Args:
@@ -72,12 +62,8 @@ class CallBack():
         return 0
 
     @abc.abstractmethod
-    def on_calc_sell_amount(self,
-                            date: datetime.datetime.timestamp,
-                            code: str,
-                            price: float,
-                            cash: float,
-                            hold_amount: float,
+    def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
+                            price: float, cash: float, hold_amount: float,
                             hold_price: float) -> float:
         """计算卖出数量
 
@@ -94,9 +80,8 @@ class CallBack():
         """
         return 0
 
-
-class AHundredChecker(CallBack):
-    """每次买入和卖出数量都是100股的回调
+class MinAmountChecker(CallBack):
+    """每次买入和卖出数量都是最小数量（数量为 `min_amount` 定义）的回调。
 
     Attributes:
         buy_dict ({str,[datetime.datetime]}): 购买日期字典。key值为股票代码，value值为日期集合。
@@ -106,7 +91,6 @@ class AHundredChecker(CallBack):
         min_commission (float): 最小手续费费率。默认为 `5` 。
         min_amount (float): 每次交易最小交易数量。默认为 `100` （股）。
     """
-
     def __init__(self, buy_dict, sell_dict, **kwargs):
         """初始化
 
@@ -118,6 +102,27 @@ class AHundredChecker(CallBack):
             min_commission (float): 最小手续费费率。默认为 `5` 。
             min_amount (float): 每次交易最小交易数量。默认为 `100` （股）。
 
+        Example:
+            直接传入日期字典
+
+            >>> from datetime import date
+            >>> import pandas as pd
+            >>> data = pd.DataFrame({'code': ['1234' for x in range(3)],
+            >>>                      'date': [date(1998, 1, 1),date(1999, 1, 1),date(2000, 1, 1)],
+            >>>                      'close': [4.5, 7.9, 6.7]})
+            >>> MinAmountChecker(buy_dict={'1234':[date(1998, 1, 1)]},
+            >>>                 sell_dict={'1234':[date(2000, 1, 1)]})
+
+            对于日期字典的处理。当准备直接使用 `Series` 类型对象时，可以使用 `to_pydatetime` 方法转换日期值。
+
+            >>> from datetime import date
+            >>> import pandas as pd
+            >>> data = pd.DataFrame({'code': ['1234' for x in range(3)],
+            >>>                      'date': [date(1998, 1, 1),date(1999, 1, 1),date(2000, 1, 1)],
+            >>>                      'close': [4.5, 7.9, 6.7]})
+            >>> MinAmountChecker(buy_dict={'1234':data[data['date'] < '1999-1-1']['date'].dt.to_pydatetime()},
+            >>>                 sell_dict={'1234':data[data['date'] > '1999-1-1']['date'].dt.to_pydatetime()})
+
         """
         self.buy_dict = buy_dict
         self.sell_dict = sell_dict
@@ -126,23 +131,16 @@ class AHundredChecker(CallBack):
         self.min_commission = kwargs.pop('min_commission', 5)
         self.min_amount = kwargs.pop('min_amount', 100)
 
-    def on_check_buy(self,
-                     date: datetime.datetime.timestamp,
-                     code: str,
-                     price: float,
-                     cash: float) -> bool:
+    def on_check_buy(self, date: datetime.datetime.timestamp, code: str,
+                     price: float, cash: float) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`buy_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.buy_dict.keys() and date in self.buy_dict[code]:
             return True
         else:
             return False
 
-    def on_check_sell(self,
-                      date: datetime.datetime.timestamp,
-                      code: str,
-                      price: float,
-                      cash: float,
-                      hold_amount: float,
+    def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
+                      price: float, cash: float, hold_amount: float,
                       hold_price: float) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`sell_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.sell_dict.keys() and date in self.sell_dict[code]:
@@ -150,35 +148,25 @@ class AHundredChecker(CallBack):
         else:
             return False
 
-    def _calc_commission(self,
-                         price: float,
-                         amount: int) -> float:
+    def _calc_commission(self, price: float, amount: int) -> float:
         """计算交易手续费"""
         return max(price * amount * self.commission_coeff, self.min_commission)
 
-    def _calc_tax(self,
-                  price: float,
-                  amount: int) -> float:
+    def _calc_tax(self, price: float, amount: int) -> float:
         """计算印花税"""
         return price * amount * self.tax_coeff
 
-    def on_calc_buy_amount(self,
-                           date: datetime.datetime.timestamp,
-                           code: str,
-                           price: float,
-                           cash: float) -> float:
+    def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
+                           price: float, cash: float) -> float:
         """计算买入数量。当交易实际花费金额小于 `cash` （可用现金） 时，返回参数 :py:attr:`min_amount` （每次交易数量）。"""
         amount = self.min_amount
-        if price * amount + self._calc_commission(price, amount) + self._calc_tax(price, amount) <= cash:
+        if price * amount + self._calc_commission(
+                price, amount) + self._calc_tax(price, amount) <= cash:
             return amount
         return 0
 
-    def on_calc_sell_amount(self,
-                            date: datetime.datetime.timestamp,
-                            code: str,
-                            price: float,
-                            cash: float,
-                            hold_amount: float,
+    def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
+                            price: float, cash: float, hold_amount: float,
                             hold_price: float) -> float:
         """计算卖出数量。
             当 `hold_amount` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
@@ -188,30 +176,23 @@ class AHundredChecker(CallBack):
         return 0
 
 
-class AllInChecker(AHundredChecker):
+class AllInChecker(MinAmountChecker):
     """全部资金进入及全部持仓卖出的回调"""
-
-    def on_calc_buy_amount(self,
-                           date: datetime.datetime.timestamp,
-                           code: str,
-                           price: float,
-                           cash: float) -> float:
+    def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
+                           price: float, cash: float) -> float:
         """计算买入数量。
             根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr:`min_amount` 的倍数）
             （计算时包含考虑了交易时可能产生的印花税和手续费）
         """
         amount = self.min_amount
-        while price * amount + self._calc_commission(price, amount) + self._calc_tax(price, amount) <= cash:
+        while price * amount + self._calc_commission(
+                price, amount) + self._calc_tax(price, amount) <= cash:
             amount = amount + self.min_amount
         amount = amount - self.min_amount
         return amount
 
-    def on_calc_sell_amount(self,
-                            date: datetime.datetime.timestamp,
-                            code: str,
-                            price: float,
-                            cash: float,
-                            hold_amount: float,
+    def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
+                            price: float, cash: float, hold_amount: float,
                             hold_price: float) -> float:
         """计算买入数量
         直接返回 `hold_amount` 。表示全部可以卖出。"""
@@ -225,14 +206,14 @@ class BackTest():
         >>> from datetime import date
         >>> import pandas as pd
         >>> from finance_tools_py.backtest import BackTest
-        >>> from finance_tools_py.backtest import AHundredChecker
+        >>> from finance_tools_py.backtest import MinAmountChecker
         >>> 
         >>> data = pd.DataFrame({
         >>>     'code': ['000001' for x in range(4)],
         >>>     'date': [date(1998, 1, 1), date(1999, 1, 1), date(2000, 1, 1), date(2001, 1, 1)],
         >>>     'close': [4.5, 7.9, 6.7, 10],
         >>> })
-        >>> bt = BackTest(data, init_cash=1000, callbacks=[AHundredChecker(
+        >>> bt = BackTest(data, init_cash=1000, callbacks=[MinAmountChecker(
         >>>     buy_dict={'000001': [date(1998, 1, 1), date(2000, 1, 1)]},
         >>>     sell_dict={'000001': [date(1999, 1, 1)]})])
         >>> bt.calc_trade_history()
@@ -255,7 +236,6 @@ class BackTest():
         2  2000-01-01  000001    6.7     100   653.09           5  0.67  675.67       1
 
     """
-
     def __init__(self,
                  data,
                  init_cash=10000,
@@ -313,10 +293,8 @@ class BackTest():
         else:
             lens = len(self._history_headers)
 
-        return pd.DataFrame(
-            data=self.history,
-            columns=self._history_headers[:lens]
-        ).sort_index()
+        return pd.DataFrame(data=self.history,
+                            columns=self._history_headers[:lens]).sort_index()
 
     @property
     def available_hold_df(self):
@@ -326,9 +304,7 @@ class BackTest():
             :py:class:`pandas.Series`
         """
         return self.history_df.groupby('code').amount.sum().replace(
-            0,
-            np.nan
-        ).dropna().sort_index()
+            0, np.nan).dropna().sort_index()
 
     # @property
     # def trade(self):
@@ -353,7 +329,6 @@ class BackTest():
         Returns:
             :py:class:`pandas.Series`
         """
-
         def weights(x):
             n = len(x)
             res = 1
@@ -364,11 +339,15 @@ class BackTest():
             x = x[n + 1:]
 
             if sum(x['amount']) != 0:
-                return np.average(x['price'], weights=x['amount'], returned=True)
+                return np.average(x['price'],
+                                  weights=x['amount'],
+                                  returned=True)
             else:
                 return np.nan
 
-        return self.history_df.set_index('datetime', drop=False).sort_index().groupby('code').apply(weights).dropna()
+        return self.history_df.set_index(
+            'datetime',
+            drop=False).sort_index().groupby('code').apply(weights).dropna()
 
     @property
     def hold_price_cur(self):
@@ -388,23 +367,22 @@ class BackTest():
         Returns:
             :py:class:`pandas.DataFrame`
         """
-
         def weights(x):
             if sum(x['amount']) != 0:
-                return pd.Timestamp(datetime.datetime.today()) - pd.to_datetime(x.datetime.max())
+                return pd.Timestamp(
+                    datetime.datetime.today()) - pd.to_datetime(
+                        x.datetime.max())
             else:
                 return np.nan
 
         if datetime is None:
             return self.history_df.set_index(
-                'datetime',
-                drop=False
-            ).sort_index().groupby('code').apply(weights).dropna()
+                'datetime', drop=False).sort_index().groupby('code').apply(
+                    weights).dropna()
         else:
             return self.history_df.set_index(
-                'datetime',
-                drop=False
-            ).sort_index().loc[:dt].groupby('code').apply(weights).dropna()
+                'datetime', drop=False).sort_index().loc[:dt].groupby(
+                    'code').apply(weights).dropna()
 
     @property
     def total_assets_cur(self) -> float:
@@ -412,7 +390,8 @@ class BackTest():
 
         当前可用资金+当前持仓。
         """
-        return self.available_cash + sum([x[0] * x[1] for x in self.hold_price_cur])
+        return self.available_cash + sum(
+            [x[0] * x[1] for x in self.hold_price_cur])
 
     # def hold_table(self, datetime=None):
     #     """到某一个时刻的持仓 如果给的是日期,则返回当日开盘前的持仓"""
@@ -453,13 +432,15 @@ class BackTest():
             hold_amount, hold_price = 0, 0
             if not self.hold_price_cur.empty and code in self.hold_price_cur.index:
                 hold_price, hold_amount = self.hold_price_cur[code]
-            if cb.on_check_sell(date, code, price, self.available_cash, hold_amount, hold_price):
+            if cb.on_check_sell(date, code, price, self.available_cash,
+                                hold_amount, hold_price):
                 return True
         return False
 
     def _calc_buy_amount(self, date, code, price) -> float:
         for cb in self._calbacks:
-            amount = cb.on_calc_buy_amount(date, code, price, self.available_cash)
+            amount = cb.on_calc_buy_amount(date, code, price,
+                                           self.available_cash)
             if amount:
                 return amount
         return 0
@@ -468,7 +449,9 @@ class BackTest():
         for cb in self._calbacks:
             if not self.hold_price_cur.empty and code in self.hold_price_cur.index:
                 hold_price, hold_amount = self.hold_price_cur[code]
-                amount = cb.on_calc_sell_amount(date, code, price, self.available_cash, hold_amount, hold_price)
+                amount = cb.on_calc_sell_amount(date, code, price,
+                                                self.available_cash,
+                                                hold_amount, hold_price)
                 if amount:
                     return amount
         return 0
@@ -479,8 +462,8 @@ class BackTest():
         Args:
             verbose (int): 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。
         """
-
-        def update_history(history, date, code, price, amount, available_cash, commission, tax, toward):
+        def update_history(history, date, code, price, amount, available_cash,
+                           commission, tax, toward):
             history.append([
                 date,  # 时间
                 code,  # 代码
@@ -493,7 +476,9 @@ class BackTest():
                 toward,  # 方向
             ])
 
-        for index, row in tqdm(self.data.iterrows()):
+        for index, row in tqdm(self.data.iterrows(),
+                               total=len(self.data),
+                               desc='回测计算中...'):
             date = row['date']
             code = row['code']
             price = row['close']  # 价格
@@ -504,22 +489,26 @@ class BackTest():
                 value = price * amount + commission + tax
                 if value <= self.available_cash and amount > 0:
                     self.cash.append(self.available_cash - value)
-                    update_history(self.history,
-                                   date,
-                                   code,
-                                   price,
-                                   amount,
-                                   self.cash[-1],
-                                   commission,
-                                   tax,
-                                   1, )
+                    update_history(
+                        self.history,
+                        date,
+                        code,
+                        price,
+                        amount,
+                        self.cash[-1],
+                        commission,
+                        tax,
+                        1,
+                    )
                     self._update_hold_price_cur()
                     if verbose > 0:
-                        print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
-                                                                                   self.available_cash))
+                        print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
+                              format(date, code, price, amount,
+                                     self.available_cash))
                 else:
                     if verbose > 1:
-                        print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(date, code, price))
+                        print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(
+                            date, code, price))
             if self._check_callback_sell(date, code, price):
                 amount = self._calc_sell_amount(date, code, price)
                 if amount > 0:
@@ -527,19 +516,22 @@ class BackTest():
                     tax = self._calc_tax(price, amount)
                     value = price * amount - commission - tax
                     self.cash.append(self.available_cash + value)
-                    update_history(self.history,
-                                   date,
-                                   code,
-                                   price,
-                                   amount,
-                                   self.cash[-1],
-                                   commission,
-                                   tax,
-                                   -1, )
+                    update_history(
+                        self.history,
+                        date,
+                        code,
+                        price,
+                        amount,
+                        self.cash[-1],
+                        commission,
+                        tax,
+                        -1,
+                    )
                     self._update_hold_price_cur()
                     if verbose > 0:
-                        print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.format(date, code, price, amount,
-                                                                                   self.available_cash))
+                        print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
+                              format(date, code, price, amount,
+                                     self.available_cash))
                 else:
                     if verbose > 1:
                         print('{:%Y-%m-%d} {} 没有持仓，跳过卖出。'.format(date, code))
@@ -548,10 +540,12 @@ class BackTest():
         self._calced = True
 
     def _calc_total_tax(self) -> float:
-        return np.asarray(self.history).T[6].sum() if len(self.history) > 0 else 0
+        return np.asarray(
+            self.history).T[6].sum() if len(self.history) > 0 else 0
 
     def _calc_total_commission(self) -> float:
-        return np.asarray(self.history).T[5].sum() if len(self.history) > 0 else 0
+        return np.asarray(
+            self.history).T[5].sum() if len(self.history) > 0 else 0
 
     def report(self):
         """获取计算结果
@@ -563,7 +557,8 @@ class BackTest():
         if not self._calced:
             result = '没有经过计算。请先调用 `calc_trade_history` 方法进行计算。'
             return result
-        result = '数据时间:{}~{}（可交易天数{}）'.format(self.data.iloc[0]['date'], self.data.iloc[-1]['date'],
+        result = '数据时间:{}~{}（可交易天数{}）'.format(self.data.iloc[0]['date'],
+                                              self.data.iloc[-1]['date'],
                                               len(self.data['date'].unique()))
         result = result + '\n初始资金:{:.2f}'.format(self.init_cash)
         result = result + '\n交易次数:{} (买入/卖出各算1次)'.format(len(self.history))
@@ -574,8 +569,10 @@ class BackTest():
         else:
             result = result + '无'
         result = result + '\n当前总资产:{:.2f}'.format(self.total_assets_cur)
-        result = result + '\n资金变化率:{:.2%}'.format(self.available_cash / self.init_cash)
-        result = result + '\n资产变化率:{:.2%}'.format(self.total_assets_cur / self.init_cash)
+        result = result + '\n资金变化率:{:.2%}'.format(
+            self.available_cash / self.init_cash)
+        result = result + '\n资产变化率:{:.2%}'.format(
+            self.total_assets_cur / self.init_cash)
         result = result + '\n总手续费:{:.2f}'.format(self._calc_total_commission())
         result = result + '\n总印花税:{:.2f}'.format(self._calc_total_tax())
         result = result + '\n交易历史：\n'

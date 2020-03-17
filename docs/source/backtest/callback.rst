@@ -15,7 +15,7 @@
 
 最小买卖的回调
 ------------------------------------------
-.. autoclass:: finance_tools_py.backtest.AHundredChecker
+.. autoclass:: finance_tools_py.backtest.MinAmountChecker
     :members:
     :special-members: __init__,
     :inherited-members:
