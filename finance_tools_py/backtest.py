@@ -399,10 +399,14 @@ class BackTest():
     def total_assets_cur(self) -> float:
         """获取当前总资产
 
-        当前可用资金+当前持仓。
+        当前可用资金+当前持仓现价。
         """
-        return self.available_cash + sum(
-            [x[0] * x[1] for x in self._hold_price_cur])
+        if self.hold_price_cur_df.empty:
+            return self.available_cash
+        else:
+            return self.available_cash + sum(
+                self.hold_price_cur_df['amount'] *
+                self.hold_price_cur_df['price_cur'])
 
     # def hold_table(self, datetime=None):
     #     """到某一个时刻的持仓 如果给的是日期,则返回当日开盘前的持仓"""
@@ -629,7 +633,8 @@ class BackTest():
             result = result + self.hold_price_cur_df.to_string()
         else:
             result = result + '无'
-        result = result + '\n当前总资产:{:.2f}'.format(self.total_assets_cur)
+        result = result + '\n当前总资产:{:.2f}(现金+持股现价值)'.format(
+            self.total_assets_cur)
         result = result + '\n资金变化率:{:.2%}'.format(
             self.available_cash / self.init_cash)
         result = result + '\n资产变化率:{:.2%}'.format(

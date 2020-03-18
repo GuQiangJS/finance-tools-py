@@ -256,8 +256,7 @@ def test_backtest_holdprice(init_global_data):
     assert np.round(
         (71.9 + 61.7 + 151.3) / 3,
         2) == np.round(bt.hold_price_cur_df.loc['000002']['buy_price'], 2)
-    assert bt.total_assets_cur == bt.available_cash + (7.9 + 13.4 + 71.9 +
-                                                       61.7 + 151.3) * 100
+    assert bt.total_assets_cur == bt.available_cash + (15.3*200)+(151.3*300)
 
 
 def test_example():
@@ -285,7 +284,7 @@ def test_example():
     assert np.round(6.7, 2) == np.round(
         bt.hold_price_cur_df.loc['000001']['buy_price'], 2)
     assert np.round(bt.total_assets_cur,
-                    2) == np.round(bt.available_cash + (6.7) * 100, 2)
+                    2) == np.round(bt.available_cash + 10 * 100, 2)
     assert bt._BackTest__get_buy_avg_price('000001') == (6.7, 100.0)
 
 
@@ -314,7 +313,7 @@ def test_allin():
     assert np.round(6.7, 2) == np.round(
         bt.hold_price_cur_df.loc['000001']['buy_price'], 2)
     assert np.round(bt.total_assets_cur,
-                    2) == np.round(bt.available_cash + (6.7) * 1200, 2)
+                    2) == np.round(bt.available_cash + 10 * 1200, 2)
     assert bt._BackTest__get_buy_avg_price('000001') == (6.7, 1200.0)
 
 
