@@ -41,9 +41,7 @@ def test_example_BBANDS():
     print('>>> from finance_tools_py.simulation import Simulation')
     from finance_tools_py.simulation.callbacks.talib import BBANDS
     print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
-    data = pd.DataFrame({
-        'close': [y for y in np.arange(0.0, 8.0)]
-    })
+    data = pd.DataFrame({'close': [y for y in np.arange(0.0, 8.0)]})
     print(">>> print(data['close'].values)")
     print(data['close'].values)
     t = 3
@@ -54,14 +52,14 @@ def test_example_BBANDS():
     print('>>> d = {}'.format(d))
     print(">>> s = Simulation(data,'',callbacks=[BBANDS(t, u, d)])")
     print('>>> s.simulate()')
-    s=Simulation(data,'',callbacks=[BBANDS(t, u, d)])
+    s = Simulation(data, '', callbacks=[BBANDS(t, u, d)])
     s.simulate()
     print(">>> cols = [col for col in data.columns if 'bbands' in col]")
     cols = [col for col in s.data.columns if 'bbands' in col]
     print(">>> for col in cols:")
     print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
     for col in cols:
-        print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
 
 
 @pytest.mark.skipif(
@@ -85,14 +83,45 @@ def test_example_WILLR(init_global_data):
     print('>>> t={}'.format(t))
     print(">>> s = Simulation(data,'',callbacks=[WILLR(t)])")
     print('>>> s.simulate()')
-    s=Simulation(data,'',callbacks=[WILLR(t)])
+    s = Simulation(data, '', callbacks=[WILLR(t)])
     s.simulate()
     print(">>> cols = [col for col in data.columns if 'willr' in col]")
     cols = [col for col in s.data.columns if 'willr' in col]
     print(">>> for col in cols:")
     print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
     for col in cols:
-        print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
+def test_example_CCI(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import CCI')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import CCI
+    print(">>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)],\n\
+                        'high': [y for y in range(10.1,15.0)],\n\
+                        'low': [y for y in range(0.0, 4.9)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(5.0, 10.0)],
+        'high': [y for y in np.arange(10.1, 15.0)],
+        'low': [y for y in np.arange(0.0, 4.9)]
+    })
+    print(">>> print(data)")
+    print(data)
+    t = 3
+    print('>>> t = {}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[CCI(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[CCI(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'cci' in col]")
+    cols = [col for col in s.data.columns if 'cci' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
 
 
 @pytest.mark.skipif(
@@ -103,23 +132,21 @@ def test_example_DEMA(init_global_data):
     print('>>> from finance_tools_py.simulation import Simulation')
     from finance_tools_py.simulation.callbacks.talib import DEMA
     print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
-    data = pd.DataFrame({
-        'close': [y for y in np.arange(0.0, 8.0)]
-    })
+    data = pd.DataFrame({'close': [y for y in np.arange(0.0, 8.0)]})
     print(">>> print(data['close'].values)")
     print(data['close'].values)
     t = 3
     print('>>> t={}'.format(t))
     print(">>> s = Simulation(data,'',callbacks=[DEMA(t)])")
     print('>>> s.simulate()')
-    s=Simulation(data,'',callbacks=[DEMA(t)])
+    s = Simulation(data, '', callbacks=[DEMA(t)])
     s.simulate()
     print(">>> cols = [col for col in data.columns if 'dema' in col]")
     cols = [col for col in s.data.columns if 'dema' in col]
     print(">>> for col in cols:")
     print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
     for col in cols:
-        print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
 
 
 @pytest.mark.skipif(
@@ -128,20 +155,18 @@ def test_example_DEMA(init_global_data):
 def test_example_Rolling_Future(init_global_data):
     print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
     print(">>> print(data['close'].values)")
-    data = pd.DataFrame({
-        'close': [y for y in range(0, 8)]
-    })
+    data = pd.DataFrame({'close': [y for y in range(0, 8)]})
     print(data['close'].values)
     t = 3
     print('>>> t={}'.format(t))
     print('>>> print(Rolling_Future(t).on_preparing_data(data))')
     callbacks.Rolling_Future(t).on_preparing_data(data)
     print(">>> cols=[col for col in data.columns if col!='close']")
-    cols = [col for col in data.columns if col!='close']
+    cols = [col for col in data.columns if col != 'close']
     print(">>> for col in cols:")
     print(">>>     print('{}:{}'.format(col,np.round(data[col].values,2)))")
     for col in cols:
-        print('{}:{}'.format(col,np.round(data[col].values,2)))
+        print('{}:{}'.format(col, np.round(data[col].values, 2)))
 
 
 def test_BBANDS(init_global_data):
@@ -161,8 +186,6 @@ def test_BBANDS(init_global_data):
     assert pd.Series.equals(up, pytest.global_data[col_up])
     assert pd.Series.equals(mean, pytest.global_data[col_mean])
     assert pd.Series.equals(low, pytest.global_data[col_low])
-
-
 
 
 def test_Sim_BBANDS(init_global_data):
@@ -195,9 +218,22 @@ def test_Sim_WILLR(init_global_data):
     print(s.data.info())
     w = 'willr_{}'.format(t)  # 威廉指标
     assert w in s.data.columns
-    real = talib.WILLR(s.data['high'], s.data['low'],
-                       s.data['close'], t)
+    real = talib.WILLR(s.data['high'], s.data['low'], s.data['close'], t)
     assert pd.Series.equals(real, s.data[w])
+
+
+def test_Sim_CCI(init_global_data):
+    """测试通过回测调用CCI，逻辑与`test_CCI`一致"""
+    t = 5
+    b = cb_talib.CCI(t)
+    s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'cci_high_low_close'  # 顺势指标
+    assert w in s.data.columns
+    real = talib.CCI(s.data['high'], s.data['low'], s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
 
 def test_WILLR(init_global_data):
     t = 5
@@ -218,10 +254,11 @@ def test_Sim_DEMA(init_global_data):
     s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
     s.simulate()
     print(s.data.info())
-    w = 'dema_{}_{}'.format('close',t)
+    w = 'dema_{}_{}'.format('close', t)
     assert w in s.data.columns
     real = talib.DEMA(s.data['close'], t)
     assert pd.Series.equals(real, s.data[w])
+
 
 def test_DEMA(init_global_data):
     t = 5
@@ -234,55 +271,81 @@ def test_DEMA(init_global_data):
     assert pd.Series.equals(real, pytest.global_data[w])
 
 
+def test_CCI(init_global_data):
+    t = 5
+    b = cb_talib.CCI(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    w = 'cci_high_low_close'  # 顺势指标
+    assert w in pytest.global_data.columns
+    real = talib.CCI(pytest.global_data['high'], pytest.global_data['low'],
+                     pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[w])
+
+
 def test_Sim_Rolling_Future(init_global_data):
     """测试通过回测调用Rolling_Future，逻辑与`test_Rolling_Future`一致"""
-    data = pd.DataFrame({
-        'close':[y for y in range(0,10)]
-    })
+    data = pd.DataFrame({'close': [y for y in range(0, 10)]})
 
     t = 3
-    s=Simulation(data, pytest.global_code,callbacks=[callbacks.Rolling_Future(t)])
+    s = Simulation(data,
+                   pytest.global_code,
+                   callbacks=[callbacks.Rolling_Future(t)])
     s.simulate()
-    _min = 'rolling_{}_{}_min'.format('close',t)
-    _max = 'rolling_{}_{}_max'.format('close',t)
-    _mean = 'rolling_{}_{}_mean'.format('close',t)
-    _med = 'rolling_{}_{}_med'.format('close',t)
+    _min = 'rolling_{}_{}_min'.format('close', t)
+    _max = 'rolling_{}_{}_max'.format('close', t)
+    _mean = 'rolling_{}_{}_mean'.format('close', t)
+    _med = 'rolling_{}_{}_med'.format('close', t)
     assert _min in s.data.columns
     assert _max in s.data.columns
     assert _mean in s.data.columns
     assert _med in s.data.columns
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,3.0,4.0,5.0,6.0,7.0,np.NaN,np.NaN,np.NaN]),
-                            s.data[_min])
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,5.0,6.0,7.0,8.0,9.0,np.NaN,np.NaN,np.NaN]),
-                            s.data[_max])
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,4.0,5.0,6.0,7.0,8.0,np.NaN,np.NaN,np.NaN]),
-                            s.data[_mean])
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,4.0,5.0,6.0,7.0,8.0,np.NaN,np.NaN,np.NaN]),
-                            s.data[_med])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 3.0, 4.0, 5.0, 6.0, 7.0, np.NaN, np.NaN, np.NaN]),
+        s.data[_min])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 5.0, 6.0, 7.0, 8.0, 9.0, np.NaN, np.NaN, np.NaN]),
+        s.data[_max])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 4.0, 5.0, 6.0, 7.0, 8.0, np.NaN, np.NaN, np.NaN]),
+        s.data[_mean])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 4.0, 5.0, 6.0, 7.0, 8.0, np.NaN, np.NaN, np.NaN]),
+        s.data[_med])
 
 
 def test_Rolling_Future(init_global_data):
-    data = pd.DataFrame({
-        'close':[y for y in range(0,10)]
-    })
+    data = pd.DataFrame({'close': [y for y in range(0, 10)]})
 
     t = 3
     b = callbacks.Rolling_Future(t)
     b.on_preparing_data(data)
     print(data.info())
-    _min = 'rolling_{}_{}_min'.format('close',t)
-    _max = 'rolling_{}_{}_max'.format('close',t)
-    _mean = 'rolling_{}_{}_mean'.format('close',t)
-    _med = 'rolling_{}_{}_med'.format('close',t)
+    _min = 'rolling_{}_{}_min'.format('close', t)
+    _max = 'rolling_{}_{}_max'.format('close', t)
+    _mean = 'rolling_{}_{}_mean'.format('close', t)
+    _med = 'rolling_{}_{}_med'.format('close', t)
     assert _min in data.columns
     assert _max in data.columns
     assert _mean in data.columns
     assert _med in data.columns
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,3.0,4.0,5.0,6.0,7.0,np.NaN,np.NaN,np.NaN]),
-                            data[_min])
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,5.0,6.0,7.0,8.0,9.0,np.NaN,np.NaN,np.NaN]),
-                            data[_max])
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,4.0,5.0,6.0,7.0,8.0,np.NaN,np.NaN,np.NaN]),
-                            data[_mean])
-    assert pd.Series.equals(pd.Series([np.NaN,np.NaN,4.0,5.0,6.0,7.0,8.0,np.NaN,np.NaN,np.NaN]),
-                            data[_med])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 3.0, 4.0, 5.0, 6.0, 7.0, np.NaN, np.NaN, np.NaN]),
+        data[_min])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 5.0, 6.0, 7.0, 8.0, 9.0, np.NaN, np.NaN, np.NaN]),
+        data[_max])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 4.0, 5.0, 6.0, 7.0, 8.0, np.NaN, np.NaN, np.NaN]),
+        data[_mean])
+    assert pd.Series.equals(
+        pd.Series(
+            [np.NaN, np.NaN, 4.0, 5.0, 6.0, 7.0, 8.0, np.NaN, np.NaN, np.NaN]),
+        data[_med])
