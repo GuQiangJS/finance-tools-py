@@ -116,6 +116,54 @@ class WILLR(CallBack):
                                   data[self.col_close].values, self.timeperiod)
 
 
+class MFI(CallBack):
+    """附加顺势指标。
+
+        执行后会对数据源中附加如下的列：
+
+        * cci_x: x日顺势指标。（ `x` 为 `col_high`_`col_low`_`col_close`_`timeperiod` ）。
+
+    Attributes:
+        timeperiod: 参考 `talib.CCI` 中的相关参数。
+        col_vol: 计算时取值的列名。默认为 `volume`。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import MFI
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)],
+                                'high': [y for y in range(10.1, 15.0)],
+                                'low': [y for y in range(0.0, 4.9)],
+                                'volume': [y for y in range(50.0, 100.0, 10.0)]})
+        >>> print(data)
+           close  high  low  volume
+        0    5.0  10.1  0.0    50.0
+        1    6.0  11.1  1.0    60.0
+        2    7.0  12.1  2.0    70.0
+        3    8.0  13.1  3.0    80.0
+        4    9.0  14.1  4.0    90.0
+        >>> t = 3
+        >>> s = Simulation(data,'',callbacks=[MFI(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'mfi' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        mfi_3:[ nan  nan  nan 100. 100.]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.col_vol = kwargs.get('low_close', 'volume')
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算顺势指标"""
+        real = 'mfi_{}'.format(self.timeperiod)
+        data[real] = talib.MFI(data[self.col_high].values,
+                               data[self.col_low].values,
+                               data[self.col_close].values,
+                               data[self.col_vol].values, self.timeperiod)
+
+
+
 class CCI(CallBack):
     """附加顺势指标。
 
