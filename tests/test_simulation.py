@@ -229,7 +229,7 @@ def test_Sim_CCI(init_global_data):
     s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
     s.simulate()
     print(s.data.info())
-    w = 'cci_high_low_close'  # 顺势指标
+    w = 'cci_high_low_close_5'  # 顺势指标
     assert w in s.data.columns
     real = talib.CCI(s.data['high'], s.data['low'], s.data['close'], t)
     assert pd.Series.equals(real, s.data[w])
@@ -276,7 +276,7 @@ def test_CCI(init_global_data):
     b = cb_talib.CCI(t)
     b.on_preparing_data(pytest.global_data)
     print(pytest.global_data.info())
-    w = 'cci_high_low_close'  # 顺势指标
+    w = 'cci_high_low_close_5'  # 顺势指标
     assert w in pytest.global_data.columns
     real = talib.CCI(pytest.global_data['high'], pytest.global_data['low'],
                      pytest.global_data['close'], t)

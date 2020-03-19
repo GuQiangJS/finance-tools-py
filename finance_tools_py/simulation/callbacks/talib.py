@@ -145,7 +145,7 @@ class CCI(CallBack):
         >>> cols = [col for col in data.columns if 'cci' in col]
         >>> for col in cols:
         >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
-        cci_high_low_close:[ nan  nan 100. 100. 100.]
+        cci_high_low_close_3:[ nan  nan 100. 100. 100.]
     """
     def __init__(self, timeperiod, **kwargs):
         super().__init__(**kwargs)
@@ -153,8 +153,8 @@ class CCI(CallBack):
 
     def on_preparing_data(self, data, **kwargs):
         """附加计算顺势指标"""
-        real = 'cci_{}_{}_{}'.format(self.col_high, self.col_low,
-                                     self.col_close, self.timeperiod)
+        real = 'cci_{}_{}_{}_{}'.format(self.col_high, self.col_low,
+                                        self.col_close, self.timeperiod)
         data[real] = talib.CCI(data[self.col_high].values,
                                data[self.col_low].values,
                                data[self.col_close].values, self.timeperiod)
