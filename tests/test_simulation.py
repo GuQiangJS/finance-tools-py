@@ -28,7 +28,7 @@ def init_global_data():
 @pytest.fixture
 def mock_data():
     pytest.mock_code = '600036'
-    pytest.mock_data = pd.read_csv('600036.csv', index_col=None)
+    pytest.mock_data = pd.read_csv('data/600036.csv', index_col=None)
     pytest.mock_data['date'] = pd.to_datetime(pytest.mock_data['date'])
 
 
