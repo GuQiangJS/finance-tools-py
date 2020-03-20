@@ -44,6 +44,7 @@
 .. _Momentum Indicators: https://mrjbq7.github.io/ta-lib/func_groups/momentum_indicators.html
 
 * :py:class:`CCI` 威廉指标
+* :py:class:`MFI` 资金流量指标
 * :py:class:`WILLR` 威廉指标
 
 
@@ -59,12 +60,24 @@
 * CCI指标曲线从下向上突破+100线而进入非常态区间(超买区)时，表明市场价格已经脱离常态而进入强势状态，如果伴随较大的市场交投，应及时介入成功率将很大。
 * CCI指标曲线从下向上突破+100线而进入非常态区间(超买区)后，只要CCI指标曲线一直朝上运行，表明价格依然保持强势可以继续持有待涨。但是，如果在远离+100线的地方开始掉头向下时，则表明市场价格的强势状态将可能难以维持，涨势可能转弱，应考虑卖出。如果前期的短期涨幅过高同时价格回落时交投活跃，则应该果断逢高卖出或做空。
 
-CCI主要是在超买和超卖区域发生作用，对急涨急跌的行情检测性相对准确。非常适用于股票、外汇、贵金属等市场的短期操作。[1]
+CCI主要是在超买和超卖区域发生作用，对急涨急跌的行情检测性相对准确。非常适用于股票、外汇、贵金属等市场的短期操作。
 
 .. autoclass:: CCI
     :exclude-members: on_preparing_data
     :inherited-members: col_close,col_high,col_low
 
+
+**MFI - Money Flow Index 资金流量指标**
+
+资金流量指标（MFI）又称为量相对强弱指标（Volume Relative Strength Index，VRSI），英文全名Money Flow Index，缩写为MFI，根据成交量来计测市场供需关系和买卖力道。该指标是通过反映股价变动的四个元素：上涨的天数、下跌的天数、成交量增加幅度、成交量减少幅度来研判量能的趋势，预测市场供求关系和买卖力道，属于量能反趋向指标。
+
+经过长期测试，MFI指标的背离讯号更能忠实的反应股价的反转现象。一次完整的波段行情，至少都会维持一定相当的时间，反转点出现的次数并不会太多。
+
+将MFI指标的参数设定为14天时，其背离讯号产生的时机，大致上都能和股价的顶点吻合。因此在使用MFI指标时，参数设定方面应尽量维持14日的原则。
+
+.. autoclass:: MFI
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close,col_high,col_low
 
 **WILLR - Williams’ %R 威廉指标**
 
