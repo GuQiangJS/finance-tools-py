@@ -121,7 +121,7 @@ class MFI(CallBack):
 
         执行后会对数据源中附加如下的列：
 
-        * cci_x: x日顺势指标。（ `x` 为 `col_high`_`col_low`_`col_close`_`timeperiod` ）。
+        * cci_x: x日顺势指标。（ `x` 为 `timeperiod` ）。
 
     Attributes:
         timeperiod: 参考 `talib.CCI` 中的相关参数。

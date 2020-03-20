@@ -35,6 +35,8 @@ install:
   - if [[ $DOCBUILD ]]; then
     pip install sphinx sphinx_rtd_theme doctr sphinxcontrib-napoleon;
     fi
+before_script:
+  - wget -P tests/data https://raw.githubusercontent.com/GuQiangJS/finance-tools-py/master/tests/600036.csv
 script: 
   pytest --cov=finance_tools_py
 after_success:
