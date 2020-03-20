@@ -29,7 +29,7 @@ def init_global_data():
 def mock_data():
     pytest.mock_code = '600036'
     if "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true":
-        pytest.mock_data = pd.read_csv('test/data/600036.csv', index_col=None)
+        pytest.mock_data = pd.read_csv('tests/data/600036.csv', index_col=None)
     else:
         pytest.mock_data = pd.read_csv('data/600036.csv', index_col=None)
 
