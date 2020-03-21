@@ -154,11 +154,6 @@ def plot_backtest_seaborn(symbol, data, x='date', y='close', **kwargs):
     return fig
 
 
-def plot_backtest(symbol, data, x='date', y='close', **kwargs):
-    plot_backtest_seaborn(symbol, data, x, y, **kwargs)
-    plot_basic_plotly(symbol, data, ys=['close'])
-
-
 def backtest(symbol,
              data=None,
              buy_query='',
