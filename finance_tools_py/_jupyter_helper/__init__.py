@@ -11,6 +11,7 @@ from finance_tools_py.simulation import Simulation
 import datetime
 from finance_tools_py.backtest import AllInChecker
 import logging
+import traceback
 
 IN_COLAB = 'google.colab' in sys.modules
 
@@ -305,9 +306,12 @@ def plot_backtest(data, x, y, buy=None, sell=None):
     try:
         plot_backtest_plotly(data, x, y, buy, sell).show()
     except:
-        pass
-    plot_backtest_seaborn(data, x, y, buy, sell)
-    plt.show()
+        traceback.print_exc()
+    try:
+        plot_backtest_seaborn(data, x, y, buy, sell)
+        plt.show()
+    except:
+        traceback.print_exc()
 
 
 def plot_backtest_plotly(data, x, y, buy=None, sell=None, col='close'):
