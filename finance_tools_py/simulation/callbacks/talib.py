@@ -242,3 +242,40 @@ class DEMA(CallBack):
         """附加计算双移动平均线"""
         real = 'dema_{}_{}'.format(self.col_name, self.timeperiod)
         data[real] = talib.DEMA(data[self.col_name].values, self.timeperiod)
+
+
+
+class RSI(CallBack):
+    """附加计算Relative Strength Index 相对强弱指数。
+
+        执行后会对数据源中附加如下的列：
+
+        * rsi_x: x日双移动平均线。（ `x` 为 `col_name_timeperiod` ）。
+
+    Attributes:
+        timeperiod: 参考 `talib.RSI` 中的相关参数。
+        col_name: 计算时使用的数据列。默认为 `col_close`。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import RSI
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})
+        >>> print(data['close'].values)
+        [0. 1. 2. 3. 4. 5. 6. 7.]
+        >>> t=3
+        >>> s = Simulation(data,'',callbacks=[RSI(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'rsi' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        rsi_close_3:[ nan  nan  nan 100. 100. 100. 100. 100.]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.col_name = kwargs.pop('col_name', self.col_close)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算Relative Strength Index 相对强弱指数"""
+        real = 'rsi_{}_{}'.format(self.col_name, self.timeperiod)
+        data[real] = talib.RSI(data[self.col_name].values, self.timeperiod)

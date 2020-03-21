@@ -43,9 +43,10 @@
 
 .. _Momentum Indicators: https://mrjbq7.github.io/ta-lib/func_groups/momentum_indicators.html
 
-* :py:class:`CCI` 威廉指标
+* :py:class:`CCI` 顺势指标
 * :py:class:`MFI` 资金流量指标
 * :py:class:`WILLR` 威廉指标
+* :py:class:`RSI` 相对强弱指数
 
 
 
@@ -88,5 +89,24 @@ CCI主要是在超买和超卖区域发生作用，对急涨急跌的行情检�
 `同花顺学院 <http://www.iwencai.com/yike/detail/auid/967febb0316c57c1>`__
 
 .. autoclass:: WILLR
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close
+
+
+**RSI - Relative Strength Index 相对强弱指数**
+
+简介：通过比较一段时期内的平均收盘涨数和平均收盘跌数来分析市场买沽盘的意向和实力，从而作出未来市场的走势。
+
+RSI值将0到100之间分成了从"极弱"、"弱""强"到"极强"四个区域。
+"强"和"弱"以50作为分界线,但"极弱"和"弱"之间以及"强"和"极强"之间的界限则要随着RSI参数的变化而变化。
+不同的参数,其区域的划分就不同。一般而言,参数越大,分界线离中心线50就越近,离100和0就越远。
+不过一般都应落在15、30到70、85的区间内。
+RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继续进入"极强"区,就要考虑物极必反,准备卖出了。
+同理RSI值在50以下也是如此,如果进入了"极弱"区,则表示超卖,应该伺机买入。
+
+分析和应用：`百度百科 <https://baike.baidu.com/item/RSI/6130115#3>`__
+`同花顺学院 <http://www.iwencai.com/yike/detail/auid/6a280c6cebcf140a?rid=>`__
+
+.. autoclass:: RSI
     :exclude-members: on_preparing_data
     :inherited-members: col_close

@@ -196,6 +196,30 @@ def test_example_DEMA(init_global_data):
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
+def test_example_RSI(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import RSI')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import RSI
+    print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
+    data = pd.DataFrame({'close': [y for y in np.arange(0.0, 8.0)]})
+    print(">>> print(data['close'].values)")
+    print(data['close'].values)
+    t = 3
+    print('>>> t={}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[RSI(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[RSI(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'rsi' in col]")
+    cols = [col for col in s.data.columns if 'rsi' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
 def test_example_Rolling_Future(init_global_data):
     print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
     print(">>> print(data['close'].values)")
@@ -318,14 +342,37 @@ def test_Sim_DEMA(init_global_data):
     assert pd.Series.equals(real, s.data[w])
 
 
+def test_Sim_RSI(init_global_data):
+    """测试通过回测调用RSI，逻辑与`test_RSI`一致"""
+    t = 5
+    b = cb_talib.RSI(t)
+    s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'rsi_{}_{}'.format('close', t)
+    assert w in s.data.columns
+    real = talib.RSI(s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
+
 def test_DEMA(init_global_data):
     t = 5
     b = cb_talib.DEMA(t)
     b.on_preparing_data(pytest.global_data)
     print(pytest.global_data.info())
-    w = 'dema_close_{}'.format(t)  # 威廉指标
+    w = 'dema_close_{}'.format(t)
     assert w in pytest.global_data.columns
     real = talib.DEMA(pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[w])
+
+def test_RSI(init_global_data):
+    t = 5
+    b = cb_talib.RSI(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    w = 'rsi_close_{}'.format(t)
+    assert w in pytest.global_data.columns
+    real = talib.RSI(pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[w])
 
 
