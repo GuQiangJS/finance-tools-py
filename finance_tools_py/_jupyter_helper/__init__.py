@@ -205,7 +205,11 @@ def backtest(symbol,
     if kwargs.pop('show_report', True):
         print(bt.report(**kwargs))
     if kwargs.pop('plot', True):
-        plot_backtest(s.data, list(buys), list(sells))
+        plot_backtest(s.data,
+                      x='date',
+                      y='close',
+                      buy=list(buys),
+                      sell=list(sells))
     return bt, s.data, buys, sells
 
 
@@ -350,7 +354,7 @@ def plot_backtest_seaborn(data,
         y = [y]
     fig = plt.figure(figsize=figsize)
     for y1 in y:
-        sns.lineplot(data=data, x=x, y=y1)
+        sns.lineplot(data=data, x=x, y=y1, c='#4281C0')
     if buy:
         b = data[data[x].isin(buy)]
         plt.plot(b[x], b[col], 'r.')
