@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.19+33.g198dc3e 文档</title>
+  <title>趋势型指标计算回调 &mdash; finance-tools-py 0.0.19+34.g5ddec55 文档</title>
   
 
   
@@ -284,9 +284,10 @@
 <h1>动量指标计算回调<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h1>
 <p>实现 talib 中 <a class="reference external" href="https://mrjbq7.github.io/ta-lib/func_groups/momentum_indicators.html">Momentum Indicators</a> 相关函数的回调。</p>
 <ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.CCI" title="finance_tools_py.simulation.callbacks.talib.CCI"><code class="xref py py-class docutils literal notranslate"><span class="pre">CCI</span></code></a> 威廉指标</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.CCI" title="finance_tools_py.simulation.callbacks.talib.CCI"><code class="xref py py-class docutils literal notranslate"><span class="pre">CCI</span></code></a> 顺势指标</p></li>
 <li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.MFI" title="finance_tools_py.simulation.callbacks.talib.MFI"><code class="xref py py-class docutils literal notranslate"><span class="pre">MFI</span></code></a> 资金流量指标</p></li>
 <li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="finance_tools_py.simulation.callbacks.talib.WILLR"><code class="xref py py-class docutils literal notranslate"><span class="pre">WILLR</span></code></a> 威廉指标</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.RSI" title="finance_tools_py.simulation.callbacks.talib.RSI"><code class="xref py py-class docutils literal notranslate"><span class="pre">RSI</span></code></a> 相对强弱指数</p></li>
 </ul>
 <p><strong>CCI - Commodity Channel Index 顺势指标</strong></p>
 <p>简介：CCI指标专门测量股价是否已超出常态分布范围</p>
@@ -437,6 +438,56 @@
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
 <span class="go">willr_3:[  nan   nan -5.26 -5.26 -5.26 -5.26 -5.26 -5.26]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>RSI - Relative Strength Index 相对强弱指数</strong></p>
+<p>简介：通过比较一段时期内的平均收盘涨数和平均收盘跌数来分析市场买沽盘的意向和实力，从而作出未来市场的走势。</p>
+<p>RSI值将0到100之间分成了从”极弱”、”弱””强”到”极强”四个区域。
+“强”和”弱”以50作为分界线,但”极弱”和”弱”之间以及”强”和”极强”之间的界限则要随着RSI参数的变化而变化。
+不同的参数,其区域的划分就不同。一般而言,参数越大,分界线离中心线50就越近,离100和0就越远。
+不过一般都应落在15、30到70、85的区间内。
+RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继续进入”极强”区,就要考虑物极必反,准备卖出了。
+同理RSI值在50以下也是如此,如果进入了”极弱”区,则表示超卖,应该伺机买入。</p>
+<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/RSI/6130115#3">百度百科</a>
+<a class="reference external" href="http://www.iwencai.com/yike/detail/auid/6a280c6cebcf140a?rid=">同花顺学院</a></p>
+<dl class="class">
+<dt id="finance_tools_py.simulation.callbacks.talib.RSI">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">RSI</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算Relative Strength Index 相对强弱指数。</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>rsi_x: x日双移动平均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
+</ul>
+</div></blockquote>
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.RSI.timeperiod">
+<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI.timeperiod" title="永久链接至目标">¶</a></dt>
+<dd><p>参考 <cite>talib.RSI</cite> 中的相关参数。</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.RSI.col_name">
+<code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI.col_name" title="永久链接至目标">¶</a></dt>
+<dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">RSI</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">8</span><span class="p">)]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;close&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+<span class="go">[0. 1. 2. 3. 4. 5. 6. 7.]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span><span class="o">=</span><span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">RSI</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;rsi&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">rsi_close_3:[ nan  nan  nan 100. 100. 100. 100. 100.]</span>
 </pre></div>
 </div>
 </dd></dl>
