@@ -204,7 +204,7 @@ def backtest(symbol,
     if kwargs.pop('show_report', True):
         print(bt.report(**kwargs))
     if kwargs.pop('plot', True):
-        plot_backtest(symbol, s.data, list(buys), list(sells))
+        plot_backtest(s.data, list(buys), list(sells))
     return bt, s.data, buys, sells
 
 
