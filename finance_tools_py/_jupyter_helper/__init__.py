@@ -61,6 +61,9 @@ def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50):
         hs.append(bt.total_assets_cur)
         cs.append(bt.available_cash)
     clear_output(True)
+    print('{}'.format(symbol))
+    print('测试区间：{}-{}。总交易天数:{}'.format(data.iloc[0]['date'],
+                                       data.iloc[-1]['date'], len(data)))
     print('测试{}次后，平均总价值:{}'.format(times, np.average(hs)))
     print('测试{}次后，平均总现金:{}'.format(times, np.average(cs)))
     return np.average(hs), np.average(cs)
