@@ -7,6 +7,7 @@ import sys
 from IPython.display import clear_output
 from finance_tools_py.backtest import BackTest
 from finance_tools_py.simulation.callbacks import CallBack
+from finance_tools_py.simulation import Simulation
 import datetime
 from finance_tools_py.backtest import AllInChecker
 import logging
@@ -36,13 +37,190 @@ class Checker(AllInChecker):
             return False
 
 
-def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50):
+def plot_basic(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
+    """绘制收盘价与指标数据的分列图，每个数据一行。一并调用plotly和seaborn绘图。"""
+    figsize = kwargs.pop('figsize', (15, len(ys) * 3))
+    plot_basic_seaborn(symbol,
+                       data,
+                       sim_callbacks=sim_callbacks,
+                       ys=ys,
+                       figsize=figsize)
+
+
+def plot_basic_plotly(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
+    """绘制收盘价与指标数据的图。可以绘制买入/卖出点。
+
+    Args:
+        symbol: 股票代码。
+        data: 待绘制的数据。如果为None，则会调用 :method:`read_data_QFQ` 读取。
+        sim_callbacks: 调用 :method:`read_data_QFQ` 时使用的回调。用来附加数据。
+        ys: 绘制的数据。默认应该至少需要包含1个。
+        figsize: 默认宽度为15，高度为 `len(ys)*3)`
+        xl: x轴。默认为 `date`。
+        yl: y轴。默认为 `close`。
+        buy: 购买时间集合。
+        sell: 卖出时间集合。
+
+    Returns:
+
+    """
+    if data is None:
+        data = read_data_QFQ(symbol)
+        s = Simulation(data, symbol, callbacks=sim_callbacks)
+        s.simulate()
+        data = s.data
+    buy = kwargs.pop('buy', [])
+    sell = kwargs.pop('sell', [])
+    x = kwargs.pop('x', 'date')
+    y = kwargs.pop('y', 'close')
+    fig = go.Figure()
+    for yt in ys:
+        fig.add_trace(go.Scatter(x=data[x], y=data[yt], mode='lines', name=y))
+    if buy:
+        b = data[data[x].isin(buy)]
+        fig.add_trace(
+            go.Scatter(x=b[x],
+                       y=b[y],
+                       mode='markers',
+                       marker=dict(color="red", size=6)))
+    if sell:
+        b = data[data[x].isin(sell)]
+        fig.add_trace(
+            go.Scatter(x=b[x],
+                       y=b[y],
+                       mode='markers',
+                       marker=dict(color="green", size=6)))
+    fig.show()
+
+
+def plot_basic_seaborn(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
+    """绘制收盘价与指标数据的分列图，每个数据一行。
+
+    Args:
+        symbol: 股票代码。
+        data: 待绘制的数据。如果为None，则会调用 :method:`read_data_QFQ` 读取。
+        sim_callbacks: 调用 :method:`read_data_QFQ` 时使用的回调。用来附加数据。
+        ys: 绘制的数据。默认应该至少需要包含1个。
+        figsize: 默认宽度为15，高度为 `len(ys)*3)`
+
+    Returns:
+
+    """
+    figsize = kwargs.pop('figsize', (15, len(ys) * 3))
+    if data is None:
+        data = read_data_QFQ(symbol)
+        s = Simulation(data, symbol, callbacks=sim_callbacks)
+        s.simulate()
+        data = s.data
+    if len(ys) > 1:
+        fig, axes = plt.subplots(len(ys), 1, figsize=figsize)
+        for index, y in enumerate(ys):
+            sns.lineplot(data=data, x='date', y=y, ax=axes[index])
+    else:
+        fig = plt.figure(figsize=figsize)
+        sns.lineplot(data=data, x='date', y=ys[0])
+    fig.suptitle('{} 数据预览'.format(symbol))
+    plt.show()
+
+
+def plot_backtest_seaborn(symbol, data, x='date', y='close', **kwargs):
+    """
+
+    Args:
+        symbol: 股票代码。
+        data: 待绘制的数据。
+        x: x轴。默认为 `date`。
+        y: y轴。默认为 `close`。
+        buy: 购买时间集合。
+        sell: 卖出时间集合。
+        figsize: 默认宽度为15，高度为 `len(ys)*3)`
+
+    Returns:
+
+    """
+    figsize = kwargs.pop('figsize', (15, 5))
+    fig = plt.figure(figsize=figsize)
+    sns.lineplot(data=data, x=x, y=y, c='#4281C0')
+    buy = kwargs.pop('buy', [])
+    sell = kwargs.pop('sell', [])
+    if buy:
+        b = data[data[x].isin(buy)]
+        plt.plot(b[x], b['close'], 'ro')
+    if sell:
+        s = data[data[x].isin(sell)]
+        plt.plot(s[x], s['close'], 'gx')
+    fig.suptitle('{} 回测结果'.format(symbol))
+    plt.show()
+    return fig
+
+
+def plot_backtest(symbol, data, x='date', y='close', **kwargs):
+    plot_backtest_seaborn(symbol, data, x, y, **kwargs)
+    plot_basic_plotly(symbol, data, ys=['close'])
+
+
+def backtest(symbol,
+             data=None,
+             buy_query='',
+             sell_query='',
+             sim_callbacks=[],
+             **kwargs):
+    """
+
+    Args:
+        symbol:
+        data:
+        buy_query: 示例：'rsi_close_14>80'
+        sell_query:
+        callbacks:
+        show_detail: 打印买入，卖出占比。默认为True
+        show_report: 打印回测报告。默认为True
+        show_history: 打印成交明细。默认为True
+        plot: 绘图。默认为True
+
+    Returns:
+        backtest实例，数据，买入时间集合，卖出时间集合
+
+    """
+    if data is None or data.empty:
+        data = read_data_QFQ(symbol)
+        data['code'] = symbol
+    s = Simulation(data, symbol, callbacks=sim_callbacks)
+    s.simulate()
+    s.data['code'] = symbol
+    buys = []
+    sells = []
+    if buy_query:
+        buys = s.data.query(buy_query)['date'].dt.to_pydatetime()
+    if sell_query:
+        sells = s.data.query(sell_query)['date'].dt.to_pydatetime()
+    bt = BackTest(s.data, callbacks=[Checker({symbol: buys}, {symbol: sells})])
+    bt.calc_trade_history()
+    if kwargs.pop("clear_output", True):
+        clear_output(True)
+    print('\x1b[1;31m{} 回测测试\x1b[0m\n买入条件:{}\n卖出条件:{}'.format(
+        symbol, buy_query, sell_query))
+    print('-----------------------------------------------')
+    if kwargs.pop('show_detail', True):
+        print('预计购买次数:{},占比:{:.2%}\n预计卖出次数:{},占比:{:.2%}'.format(
+            len(buys),
+            len(buys) / len(s.data), len(sells),
+            len(sells) / len(s.data)))
+    if kwargs.pop('show_report', True):
+        print(bt.report(**kwargs))
+    if kwargs.pop('plot', True):
+        plot_backtest(symbol, s.data)
+    return bt, s.data, buys, sells
+
+
+def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50, **kwargs):
     """随机执行 `times` 次回测。默认调用 :class:`Checker` 来执行回测。
 
     Args:
         symbol: 股票代码
         times: 随机执行总次数
         buy_times: 从所有数据中随机选择购买的次数。
+        clear_output: 执行完成后清除报告。默认为True。
 
     Returns:
         总价值平均值,总现金平均值
@@ -60,13 +238,14 @@ def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50):
         print(bt.total_assets_cur)
         hs.append(bt.total_assets_cur)
         cs.append(bt.available_cash)
-    clear_output(True)
-    print('{}'.format(symbol))
-    print('测试区间：{}-{}。总交易天数:{}'.format(data.iloc[0]['date'],
-                                       data.iloc[-1]['date'], len(data)))
-    print('测试{}次后，平均总价值:{}'.format(times, np.average(hs)))
-    print('测试{}次后，平均总现金:{}'.format(times, np.average(cs)))
-    return np.average(hs), np.average(cs)
+    if kwargs.pop("clear_output", True):
+        clear_output(True)
+    report = '{}'.format(symbol)
+    report = report + '\n测试区间：{}-{}。总交易天数:{}'.format(
+        data.iloc[0]['date'], data.iloc[-1]['date'], len(data))
+    report = report + '\n测试{}次后，平均总价值:{}'.format(times, np.average(hs))
+    report = report + '\n测试{}次后，平均总现金:{}'.format(times, np.average(cs))
+    return report, np.average(hs), np.average(cs)
 
 
 def read_data_QFQ(symbol='600036') -> pd.DataFrame:
