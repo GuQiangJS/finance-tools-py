@@ -3,10 +3,14 @@ import numpy as np
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
+import sys
 
+IN_COLAB = 'google.colab' in sys.modules
 
 def read_data_QFQ(symbol='600036') -> pd.DataFrame:
     """读取前复权数据"""
+    if not IN_COLAB:
+        raise NotImplementedError()
     data = pd.read_csv(
         'https://raw.githubusercontent.com/GuQiangJS/temp/master/{}_daily.csv'.
         format(symbol),
@@ -33,6 +37,8 @@ def read_data_QFQ(symbol='600036') -> pd.DataFrame:
 
 def read_data_HFQ(symbol='600036') -> pd.DataFrame:
     """读取后复权数据"""
+    if not IN_COLAB:
+        raise NotImplementedError()
     data = pd.read_csv(
         'https://raw.githubusercontent.com/GuQiangJS/temp/master/{}_daily.csv'.
         format(symbol),
@@ -61,7 +67,7 @@ def plot_backtest(data, x, y, buy=None, sell=None):
     if isinstance(y, str):
         y = [y]
     plot_backtest_plotly(data, x, y, buy, sell).show()
-    plot_py(data, x, y, buy, sell)
+    plot_backtest_seaborn(data, x, y, buy, sell)
     plt.show()
 
 
@@ -89,7 +95,7 @@ def plot_backtest_plotly(data, x, y, buy=None, sell=None, col='close'):
     return fig
 
 
-def plot_py_plt(data, x, y, buy=None, sell=None, figsize=(20, 6), col='close'):
+def plot_backtest_seaborn(data, x, y, buy=None, sell=None, figsize=(20, 6), col='close'):
     """使用seaborn绘制回测后的数据，数据上会标记买入点和卖出点"""
     if isinstance(y, str):
         y = [y]
