@@ -83,6 +83,7 @@ def plot_basic_plotly(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
             go.Scatter(x=b[x],
                        y=b[y],
                        mode='markers',
+                       name='buy',
                        marker=dict(color="red", size=6)))
     if sell:
         b = data[data[x].isin(sell)]
@@ -90,6 +91,7 @@ def plot_basic_plotly(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
             go.Scatter(x=b[x],
                        y=b[y],
                        mode='markers',
+                       name='sell',
                        marker=dict(color="green", size=6)))
     fig.show()
 
@@ -122,37 +124,6 @@ def plot_basic_seaborn(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
         sns.lineplot(data=data, x='date', y=ys[0])
     fig.suptitle('{} 数据预览'.format(symbol))
     plt.show()
-
-
-def plot_backtest_seaborn(symbol, data, x='date', y='close', **kwargs):
-    """
-
-    Args:
-        symbol: 股票代码。
-        data: 待绘制的数据。
-        x: x轴。默认为 `date`。
-        y: y轴。默认为 `close`。
-        buy: 购买时间集合。
-        sell: 卖出时间集合。
-        figsize: 默认宽度为15，高度为 `len(ys)*3)`
-
-    Returns:
-
-    """
-    figsize = kwargs.pop('figsize', (15, 5))
-    fig = plt.figure(figsize=figsize)
-    sns.lineplot(data=data, x=x, y=y, c='#4281C0')
-    buy = kwargs.pop('buy', [])
-    sell = kwargs.pop('sell', [])
-    if buy:
-        b = data[data[x].isin(buy)]
-        plt.plot(b[x], b['close'], 'ro')
-    if sell:
-        s = data[data[x].isin(sell)]
-        plt.plot(s[x], s['close'], 'gx')
-    fig.suptitle('{} 回测结果'.format(symbol))
-    plt.show()
-    return fig
 
 
 def backtest(symbol,
@@ -313,6 +284,7 @@ def plot_backtest(data, x, y, buy=None, sell=None):
         traceback.print_exc()
     try:
         plot_backtest_seaborn(data, x, y, buy, sell)
+        plt.legend()
         plt.show()
     except:
         traceback.print_exc()
@@ -331,6 +303,7 @@ def plot_backtest_plotly(data, x, y, buy=None, sell=None, col='close'):
             go.Scatter(x=b[x],
                        y=b[col],
                        mode='markers',
+                       name='buy',
                        marker=dict(color="red", size=6)))
     if sell:
         b = data[data[x].isin(sell)]
@@ -338,6 +311,7 @@ def plot_backtest_plotly(data, x, y, buy=None, sell=None, col='close'):
             go.Scatter(x=b[x],
                        y=b[col],
                        mode='markers',
+                       name='sell',
                        marker=dict(color="green", size=6)))
     return fig
 
@@ -354,11 +328,11 @@ def plot_backtest_seaborn(data,
         y = [y]
     fig = plt.figure(figsize=figsize)
     for y1 in y:
-        sns.lineplot(data=data, x=x, y=y1, c='#4281C0')
+        sns.lineplot(data=data, x=x, y=y1, c='#4281C0', label=y1)
     if buy:
         b = data[data[x].isin(buy)]
-        plt.plot(b[x], b[col], 'r.')
+        plt.plot(b[x], b[col], 'r.', label='buy')
     if sell:
         b = data[data[x].isin(sell)]
-        plt.plot(b[x], b[col], 'gx')
+        plt.plot(b[x], b[col], 'gx', label='sell')
     return fig
