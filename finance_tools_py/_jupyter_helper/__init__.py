@@ -302,7 +302,10 @@ def read_data_HFQ(symbol='600036') -> pd.DataFrame:
 def plot_backtest(data, x, y, buy=None, sell=None):
     if isinstance(y, str):
         y = [y]
-    plot_backtest_plotly(data, x, y, buy, sell).show()
+    try:
+        plot_backtest_plotly(data, x, y, buy, sell).show()
+    except:
+        pass
     plot_backtest_seaborn(data, x, y, buy, sell)
     plt.show()
 
