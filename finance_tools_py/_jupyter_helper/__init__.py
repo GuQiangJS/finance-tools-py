@@ -194,7 +194,7 @@ def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50, **kwargs):
         clear_output: 执行完成后清除报告。默认为True。
 
     Returns:
-        总价值平均值,总现金平均值
+        总价值平均值,总现金平均值,报告,所有测试的总价值集合,所有测试的剩余现金集合
     """
     data = read_data_QFQ(symbol)
     data['code'] = symbol
@@ -216,7 +216,7 @@ def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50, **kwargs):
         data.iloc[0]['date'], data.iloc[-1]['date'], len(data))
     report = report + '\n测试{}次后，平均总价值:{}'.format(times, np.average(hs))
     report = report + '\n测试{}次后，平均总现金:{}'.format(times, np.average(cs))
-    return report, np.average(hs), np.average(cs)
+    return np.average(hs), np.average(cs), report, hs, cs
 
 
 def read_data_QFQ(symbol='600036') -> pd.DataFrame:
