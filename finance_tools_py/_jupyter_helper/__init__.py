@@ -194,6 +194,7 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
         buy_times: 从所有数据中随机选择购买的次数。
         clear_output: 执行完成后清除报告。默认为True。
         init_cash: 初始资金。默认50000.
+        buy_data: 计算买入时间点的数据集。默认为 `data`。其中最少需要包含 `date` 和 `code` 列。
 
     Returns:
         报告,所有测试的总价值集合,所有测试的剩余现金集合,所有成交明细集合
@@ -205,8 +206,9 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
     init_cash = kwargs.pop('init_cash', 50000)
 
     for i in tqdm(range(times)):
-        buys = data.iloc[np.random.choice(
-            len(data),
+        buy_data = kwargs.pop('buy_data', data)
+        buys = buy_data.iloc[np.random.choice(
+            len(buy_data),
             buy_times)].sort_values('date').groupby('code')['date'].apply(
                 lambda g: g.dt.to_pydatetime()).to_dict()
 
