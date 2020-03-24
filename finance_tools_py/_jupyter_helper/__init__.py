@@ -12,6 +12,7 @@ import datetime
 from finance_tools_py.backtest import AllInChecker
 import logging
 import traceback
+from tqdm.auto import tqdm
 
 IN_COLAB = 'google.colab' in sys.modules
 
@@ -30,12 +31,12 @@ class Checker(AllInChecker):
                       price: float, cash: float, hold_amount: float,
                       hold_price: float) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`sell_dict` 中时返回 `True` 。否则返回 `False` 。"""
-        if hold_amount > 0 and hold_price * 1.15 > price:
-            return False
         if code in self.sell_dict.keys() and date in self.sell_dict[code]:
             return True
-        else:
-            return False
+        """当价格超过持仓成本的15%时卖出"""
+        if hold_amount > 0 and hold_price * 1.15 < price:
+            return True
+        return False
 
 
 def plot_basic(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
@@ -184,39 +185,45 @@ def backtest(symbol,
     return bt, s.data, buys, sells
 
 
-def RANDMON_TEST_BASIC(symbol, times=100, buy_times=50, **kwargs):
+def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
     """随机执行 `times` 次回测。默认调用 :class:`Checker` 来执行回测。
 
     Args:
-        symbol: 股票代码
+        data: 所有股票完整数据
         times: 随机执行总次数
         buy_times: 从所有数据中随机选择购买的次数。
         clear_output: 执行完成后清除报告。默认为True。
+        init_cash: 初始资金。默认50000.
 
     Returns:
-        总价值平均值,总现金平均值,报告,所有测试的总价值集合,所有测试的剩余现金集合
+        总价值平均值,总现金平均值,报告,所有测试的总价值集合,所有测试的剩余现金集合,所有成交明细集合
     """
-    data = read_data_QFQ(symbol)
-    data['code'] = symbol
     hs = []  # 总价值
     cs = []  # 可用资金
-    for i in range(times):
+    hiss = []  # 交易明细
+
+    init_cash = kwargs.pop('init_cash', 50000)
+
+    for i in tqdm(range(times)):
         buys = data.iloc[np.random.choice(
             len(data),
-            buy_times)].sort_values('date')['date'].dt.to_pydatetime()
-        bt = BackTest(data, callbacks=[Checker({symbol: buys}, {})])
-        bt.calc_trade_history()
-        print(bt.total_assets_cur)
+            buy_times)].sort_values('date').groupby('code')['date'].apply(
+                lambda g: g.dt.to_pydatetime()).to_dict()
+
+        bt = BackTest(data, init_cash=init_cash, callbacks=[Checker(buys, {})])
+        bt.calc_trade_history(**kwargs)
         hs.append(bt.total_assets_cur)
         cs.append(bt.available_cash)
+        hiss.append(bt.history_df)
     if kwargs.pop("clear_output", True):
         clear_output(True)
-    report = '{}'.format(symbol)
-    report = report + '\n测试区间：{}-{}。总交易天数:{}'.format(
-        data.iloc[0]['date'], data.iloc[-1]['date'], len(data))
+    report = '测试起始资金 {}，总数据量 {} 随机抽取 {} 次作为测试。'.format(init_cash, len(data),
+                                                       buy_times)
+    report = report + \
+             '\n测试区间：{}-{}'.format(data.iloc[0]['date'], data.iloc[-1]['date'])
     report = report + '\n测试{}次后，平均总价值:{}'.format(times, np.average(hs))
     report = report + '\n测试{}次后，平均总现金:{}'.format(times, np.average(cs))
-    return np.average(hs), np.average(cs), report, hs, cs
+    return np.average(hs), np.average(cs), report, hs, cs, hiss
 
 
 def read_data_QFQ(symbol='600036') -> pd.DataFrame:
