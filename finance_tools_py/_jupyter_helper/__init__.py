@@ -196,7 +196,7 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
         init_cash: 初始资金。默认50000.
 
     Returns:
-        总价值平均值,总现金平均值,报告,所有测试的总价值集合,所有测试的剩余现金集合,所有成交明细集合
+        报告,所有测试的总价值集合,所有测试的剩余现金集合,所有成交明细集合
     """
     hs = []  # 总价值
     cs = []  # 可用资金
@@ -223,7 +223,7 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
              '\n测试区间：{}-{}'.format(data.iloc[0]['date'], data.iloc[-1]['date'])
     report = report + '\n测试{}次后，平均总价值:{}'.format(times, np.average(hs))
     report = report + '\n测试{}次后，平均总现金:{}'.format(times, np.average(cs))
-    return np.average(hs), np.average(cs), report, hs, cs, hiss
+    return report, hs, cs, hiss
 
 
 def read_data_QFQ(symbol='600036') -> pd.DataFrame:
