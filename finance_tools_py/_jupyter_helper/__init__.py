@@ -218,7 +218,7 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
         hiss.append(bt.history_df)
     if kwargs.pop("clear_output", True):
         clear_output(True)
-    report = '测试起始资金 {}，总数据量 {} 随机抽取 {} 次作为测试。'.format(init_cash, len(data),
+    report = '测试起始资金 {}，总数据量 {} 随机抽取 {} 次买入点作为测试。'.format(init_cash, len(data),
                                                        buy_times)
     report = report + \
              '\n测试区间：{}-{}'.format(data.iloc[0]['date'], data.iloc[-1]['date'])
