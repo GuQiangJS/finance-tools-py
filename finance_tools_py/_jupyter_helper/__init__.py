@@ -204,9 +204,8 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
     hiss = []  # 交易明细
 
     init_cash = kwargs.pop('init_cash', 50000)
-
+    buy_data = kwargs.pop('buy_data', data)
     for i in tqdm(range(times)):
-        buy_data = kwargs.pop('buy_data', data)
         buys = buy_data.iloc[np.random.choice(
             len(buy_data),
             buy_times)].sort_values('date').groupby('code')['date'].apply(
