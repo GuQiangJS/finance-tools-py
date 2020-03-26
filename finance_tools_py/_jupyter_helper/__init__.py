@@ -127,24 +127,115 @@ def plot_basic_seaborn(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
     plt.show()
 
 
-def backtest(symbol,
-             data=None,
-             buy_query='',
-             sell_query='',
-             sim_callbacks=[],
-             **kwargs):
+def BACKTEST_PACK(**kwargs):
+    """多支支股票的回测计算。
+
+    Args:
+        sim_data: 所有处理后的数据。包含这个值以后，不再使用 `ori_data`。如果这个值为 None ，则会根据 `sim_callbacks` 中的回调定义对 `ori_data` 进行处理。
+        ori_data: 所有原始数据。包含多支不同的股票。
+        buy_sell_data: 买入卖出计算数据。默认使用 `data` 的值。如果传入字符串则从 `sim_data` 中根据条件取值。
+        buys: 可以是字符串，示例：'rsi_close_14>80'。如果是字符串则会自动从 `buy_sell_data` 中筛选。也可以是字典类型，示例:{'000002':[datetime,datetime]}。如果是字典类型则无需传入 `buy_sell_data`。
+        sells: 参考 `buys`。
+        sim_callbacks: 附加数据时的回调。只有当 `sim_data` 为空时才有用。
+        show_detail: 打印买入，卖出占比。默认为False
+        show_report: 打印回测报告。默认为False
+        show_history: 打印成交明细。默认为False
+        plot: 绘图。默认为False
+
+    Returns:
+        backtest实例，数据，买入时间集合，卖出时间集合
+
     """
+    dfs = []
+
+    ori_data = kwargs.pop('sim_data', None)
+    sim_data = kwargs.pop('sim_data', None)
+    sim_callbacks = kwargs.pop('sim_callbacks', [])
+    buys = kwargs.pop('buys', {})
+    sells = kwargs.pop('sells', {})
+
+    if sim_data is None and ori_data is None:
+        raise ValueError()
+    if sim_data is None:
+        for symbol in tqdm(ori_data['code'].unique(), desc='处理数据中...'):
+            s = Simulation(ori_data[ori_data['code'] == symbol],
+                           symbol,
+                           callbacks=sim_callbacks)
+            s.simulate()
+            s.data['code'] = symbol
+            dfs.append(s.data)
+        _data = pd.concat(dfs)
+        _data.sort_values('date', inplace=True)
+    else:
+        _data = sim_data
+    buy_sell_data = kwargs.pop('buy_sell_data', _data)
+    #     _print_buy=False
+    #     _print_sell=False
+    if isinstance(buy_sell_data, str):
+        buy_sell_data = _data.loc[_data.query(buy_sell_data)]
+    if isinstance(buys, str):
+        bq = str(buys)
+        #         _print_buy=True
+        buys = {}
+        for symbol in tqdm(buy_sell_data['code'].unique(), desc='计算买入点...'):
+            buys[symbol] = buy_sell_data[buy_sell_data['code'] ==
+                                         symbol].query(
+                                             bq)['date'].dt.to_pydatetime()
+    if isinstance(sells, str):
+        #         _print_sell=True
+        sq = str(sells)
+        for symbol in tqdm(buy_sell_data['code'].unique(), desc='计算卖出点...'):
+            sells[symbol] = buy_sell_data[buy_sell_data['code'] ==
+                                          symbol].query(
+                                              sq)['date'].dt.to_pydatetime()
+    bt = BackTest(_data, callbacks=[Checker(buys, sells)])
+    bt.calc_trade_history()
+    if kwargs.pop("clear_output", True):
+        clear_output(True)
+    #     print('\x1b[1;31m{} 回测测试\x1b[0m\n买入条件:{}\n卖出条件:{}'.format(
+    #         symbol, buy_query, sell_query))
+    #     print('-----------------------------------------------')
+    if kwargs.pop('show_detail', False):
+        print('预计购买次数:{},占比:{:.2%}\n预计卖出次数:{},占比:{:.2%}'.format(
+            len(buys),
+            len(buys) / len(_data), len(sells),
+            len(sells) / len(_data)))
+    if kwargs.pop('show_report', False):
+        print(
+            bt.report(show_history=kwargs.pop('show_history', False),
+                      **kwargs))
+    if kwargs.pop('plot', False):
+        plot_backtest(_data,
+                      x='date',
+                      y='close',
+                      buy=list(buys),
+                      sell=list(sells))
+    return bt, _data, buys, sells
+
+
+def BACKTEST_SINGLE(symbol,
+                    data=None,
+                    buy_query='',
+                    sell_query='',
+                    sim_callbacks=[],
+                    **kwargs):
+    """单支股票的回测计算。默认包含先调用 `sim_callbacks` 进行数据处理，
+    再从 `buy_data` 中根据 `buy_query` 和 `sell_query` 产生买入卖出是几点，
+    最后再进行回测计算。
+
+    .. seealso::
+        * :func:`BACKTEST_PACK` 多支股票的回测计算。
 
     Args:
         symbol:
         data:
         buy_query: 示例：'rsi_close_14>80'
         sell_query:
-        callbacks:
-        show_detail: 打印买入，卖出占比。默认为True
-        show_report: 打印回测报告。默认为True
-        show_history: 打印成交明细。默认为True
-        plot: 绘图。默认为True
+        sim_callbacks:
+        show_detail: 打印买入，卖出占比。默认为 False
+        show_report: 打印回测报告。默认为 False
+        show_history: 打印成交明细。默认为 False
+        plot: 绘图。默认为 False
 
     Returns:
         backtest实例，数据，买入时间集合，卖出时间集合
@@ -169,14 +260,16 @@ def backtest(symbol,
     print('\x1b[1;31m{} 回测测试\x1b[0m\n买入条件:{}\n卖出条件:{}'.format(
         symbol, buy_query, sell_query))
     print('-----------------------------------------------')
-    if kwargs.pop('show_detail', True):
+    if kwargs.pop('show_detail', False):
         print('预计购买次数:{},占比:{:.2%}\n预计卖出次数:{},占比:{:.2%}'.format(
             len(buys),
             len(buys) / len(s.data), len(sells),
             len(sells) / len(s.data)))
-    if kwargs.pop('show_report', True):
-        print(bt.report(**kwargs))
-    if kwargs.pop('plot', True):
+    if kwargs.pop('show_report', False):
+        print(
+            bt.report(show_history=kwargs.pop('show_history', False),
+                      **kwargs))
+    if kwargs.pop('plot', False):
         plot_backtest(s.data,
                       x='date',
                       y='close',
@@ -218,8 +311,8 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
         hiss.append(bt.history_df)
     if kwargs.pop("clear_output", True):
         clear_output(True)
-    report = '测试起始资金 {}，总数据量 {} 随机抽取 {} 次买入点作为测试。'.format(init_cash, len(data),
-                                                       buy_times)
+    report = '测试起始资金 {}，总数据量 {} 随机抽取 {} 次买入点作为测试。'.format(
+        init_cash, len(data), buy_times)
     report = report + \
              '\n测试区间：{}-{}'.format(data.iloc[0]['date'], data.iloc[-1]['date'])
     report = report + '\n测试{}次后，平均总价值:{}'.format(times, np.average(hs))
