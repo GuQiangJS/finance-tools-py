@@ -148,7 +148,7 @@ def BACKTEST_PACK(**kwargs):
     """
     dfs = []
 
-    ori_data = kwargs.pop('sim_data', None)
+    ori_data = kwargs.pop('ori_data', None)
     sim_data = kwargs.pop('sim_data', None)
     sim_callbacks = kwargs.pop('sim_callbacks', [])
     buys = kwargs.pop('buys', {})
