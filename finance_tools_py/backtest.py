@@ -614,6 +614,7 @@ class BackTest():
 
         Args:
             show_history (bool): 是否包含交易明细。默认为True。
+            show_hold (bool): 是否包含当前持仓明细。默认为True。
 
         Returns:
             str: 返回计算结果。
@@ -628,11 +629,12 @@ class BackTest():
         result = result + '\n初始资金:{:.2f}'.format(self.init_cash)
         result = result + '\n交易次数:{} (买入/卖出各算1次)'.format(len(self.history))
         result = result + '\n可用资金:{:.2f}'.format(self.available_cash)
-        result = result + '\n当前持仓:'
-        if not self.hold_price_cur_df.empty:
-            result = result + self.hold_price_cur_df.to_string()
-        else:
-            result = result + '无'
+        if kwargs.pop('show_hold', True):
+            result = result + '\n当前持仓:'
+            if not self.hold_price_cur_df.empty:
+                result = result + self.hold_price_cur_df.to_string()
+            else:
+                result = result + '无'
         result = result + '\n当前总资产:{:.2f}(现金+持股现价值)'.format(
             self.total_assets_cur)
         result = result + '\n资金变化率:{:.2%}'.format(
