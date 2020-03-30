@@ -88,7 +88,7 @@ def BACKTEST_PACK_YEAR(data, zs_data, year, sim_callbacks, **kwargs):
         hs_data： 指数相关数据。与 `data` 匹配。
         sim_callbacks: 回测时使用的回调集合。
         year: 年度
-        title:
+        name:
 
     See Also:
         * :func:`BACKTEST_PACK_ALL` 跨年度回测数据。
@@ -152,7 +152,7 @@ def BACKTEST_PACK_ALL(data,
         sim_callbacks: 回测时使用的回调集合。
         start_year: 开始年度
         end_year: 结束年度
-        title:
+        name:
 
     Example:
         >>> from finance_tools_py.simulation.callbacks.talib import MFI
