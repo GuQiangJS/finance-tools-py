@@ -1,6 +1,7 @@
 devel/_sources/backtest/backtest.rst.txt
 devel/_sources/backtest/callback.rst.txt
 devel/_sources/index.rst.txt
+devel/_sources/jupyter_helper.rst.txt
 devel/_sources/simulation/callback.rst.txt
 devel/_sources/simulation/callback_talib.rst.txt
 devel/_sources/simulation/simulation.rst.txt
@@ -62,6 +63,7 @@ devel/backtest/backtest.html
 devel/backtest/callback.html
 devel/genindex.html
 devel/index.html
+devel/jupyter_helper.html
 devel/objects.inv
 devel/py-modindex.html
 devel/search.html
