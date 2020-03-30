@@ -56,9 +56,9 @@ def __BACKTEST(data,
     sells = bs_data[bs_data['opt'] == -1].groupby('code')['date'].apply(
         lambda x: x.dt.to_pydatetime()).to_dict()
 
-    bt, bs_data, bt_buy, bt_sell = BACKTEST_PACK(sim_data=sim_data,
-                                                 buys=buys,
-                                                 sells=sells)
+    bt, bs_data, bt_buy, bt_sell = __BACKTEST_PACK_CORE(sim_data=sim_data,
+                                                        buys=buys,
+                                                        sells=sells)
 
     clear_output(True)
     print("可买入时间：{}~{}".format(buy_start, buy_end))
@@ -89,6 +89,39 @@ def BACKTEST_PACK_YEAR(data, zs_data, year, sim_callbacks, **kwargs):
         sim_callbacks: 回测时使用的回调集合。
         year: 年度
         title:
+
+    See Also:
+        * :func:`BACKTEST_PACK_ALL` 跨年度回测数据。
+
+    Example:
+        >>> from finance_tools_py.simulation.callbacks.talib import MFI
+        >>> qfq_datas=pd.DataFrame() #所有股票日线数据
+        >>> hs_300_data=pd.DataFrame() #沪深300指数日线数据
+        >>> class CB(CallBack):
+        >>>     def __init__(self, t, v1, v2):
+        >>>         self.t = t
+        >>>         self.v1 = v1
+        >>>         self.v2 = v2
+        >>>     def on_preparing_data(self, data, **kwargs):
+        >>>         data['opt'] = 0
+        >>>         data.loc[data['mfi_{}'.format(self.t)] < self.v1, 'opt'] = 1
+        >>>         data.loc[data['mfi_{}'.format(self.t)] > self.v2, 'opt'] = -1
+        >>>
+        >>> BACKTEST_PACK_YEAR(qfq_datas,
+        >>>                    hs_300_data,
+        >>>                    2015,
+        >>>                    [MFI(14), CB(14, 20, 80)],
+        >>>                    name='2015年度比较')
+        可买入时间：2015-01-01~2015-12-31
+        数据时间:2015-01-05 00:00:00~2015-12-31 00:00:00（可交易天数244）
+        初始资金:10000.00
+        交易次数:170 (买入/卖出各算1次)
+        可用资金:1402.50
+        当前总资产:12135.85(现金+持股现价值)
+        资金变化率:14.03%
+        资产变化率:121.36%
+        总手续费:850.54
+        总印花税:138.15
     """
     start = '{0}-01-01'.format(year)
     end = '{0}-12-31'.format(year)
@@ -110,6 +143,9 @@ def BACKTEST_PACK_ALL(data,
                       **kwargs):
     """跨年度回测数据
 
+    See Also:
+        * :func:`BACKTEST_PACK_YEAR` 按照年度回测数据。
+
     Args:
         data: 待回测的数据。
         zs_data: 指数相关数据。与 `data` 匹配。
@@ -117,10 +153,25 @@ def BACKTEST_PACK_ALL(data,
         start_year: 开始年度
         end_year: 结束年度
         title:
-        **kwargs:
 
-    Returns:
-
+    Example:
+        >>> from finance_tools_py.simulation.callbacks.talib import MFI
+        >>> qfq_datas=pd.DataFrame() #所有股票日线数据
+        >>> hs_300_data=pd.DataFrame() #沪深300指数日线数据
+        >>> class CB(CallBack):
+        >>>     def __init__(self, t, v1, v2):
+        >>>         self.t = t
+        >>>         self.v1 = v1
+        >>>         self.v2 = v2
+        >>>     def on_preparing_data(self, data, **kwargs):
+        >>>         data['opt'] = 0
+        >>>         data.loc[data['mfi_{}'.format(self.t)] < self.v1, 'opt'] = 1
+        >>>         data.loc[data['mfi_{}'.format(self.t)] > self.v2, 'opt'] = -1
+        >>>
+        >>> BACKTEST_PACK_ALL(qfq_datas,
+        >>>                   hs_300_data,
+        >>>                   [MFI(14), CB(14, 20, 80)],
+        >>>                   name='2015年度比较')
     """
     start = '{0}-01-01'.format(start_year)
     end = '{0}-12-31'.format(end_year)
@@ -241,7 +292,7 @@ def plot_basic_seaborn(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
     plt.show()
 
 
-def BACKTEST_PACK(**kwargs):
+def __BACKTEST_PACK_CORE(**kwargs):
     """多支支股票的回测计算。
 
     Args:
@@ -338,7 +389,7 @@ def BACKTEST_SINGLE(symbol,
     最后再进行回测计算。
 
     .. seealso::
-        * :func:`BACKTEST_PACK` 多支股票的回测计算。
+        * :func:`__BACKTEST_PACK_CORE` 多支股票的回测计算。
 
     Args:
         symbol:

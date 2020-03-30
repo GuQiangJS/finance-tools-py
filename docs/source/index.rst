@@ -8,3 +8,4 @@
    backtest/callback
    simulation/simulation
    simulation/callback
+   jupyter_helper
