@@ -14,10 +14,124 @@ import logging
 import traceback
 from tqdm.auto import tqdm
 
-IN_COLAB = 'google.colab' in sys.modules
+plt.rcParams['font.family'] = 'SimHei'
+# IN_COLAB = 'google.colab' in sys.modules
 
-if not IN_COLAB:
-    logging.warning('Colab用。如果不是在Colab下可能会有各种各样的问题！！！')
+# if not IN_COLAB:
+#     logging.warning('Colab用。如果不是在Colab下可能会有各种各样的问题！！！')
+
+
+def __plot_BACKTEST_bar(v, title):
+    for index, i in enumerate(v.items()):
+        plt.bar(x=index, height=i[1], label=i[0])
+    plt.legend()
+    plt.title(title)
+
+
+def __BACKTEST(data,
+               zs_data,
+               callback=[],
+               buy_start='2018-01-01',
+               buy_end='2018-12-31',
+               **kwargs):
+    dfs = []
+    for symbol in tqdm(data['code'].unique(), desc='处理数据中...'):
+        s = Simulation(data[data['code'] == symbol].sort_values('date'),
+                       symbol,
+                       callbacks=callback)
+        s.simulate()
+        s.data['code'] = symbol
+        dfs.append(s.data)
+    sim_data = pd.concat(dfs)
+    sim_data.sort_values(['date', 'code'], inplace=True)
+    clear_output(True)
+
+    #取买入卖出点的计算数据
+    bs_data = sim_data[(sim_data['date'] >= buy_start)
+                       & (sim_data['date'] <= buy_end)]
+
+    #计算买入/卖出点...
+    buys = bs_data[bs_data['opt'] == 1].groupby('code')['date'].apply(
+        lambda x: x.dt.to_pydatetime()).to_dict()
+    sells = bs_data[bs_data['opt'] == -1].groupby('code')['date'].apply(
+        lambda x: x.dt.to_pydatetime()).to_dict()
+
+    bt, bs_data, bt_buy, bt_sell = BACKTEST_PACK(sim_data=sim_data,
+                                                 buys=buys,
+                                                 sells=sells)
+
+    clear_output(True)
+    print("可买入时间：{}~{}".format(buy_start, buy_end))
+    print(bt.report(
+        show_history=False,
+        show_hold=False,
+    ))
+
+    baseline = data.groupby('code').apply(
+        lambda df: df.iloc[-1]['close'] / df.iloc[0]['close']).mean()
+    name = kwargs.pop('name', '')
+    __plot_BACKTEST_bar(
+        {
+            "沪深300": zs_data.iloc[-1]['close'] / zs_data.iloc[0]['close'],
+            "BaseLine": baseline,
+            name: bt.total_assets_cur / bt.init_cash
+        }, name)
+
+    return bt, bs_data
+
+
+def BACKTEST_PACK_YEAR(data, zs_data, year, sim_callbacks, **kwargs):
+    """按照年度回测数据
+
+    Args:
+        data: 待回测的数据。
+        hs_data： 指数相关数据。与 `data` 匹配。
+        sim_callbacks: 回测时使用的回调集合。
+        year: 年度
+        title:
+    """
+    start = '{0}-01-01'.format(year)
+    end = '{0}-12-31'.format(year)
+    __BACKTEST(data[(data['date'] >= start)
+                    & (data['date'] <= end)],
+               zs_data[(zs_data['date'] >= start)
+                       & (zs_data['date'] <= end)],
+               callback=sim_callbacks,
+               buy_start=start,
+               buy_end=end,
+               **kwargs)
+
+
+def BACKTEST_PACK_ALL(data,
+                      zs_data,
+                      sim_callbacks,
+                      start_year=2005,
+                      end_year=2019,
+                      **kwargs):
+    """跨年度回测数据
+
+    Args:
+        data: 待回测的数据。
+        zs_data: 指数相关数据。与 `data` 匹配。
+        sim_callbacks: 回测时使用的回调集合。
+        start_year: 开始年度
+        end_year: 结束年度
+        title:
+        **kwargs:
+
+    Returns:
+
+    """
+    start = '{0}-01-01'.format(start_year)
+    end = '{0}-12-31'.format(end_year)
+    __BACKTEST(data[(data['date'] >= start)
+                    & (data['date'] <= end)],
+               zs_data[(zs_data['date'] >= start)
+                       & (zs_data['date'] <= end)],
+               callback=sim_callbacks,
+               buy_start=start,
+               buy_end=end,
+               **kwargs)
 
 
 class Checker(AllInChecker):
@@ -322,8 +436,8 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
 
 def read_data_QFQ(symbol='600036') -> pd.DataFrame:
     """读取前复权数据"""
-    if not IN_COLAB:
-        raise NotImplementedError()
+    # if not IN_COLAB:
+    #     raise NotImplementedError()
     data = pd.read_csv(
         'https://raw.githubusercontent.com/GuQiangJS/temp/master/{}_daily.csv'.
         format(symbol),
@@ -350,8 +464,8 @@ def read_data_QFQ(symbol='600036') -> pd.DataFrame:
 
 def read_data_HFQ(symbol='600036') -> pd.DataFrame:
     """读取后复权数据"""
-    if not IN_COLAB:
-        raise NotImplementedError()
+    # if not IN_COLAB:
+    #     raise NotImplementedError()
     data = pd.read_csv(
         'https://raw.githubusercontent.com/GuQiangJS/temp/master/{}_daily.csv'.
         format(symbol),
