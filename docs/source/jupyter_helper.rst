@@ -38,13 +38,13 @@ jupyter notebook 中可能用到的常用方法封装
 .. automethod:: finance_tools_py._jupyter_helper::RANDMON_TEST_BASIC
 
 使用plotly绘制回测后的数据
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 单支股票用
 
 .. automethod:: finance_tools_py._jupyter_helper::plot_backtest_plotly
 
 使用seaborn绘制回测后的数据
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 单支股票用
 
 .. automethod:: finance_tools_py._jupyter_helper::plot_backtest_seaborn
