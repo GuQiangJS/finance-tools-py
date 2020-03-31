@@ -28,12 +28,8 @@ def __plot_BACKTEST_bar(v, title):
     plt.title(title)
 
 
-def __BACKTEST(data,
-               zs_data,
-               callback=[],
-               buy_start='2018-01-01',
-               buy_end='2018-12-31',
-               **kwargs):
+def SIMULATE_DATA(data, callback=[]):
+    """循环处理所有数据，循环按照 `callback` 的回测集合对所有股票分别进行回测处理后再合并返回"""
     dfs = []
     for symbol in tqdm(data['code'].unique(), desc='处理数据中...'):
         s = Simulation(data[data['code'] == symbol].sort_values('date'),
@@ -45,6 +41,16 @@ def __BACKTEST(data,
     sim_data = pd.concat(dfs)
     sim_data.sort_values(['date', 'code'], inplace=True)
     clear_output(True)
+    return sim_data
+
+
+def __BACKTEST(data,
+               zs_data,
+               callback=[],
+               buy_start='2018-01-01',
+               buy_end='2018-12-31',
+               **kwargs):
+    sim_data = SIMULATE_DATA(data, callback)
 
     #取买入卖出点的计算数据
     bs_data = sim_data[(sim_data['date'] >= buy_start)
@@ -322,15 +328,7 @@ def __BACKTEST_PACK_CORE(**kwargs):
     if sim_data is None and ori_data is None:
         raise ValueError()
     if sim_data is None:
-        for symbol in tqdm(ori_data['code'].unique(), desc='处理数据中...'):
-            s = Simulation(ori_data[ori_data['code'] == symbol],
-                           symbol,
-                           callbacks=sim_callbacks)
-            s.simulate()
-            s.data['code'] = symbol
-            dfs.append(s.data)
-        _data = pd.concat(dfs)
-        _data.sort_values('date', inplace=True)
+        _data = SIMULATE_DATA(ori_data, sim_callbacks)
     else:
         _data = sim_data
     buy_sell_data = kwargs.pop('buy_sell_data', _data)

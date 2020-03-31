@@ -11,7 +11,10 @@
 .. _Overlap Studies: https://mrjbq7.github.io/ta-lib/func_groups/overlap_studies.html
 
 * :py:class:`BBANDS` BBANDS - Bollinger Bands
+* :py:class:`SMA` SMA - Simple Moving Average 简单移动平均线
 * :py:class:`DEMA` DEMA - Double Exponential Moving Average 双移动平均线
+* :py:class:`EMA` EMA - Exponential Moving Average 指数移动平均线
+* :py:class:`WMA` WMA - Weighted Moving Average 移动加权平均法
 
 **BBANDS - Bollinger Bands**
 
@@ -34,6 +37,45 @@
 .. autoclass:: DEMA
     :exclude-members: on_preparing_data
     :inherited-members: col_close
+
+
+
+**SMA - Simple Moving Average 简单移动平均线**
+
+简介：移动平均线，Moving Average，简称MA，原本的意思是移动平均，由于我们将其制作成线形，所以一般称之为移动平均线，简称均线。
+
+分析和应用：`百度百科 <https://baike.baidu.com/item/%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/217887?fromtitle=MA&fromid=1511750#viewPageContent>`__
+`同花顺学院 <http://www.iwencai.com/yike/detail/auid/a04d723659318237?rid=96>`__
+
+.. autoclass:: SMA
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close
+
+
+
+**EMA - Exponential Moving Average 指数移动平均线**
+
+简介：是一种趋向类指标，其构造原理是仍然对价格收盘价进行算术平均，并根据计算结果来进行分析，用于判断价格未来走势的变动趋势。
+
+分析和应用：`百度百科 <https://baike.baidu.com/item/EMA/12646151>`__
+`同花顺学院 <http://www.iwencai.com/yike/detail/auid/b7a39d74783ad689?rid=589>`__
+
+.. autoclass:: EMA
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close
+
+
+**WMA - Weighted Moving Average 移动加权平均法**
+
+简介：移动加权平均法是指以每次进货的成本加上原有库存存货的成本，除以每次进货数量与原有库存存货的数量之和，据以计算加权平均单位成本，以此为基础计算当月发出存货的成本和期末存货的成本的一种方法。
+
+分析和应用：`百度百科 <https://baike.baidu.com/item/%E7%A7%BB%E5%8A%A8%E5%8A%A0%E6%9D%83%E5%B9%B3%E5%9D%87%E6%B3%95/10056490?fr=aladdin&fromid=16799870&fromtitle=%E5%8A%A0%E6%9D%83%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87>`__
+`同花顺学院 <http://www.iwencai.com/yike/detail/auid/262b1dfd1c68ee30>`__
+
+.. autoclass:: WMA
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close
+
 
 
 动量指标计算回调

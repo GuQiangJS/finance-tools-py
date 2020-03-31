@@ -163,7 +163,6 @@ class MFI(CallBack):
                                data[self.col_vol].values, self.timeperiod)
 
 
-
 class CCI(CallBack):
     """附加顺势指标。
 
@@ -244,7 +243,6 @@ class DEMA(CallBack):
         data[real] = talib.DEMA(data[self.col_name].values, self.timeperiod)
 
 
-
 class RSI(CallBack):
     """附加计算Relative Strength Index 相对强弱指数。
 
@@ -279,3 +277,120 @@ class RSI(CallBack):
         """附加计算Relative Strength Index 相对强弱指数"""
         real = 'rsi_{}_{}'.format(self.col_name, self.timeperiod)
         data[real] = talib.RSI(data[self.col_name].values, self.timeperiod)
+
+
+class SMA(CallBack):
+    """附加计算SMA - 简单移动均线指标
+
+        执行后会对数据源中附加如下的列：
+
+        * sma_x: x日简单移动均线。（ `x` 为 `col_name_timeperiod` ）。
+
+    Attributes:
+        timeperiod: 参考 `talib.SMA` 中的相关参数。
+        col_name: 计算时使用的数据列。默认为 `col_close`。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import SMA
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)]})
+        >>> print(data)
+           close
+        0    5.0
+        1    6.0
+        2    7.0
+        3    8.0
+        4    9.0
+        >>> t = 3
+        >>> s = Simulation(data,'',callbacks=[SMA(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'sma' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        sma_close_3:[nan nan  6.  7.  8.]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.col_name = kwargs.pop('col_name', self.col_close)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算SMA - 简单移动均线指标"""
+        real = 'sma_{}_{}'.format(self.col_name, self.timeperiod)
+        data[real] = talib.SMA(data[self.col_name].values, self.timeperiod)
+
+
+class EMA(CallBack):
+    """附加计算EMA - 指数移动平均线
+
+        执行后会对数据源中附加如下的列：
+
+        * ema_x: x日简单移动均线。（ `x` 为 `col_name_timeperiod` ）。
+
+    Attributes:
+        timeperiod: 参考 `talib.EMA` 中的相关参数。
+        col_name: 计算时使用的数据列。默认为 `col_close`。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import EMA
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)]})
+        >>> print(data)
+           close
+        0    5.0
+        1    6.0
+        2    7.0
+        3    8.0
+        4    9.0
+        >>> t = 3
+        >>> s = Simulation(data,'',callbacks=[EMA(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'ema' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        ema_close_3:[nan nan  6.  7.  8.]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.col_name = kwargs.pop('col_name', self.col_close)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算EMA - 指数移动平均线"""
+        real = 'ema_{}_{}'.format(self.col_name, self.timeperiod)
+        data[real] = talib.EMA(data[self.col_name].values, self.timeperiod)
+
+class WMA(CallBack):
+    """附加计算WMA - 加权移动平均线
+
+        执行后会对数据源中附加如下的列：
+
+        * wma_x: x日简单移动均线。（ `x` 为 `col_name_timeperiod` ）。
+
+    Attributes:
+        timeperiod: 参考 `talib.WMA` 中的相关参数。
+        col_name: 计算时使用的数据列。默认为 `col_close`。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import WMA
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})
+        >>> print(data['close'].values)
+        [0. 1. 2. 3. 4. 5. 6. 7.]
+        >>> t=3
+        >>> s = Simulation(data,'',callbacks=[WMA(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'dema' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        wma_close_3:[ nan  nan 1.33 2.33 3.33 4.33 5.33 6.33]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.col_name = kwargs.pop('col_name', self.col_close)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算WMA - 加权移动平均线"""
+        real = 'wma_{}_{}'.format(self.col_name, self.timeperiod)
+        data[real] = talib.WMA(data[self.col_name].values, self.timeperiod)

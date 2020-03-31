@@ -171,6 +171,55 @@ def test_example_MFI(init_global_data):
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
+def test_example_SMA(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import SMA')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import SMA
+    print(">>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)]})")
+    data = pd.DataFrame({'close': [y for y in np.arange(5.0, 10.0)]})
+    print(">>> print(data)")
+    print(data)
+    t = 3
+    print('>>> t = {}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[SMA(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[SMA(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'sma' in col]")
+    cols = [col for col in s.data.columns if 'sma' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
+def test_example_EMA(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import EMA')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import EMA
+    print(">>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)]})")
+    data = pd.DataFrame({'close': [y for y in np.arange(5.0, 10.0)]})
+    print(">>> print(data)")
+    print(data)
+    t = 3
+    print('>>> t = {}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[EMA(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[EMA(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'ema' in col]")
+    cols = [col for col in s.data.columns if 'ema' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
 def test_example_DEMA(init_global_data):
     print('>>> from finance_tools_py.simulation.callbacks.talib import DEMA')
     print('>>> from finance_tools_py.simulation import Simulation')
@@ -196,6 +245,32 @@ def test_example_DEMA(init_global_data):
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
+def test_example_WMA(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import WMA')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import WMA
+    print(">>> data = pd.DataFrame({'close': [y for y in range(0, 8)]})")
+    data = pd.DataFrame({'close': [y for y in np.arange(0.0, 8.0)]})
+    print(">>> print(data['close'].values)")
+    print(data['close'].values)
+    t = 3
+    print('>>> t={}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[WMA(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[WMA(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'dema' in col]")
+    cols = [col for col in s.data.columns if 'wma' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
 def test_example_RSI(init_global_data):
     print('>>> from finance_tools_py.simulation.callbacks.talib import RSI')
     print('>>> from finance_tools_py.simulation import Simulation')
@@ -216,6 +291,7 @@ def test_example_RSI(init_global_data):
     print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
     for col in cols:
         print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
 
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
@@ -254,6 +330,37 @@ def test_BBANDS(init_global_data):
     assert pd.Series.equals(up, pytest.global_data[col_up])
     assert pd.Series.equals(mean, pytest.global_data[col_mean])
     assert pd.Series.equals(low, pytest.global_data[col_low])
+
+
+def test_SMA(init_global_data):
+    t = 5
+    b = cb_talib.SMA(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    col = 'sma_close_{}'.format(t)
+    assert col in pytest.global_data.columns
+    real = talib.SMA(pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[col])
+
+def test_WMA(init_global_data):
+    t = 5
+    b = cb_talib.WMA(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    col = 'wma_close_{}'.format(t)
+    assert col in pytest.global_data.columns
+    real = talib.WMA(pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[col])
+
+def test_EMA(init_global_data):
+    t = 5
+    b = cb_talib.EMA(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    col = 'ema_close_{}'.format(t)
+    assert col in pytest.global_data.columns
+    real = talib.EMA(pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[col])
 
 
 def test_Sim_BBANDS(init_global_data):
@@ -317,6 +424,44 @@ def test_Sim_MFI(mock_data):
     assert pd.Series.equals(real, s.data[w])
 
 
+def test_Sim_SMA(mock_data):
+    """测试通过回测调用SMA，逻辑与`test_SMA`一致"""
+    t = 5
+    b = cb_talib.SMA(t)
+    s = Simulation(pytest.mock_data, pytest.mock_data, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'sma_close_{}'.format(t)  # 顺势指标
+    assert w in s.data.columns
+    real = talib.SMA(s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
+
+def test_Sim_EMA(mock_data):
+    """测试通过回测调用EMA，逻辑与`test_EMA`一致"""
+    t = 5
+    b = cb_talib.EMA(t)
+    s = Simulation(pytest.mock_data, pytest.mock_data, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'ema_close_{}'.format(t)  # 顺势指标
+    assert w in s.data.columns
+    real = talib.EMA(s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
+
+def test_Sim_WMA(mock_data):
+    """测试通过回测调用WMA，逻辑与`test_WMA`一致"""
+    t = 5
+    b = cb_talib.WMA(t)
+    s = Simulation(pytest.mock_data, pytest.mock_data, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'wma_close_{}'.format(t)  # 顺势指标
+    assert w in s.data.columns
+    real = talib.WMA(s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
 def test_WILLR(init_global_data):
     t = 5
     b = cb_talib.WILLR(t)
@@ -364,6 +509,7 @@ def test_DEMA(init_global_data):
     assert w in pytest.global_data.columns
     real = talib.DEMA(pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[w])
+
 
 def test_RSI(init_global_data):
     t = 5
