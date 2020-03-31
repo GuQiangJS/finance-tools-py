@@ -14,6 +14,7 @@ jupyter notebook 中可能用到的常用方法封装
 * :py:meth:`BACKTEST_PACK_YEAR` 按年度回测
 * :py:meth:`BACKTEST_SINGLE` 单支股票回测
 * :py:meth:`RANDMON_TEST_BASIC` 随机回测
+* :py:meth:`SIMULATE_DATA` 循环处理所有数据
 
 绘图相关
 ---------------------------------
