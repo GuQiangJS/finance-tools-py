@@ -50,6 +50,19 @@ def __BACKTEST(data,
                buy_start='2018-01-01',
                buy_end='2018-12-31',
                **kwargs):
+    """
+
+    Args:
+        data:
+        zs_data:
+        callback:
+        buy_start:
+        buy_end:
+        clear_output (bool): 清除输出。默认True。
+
+    Returns:
+
+    """
     sim_data = SIMULATE_DATA(data, callback)
 
     #取买入卖出点的计算数据
@@ -65,8 +78,8 @@ def __BACKTEST(data,
     bt, bs_data, bt_buy, bt_sell = __BACKTEST_PACK_CORE(sim_data=sim_data,
                                                         buys=buys,
                                                         sells=sells)
-
-    clear_output(True)
+    if kwargs.pop('clear_output',True):
+        clear_output(True)
     print("可买入时间：{}~{}".format(buy_start, buy_end))
     print(bt.report(
         show_history=False,
@@ -159,6 +172,7 @@ def BACKTEST_PACK_ALL(data,
         start_year: 开始年度
         end_year: 结束年度
         name:
+        clear_output (bool): 清除输出。默认True。
 
     Example:
         >>> from finance_tools_py.simulation.callbacks.talib import MFI
