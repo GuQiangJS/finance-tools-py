@@ -8,10 +8,9 @@ Python 金融量化计算工具包
 
 其他对于 talib 包的中文说明：`Talib库详解 <https://www.fmz.com/bbs-topic/1234>`__ , `Talib中文文档 <https://www.bookstack.cn/read/talib-zh/README.md>`__
 
+`TA-lib视频教程（超简易使用方法） <https://v.qq.com/x/cover/z05423zgjyu/z05423zgjyu.html>`__ , `talib中文文档 github <https://github.com/HuaRongSAO/talib-document>`__
+
 .. image:: https://travis-ci.org/GuQiangJS/finance-tools-py.svg?branch=master
     :target: https://travis-ci.org/GuQiangJS/finance-tools-py
-
-.. image:: https://coveralls.io/repos/github/GuQiangJS/finance-tools-py/badge.svg
-    :target: https://coveralls.io/github/GuQiangJS/finance-tools-py
 
 .. include:: dep.md
