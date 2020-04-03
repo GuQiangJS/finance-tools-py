@@ -68,7 +68,7 @@ def __BACKTEST(data,
     Returns:
 
     """
-    sim_data = SIMULATE_DATA(data, callback)
+    sim_data = SIMULATE_DATA(data, callback, **kwargs)
 
     #取买入卖出点的计算数据
     bs_data = sim_data[(sim_data['date'] >= buy_start)
@@ -82,7 +82,8 @@ def __BACKTEST(data,
 
     bt, bs_data, bt_buy, bt_sell = __BACKTEST_PACK_CORE(sim_data=sim_data,
                                                         buys=buys,
-                                                        sells=sells)
+                                                        sells=sells,
+                                                        **kwargs)
     if kwargs.get('clear_output', True):
         clear_output(True)
     print("可买入时间：{}~{}".format(buy_start, buy_end))
