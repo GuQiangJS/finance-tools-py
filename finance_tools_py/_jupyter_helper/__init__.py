@@ -28,8 +28,12 @@ def __plot_BACKTEST_bar(v, title):
     plt.title(title)
 
 
-def SIMULATE_DATA(data, callback=[]):
-    """循环处理所有数据，循环按照 `callback` 的回测集合对所有股票分别进行回测处理后再合并返回"""
+def SIMULATE_DATA(data, callback=[], **kwargs):
+    """循环处理所有数据，循环按照 `callback` 的回测集合对所有股票分别进行回测处理后再合并返回
+
+    Args:
+        clear_output (bool): 清除输出。默认True。
+    """
     dfs = []
     for symbol in tqdm(data['code'].unique(), desc='处理数据中...'):
         s = Simulation(data[data['code'] == symbol].sort_values('date'),
@@ -40,7 +44,8 @@ def SIMULATE_DATA(data, callback=[]):
         dfs.append(s.data)
     sim_data = pd.concat(dfs)
     sim_data.sort_values(['date', 'code'], inplace=True)
-    clear_output(True)
+    if kwargs.get('clear_output', True):
+        clear_output(True)
     return sim_data
 
 
@@ -78,7 +83,7 @@ def __BACKTEST(data,
     bt, bs_data, bt_buy, bt_sell = __BACKTEST_PACK_CORE(sim_data=sim_data,
                                                         buys=buys,
                                                         sells=sells)
-    if kwargs.pop('clear_output',True):
+    if kwargs.get('clear_output', True):
         clear_output(True)
     print("可买入时间：{}~{}".format(buy_start, buy_end))
     print(bt.report(
@@ -326,6 +331,7 @@ def __BACKTEST_PACK_CORE(**kwargs):
         show_report: 打印回测报告。默认为False
         show_history: 打印成交明细。默认为False
         plot: 绘图。默认为False
+        clear_output (bool): 清除输出。默认True。
 
     Returns:
         backtest实例，数据，买入时间集合，卖出时间集合
@@ -367,7 +373,7 @@ def __BACKTEST_PACK_CORE(**kwargs):
                                               sq)['date'].dt.to_pydatetime()
     bt = BackTest(_data, callbacks=[Checker(buys, sells)])
     bt.calc_trade_history()
-    if kwargs.pop("clear_output", True):
+    if kwargs.get("clear_output", True):
         clear_output(True)
     #     print('\x1b[1;31m{} 回测测试\x1b[0m\n买入条件:{}\n卖出条件:{}'.format(
     #         symbol, buy_query, sell_query))
@@ -413,6 +419,7 @@ def BACKTEST_SINGLE(symbol,
         show_report: 打印回测报告。默认为 False
         show_history: 打印成交明细。默认为 False
         plot: 绘图。默认为 False
+        clear_output (bool): 清除输出。默认True。
 
     Returns:
         backtest实例，数据，买入时间集合，卖出时间集合
@@ -432,7 +439,7 @@ def BACKTEST_SINGLE(symbol,
         sells = s.data.query(sell_query)['date'].dt.to_pydatetime()
     bt = BackTest(s.data, callbacks=[Checker({symbol: buys}, {symbol: sells})])
     bt.calc_trade_history()
-    if kwargs.pop("clear_output", True):
+    if kwargs.get("clear_output", True):
         clear_output(True)
     print('\x1b[1;31m{} 回测测试\x1b[0m\n买入条件:{}\n卖出条件:{}'.format(
         symbol, buy_query, sell_query))
@@ -486,7 +493,7 @@ def RANDMON_TEST_BASIC(data, times=100, buy_times=50, **kwargs):
         hs.append(bt.total_assets_cur)
         cs.append(bt.available_cash)
         hiss.append(bt.history_df)
-    if kwargs.pop("clear_output", True):
+    if kwargs.get("clear_output", True):
         clear_output(True)
     report = '测试起始资金 {}，总数据量 {} 随机抽取 {} 次买入点作为测试。'.format(
         init_cash, len(data), buy_times)
