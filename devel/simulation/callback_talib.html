@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>趋势型指标计算回调 &mdash; finance-tools-py 0+untagged.50.g4975275 文档</title>
+  <title>趋势型指标计算回调 &mdash; finance-tools-py 0+untagged.50.g3527e79 文档</title>
   
 
   
@@ -93,6 +93,7 @@
 <li class="toctree-l2 current"><a class="reference internal" href="callback.html#talib">talib函数相关</a><ul class="current">
 <li class="toctree-l3 current"><a class="current reference internal" href="#">趋势型指标计算回调</a></li>
 <li class="toctree-l3"><a class="reference internal" href="#id2">动量指标计算回调</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">波动率型指标计算回调</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="callback.html#id2">其他回调</a></li>
@@ -181,9 +182,9 @@
 <p>简介：其利用统计原理，求出股价的标准差及其信赖区间，从而确定股价的波动范围及未来走势，利用波带显示股价的安全高低价位，因而也被称为布林带。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/bollinger%20bands/1612394?fr=aladdin">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/56d0d9be66b4f7a0?rid=53">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">BBANDS</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">nbdevup</em>, <em class="sig-param">nbdevdn</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">BBANDS</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="n">nbdevup</span></em>, <em class="sig-param"><span class="n">nbdevdn</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算布林带数据。</p>
 <blockquote>
@@ -198,21 +199,21 @@
 </ul>
 <p><cite>x</cite> 生成规则为 <cite>timeperiod_nbdevup_nbdevup</cite> 。</p>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.BBANDS</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup">
 <code class="sig-name descname">nbdevup</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.BBANDS.nbdevup" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.BBANDS</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
-<dt>
-<code class="sig-name descname">nbdevup</code></dt>
+<dl class="py attribute">
+<dt id="id0">
+<code class="sig-name descname">nbdevup</code><a class="headerlink" href="#id0" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.BBANDS</cite> 中的相关参数。</p>
 </dd></dl>
 
@@ -244,9 +245,9 @@
 <p>简介：两条移动平均线来产生趋势信号，较长期者用来识别趋势，较短期者用来选择时机。正是两条平均线及价格三者的相互作用，才共同产生了趋势信号。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%8F%8C%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/1831921?fr=aladdin">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/a04d723659318237">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.DEMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">DEMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">DEMA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算双移动平均线。</p>
 <blockquote>
@@ -255,13 +256,13 @@
 <li><p>dema_x: x日双移动平均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.DEMA</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.DEMA.col_name">
 <code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.DEMA.col_name" title="永久链接至目标">¶</a></dt>
 <dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
@@ -288,9 +289,9 @@
 <p>简介：移动平均线，Moving Average，简称MA，原本的意思是移动平均，由于我们将其制作成线形，所以一般称之为移动平均线，简称均线。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87%E7%BA%BF/217887?fromtitle=MA&amp;fromid=1511750#viewPageContent">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/a04d723659318237?rid=96">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.SMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">SMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">SMA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算SMA - 简单移动均线指标</p>
 <blockquote>
@@ -299,13 +300,13 @@
 <li><p>sma_x: x日简单移动均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.SMA.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.SMA</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.SMA.col_name">
 <code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.SMA.col_name" title="永久链接至目标">¶</a></dt>
 <dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
@@ -337,9 +338,9 @@
 <p>简介：是一种趋向类指标，其构造原理是仍然对价格收盘价进行算术平均，并根据计算结果来进行分析，用于判断价格未来走势的变动趋势。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/EMA/12646151">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/b7a39d74783ad689?rid=589">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.EMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">EMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">EMA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算EMA - 指数移动平均线</p>
 <blockquote>
@@ -348,13 +349,13 @@
 <li><p>ema_x: x日简单移动均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.EMA.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.EMA</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.EMA.col_name">
 <code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.EMA.col_name" title="永久链接至目标">¶</a></dt>
 <dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
@@ -386,9 +387,9 @@
 <p>简介：移动加权平均法是指以每次进货的成本加上原有库存存货的成本，除以每次进货数量与原有库存存货的数量之和，据以计算加权平均单位成本，以此为基础计算当月发出存货的成本和期末存货的成本的一种方法。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E7%A7%BB%E5%8A%A8%E5%8A%A0%E6%9D%83%E5%B9%B3%E5%9D%87%E6%B3%95/10056490?fr=aladdin&amp;fromid=16799870&amp;fromtitle=%E5%8A%A0%E6%9D%83%E7%A7%BB%E5%8A%A8%E5%B9%B3%E5%9D%87">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/262b1dfd1c68ee30">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.WMA">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WMA</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WMA</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算WMA - 加权移动平均线</p>
 <blockquote>
@@ -397,13 +398,13 @@
 <li><p>wma_x: x日简单移动均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.WMA.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.WMA</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.WMA.col_name">
 <code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WMA.col_name" title="永久链接至目标">¶</a></dt>
 <dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
@@ -447,9 +448,9 @@
 <li><p>CCI指标曲线从下向上突破+100线而进入非常态区间(超买区)后，只要CCI指标曲线一直朝上运行，表明价格依然保持强势可以继续持有待涨。但是，如果在远离+100线的地方开始掉头向下时，则表明市场价格的强势状态将可能难以维持，涨势可能转弱，应考虑卖出。如果前期的短期涨幅过高同时价格回落时交投活跃，则应该果断逢高卖出或做空。</p></li>
 </ul>
 <p>CCI主要是在超买和超卖区域发生作用，对急涨急跌的行情检测性相对准确。非常适用于股票、外汇、贵金属等市场的短期操作。</p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.CCI">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">CCI</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.CCI" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">CCI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.CCI" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加顺势指标。</p>
 <blockquote>
@@ -458,7 +459,7 @@
 <li><p>cci_x: x日顺势指标。（ <cite>x</cite> 为 <cite>col_high`_`col_low`_`col_close`_`timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.CCI.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.CCI.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.CCI</cite> 中的相关参数。</p>
@@ -492,9 +493,9 @@
 <p>资金流量指标（MFI）又称为量相对强弱指标（Volume Relative Strength Index，VRSI），英文全名Money Flow Index，缩写为MFI，根据成交量来计测市场供需关系和买卖力道。该指标是通过反映股价变动的四个元素：上涨的天数、下跌的天数、成交量增加幅度、成交量减少幅度来研判量能的趋势，预测市场供求关系和买卖力道，属于量能反趋向指标。</p>
 <p>经过长期测试，MFI指标的背离讯号更能忠实的反应股价的反转现象。一次完整的波段行情，至少都会维持一定相当的时间，反转点出现的次数并不会太多。</p>
 <p>将MFI指标的参数设定为14天时，其背离讯号产生的时机，大致上都能和股价的顶点吻合。因此在使用MFI指标时，参数设定方面应尽量维持14日的原则。</p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.MFI">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MFI</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MFI" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">MFI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MFI" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加顺势指标。</p>
 <blockquote>
@@ -503,13 +504,13 @@
 <li><p>cci_x: x日顺势指标。（ <cite>x</cite> 为 <cite>timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.MFI.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MFI.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.CCI</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.MFI.col_vol">
 <code class="sig-name descname">col_vol</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.MFI.col_vol" title="永久链接至目标">¶</a></dt>
 <dd><p>计算时取值的列名。默认为 <cite>volume</cite>。</p>
@@ -545,9 +546,9 @@
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%A8%81%E5%BB%89%E6%8C%87%E6%A0%87?fr=aladdin">百度百科</a>
 <a class="reference external" href="https://zh.wikipedia.org/wiki/%E5%A8%81%E5%BB%89%E6%8C%87%E6%A8%99">维基百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/967febb0316c57c1">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.WILLR">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WILLR</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">WILLR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WILLR" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算威廉指标。</p>
 <blockquote>
@@ -556,7 +557,7 @@
 <li><p>willr_x: x日威廉指标。（ <cite>x</cite> 为 <cite>timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.WILLR.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.WILLR.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.WILLR</cite> 中的相关参数。</p>
@@ -599,9 +600,9 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 同理RSI值在50以下也是如此,如果进入了”极弱”区,则表示超卖,应该伺机买入。</p>
 <p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/RSI/6130115#3">百度百科</a>
 <a class="reference external" href="http://www.iwencai.com/yike/detail/auid/6a280c6cebcf140a?rid=">同花顺学院</a></p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.RSI">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">RSI</code><span class="sig-paren">(</span><em class="sig-param">timeperiod</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">RSI</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
 <p>附加计算Relative Strength Index 相对强弱指数。</p>
 <blockquote>
@@ -610,13 +611,13 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 <li><p>rsi_x: x日双移动平均线。（ <cite>x</cite> 为 <cite>col_name_timeperiod</cite> ）。</p></li>
 </ul>
 </div></blockquote>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.RSI.timeperiod">
 <code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI.timeperiod" title="永久链接至目标">¶</a></dt>
 <dd><p>参考 <cite>talib.RSI</cite> 中的相关参数。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.callbacks.talib.RSI.col_name">
 <code class="sig-name descname">col_name</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.RSI.col_name" title="永久链接至目标">¶</a></dt>
 <dd><p>计算时使用的数据列。默认为 <cite>col_close</cite>。</p>
@@ -635,6 +636,111 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
 <span class="go">rsi_close_3:[ nan  nan  nan 100. 100. 100. 100. 100.]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+<div class="section" id="id3">
+<h1>波动率型指标计算回调<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h1>
+<p>实现 talib 中 <a href="#id4"><span class="problematic" id="id5">`Volatility Indicator`_</span></a> 相关函数的回调。</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.ATR" title="finance_tools_py.simulation.callbacks.talib.ATR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ATR</span></code></a> 平均真实波幅指标</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.NATR" title="finance_tools_py.simulation.callbacks.talib.NATR"><code class="xref py py-class docutils literal notranslate"><span class="pre">NATR</span></code></a> 归一化平均真实波幅</p></li>
+</ul>
+<p><strong>ATR - Average True Range - 平均真实波幅指标</strong></p>
+<p>简介：均幅指标是显示市场变化率的指标，由威尔德（Welles Wilder）在《技术交易系统中的新概念》一书中首次提出，已成为众多指标经常引用的技术量。威尔德发现较高的ATR值常发生在市场底部，并伴随恐慌性抛盘。当其值较低时，则往往发生在合并以后的市场顶部。</p>
+<p>著名的海龟法则中,海龟交易法则按照价格高于初始价格0.5ATR进行加仓操作,按照价格低于建仓价2ATR进行止损操作。</p>
+<p>均幅指标一般不单独使用，应结合其他指标综合研判。</p>
+<p>分析和应用：<a class="reference external" href="https://baike.baidu.com/item/%E5%9D%87%E5%B9%85%E6%8C%87%E6%A0%87/3618107">百度百科</a></p>
+<dl class="py class">
+<dt id="finance_tools_py.simulation.callbacks.talib.ATR">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">ATR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.ATR" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算ATR - 平均真实波幅指标</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>atr_x: x日平均真实波幅指标。（ <cite>x</cite> 为 <cite>timeperiod</cite> ）。</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>根据 talib 官网说明，ATR功能的周期并不稳定。</p>
+</div>
+<dl class="py attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.ATR.timeperiod">
+<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.ATR.timeperiod" title="永久链接至目标">¶</a></dt>
+<dd><p>参考 <cite>talib.ATR</cite> 中的相关参数。</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">ATR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)],</span>
+<span class="go">                        &#39;high&#39;: [y for y in range(10.1,15.0)],</span>
+<span class="go">                        &#39;low&#39;: [y for y in range(0.0, 4.9)]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">   close  high  low</span>
+<span class="go">0    5.0  10.1  0.0</span>
+<span class="go">1    6.0  11.1  1.0</span>
+<span class="go">2    7.0  12.1  2.0</span>
+<span class="go">3    8.0  13.1  3.0</span>
+<span class="go">4    9.0  14.1  4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">ATR</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;atr&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">atr_3:[ nan  nan  nan 10.1 10.1]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>NATR - Normalized Average True Range</strong></p>
+<p>简介：归一化平均真实波幅是对平均真实波幅的一种改进。NATR在ATR的基础上，将ATR的值进行归一化，便于跨期比较。</p>
+<dl class="py class">
+<dt id="finance_tools_py.simulation.callbacks.talib.NATR">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">NATR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">timeperiod</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.NATR" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算NATR - 归一化平均真实波幅</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>natr_x: x日平均真实波幅指标。（ <cite>x</cite> 为 <cite>timeperiod</cite> ）。</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>根据 talib 官网说明，NATR功能的周期并不稳定。</p>
+</div>
+<dl class="py attribute">
+<dt id="finance_tools_py.simulation.callbacks.talib.NATR.timeperiod">
+<code class="sig-name descname">timeperiod</code><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.NATR.timeperiod" title="永久链接至目标">¶</a></dt>
+<dd><p>参考 <cite>talib.NATR</cite> 中的相关参数。</p>
+</dd></dl>
+
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">NATR</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)],</span>
+<span class="go">                        &#39;high&#39;: [y for y in range(10.1,15.0)],</span>
+<span class="go">                        &#39;low&#39;: [y for y in range(0.0, 4.9)]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">   close  high  low</span>
+<span class="go">0    5.0  10.1  0.0</span>
+<span class="go">1    6.0  11.1  1.0</span>
+<span class="go">2    7.0  12.1  2.0</span>
+<span class="go">3    8.0  13.1  3.0</span>
+<span class="go">4    9.0  14.1  4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">t</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">NATR</span><span class="p">(</span><span class="n">t</span><span class="p">)])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;atr&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">natr_3:[   nan    nan    nan 126.25 112.22]</span>
 </pre></div>
 </div>
 </dd></dl>

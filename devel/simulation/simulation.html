@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>模拟工具 &mdash; finance-tools-py 0+untagged.50.g4975275 文档</title>
+  <title>模拟工具 &mdash; finance-tools-py 0+untagged.50.g3527e79 文档</title>
   
 
   
@@ -162,32 +162,32 @@
 <div class="toctree-wrapper compound">
 </div>
 <p>模拟工具。可以通过编写不同的回调对数据进行加工和筛选，达到创建买入卖出信号点的功能。</p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.simulation.Simulation">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param">data</em>, <em class="sig-param">symbol</em>, <em class="sig-param">callbacks=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.</code><code class="sig-name descname">Simulation</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em>, <em class="sig-param"><span class="n">symbol</span></em>, <em class="sig-param"><span class="n">callbacks</span><span class="o">=</span><span class="default_value">[]</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>模拟类</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.Simulation.data">
 <code class="sig-name descname">data</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.data" title="永久链接至目标">¶</a></dt>
 <dd><p>数据源。调用 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.simulate" title="finance_tools_py.simulation.Simulation.simulate"><code class="xref py py-func docutils literal notranslate"><span class="pre">simulate()</span></code></a> 方法后，会返回处理后的数据集，否则返回原始数据集。</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.Simulation.symbol">
 <code class="sig-name descname">symbol</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.symbol" title="永久链接至目标">¶</a></dt>
 <dd><p>股票代码</p>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.simulation.Simulation.callbacks">
 <code class="sig-name descname">callbacks</code><a class="headerlink" href="#finance_tools_py.simulation.Simulation.callbacks" title="永久链接至目标">¶</a></dt>
 <dd><p>处理数据时会使用到的回调 <a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">callbacks.CallBack</span></code></a> 集合。</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.simulation.Simulation.simulate">
-<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation.simulate" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">simulate</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.Simulation.simulate" title="永久链接至目标">¶</a></dt>
 <dd><p>执行模拟计算。默认使用 <a class="reference internal" href="#finance_tools_py.simulation.Simulation.callbacks" title="finance_tools_py.simulation.Simulation.callbacks"><code class="xref py py-attr docutils literal notranslate"><span class="pre">callbacks</span></code></a> 回调生成的数据。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>

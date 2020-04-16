@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.50.g4975275 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.50.g3527e79 文档</title>
   
 
   
@@ -167,14 +167,14 @@
 <div class="section" id="id2">
 <h2>回调基类<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
 <p>所有回调均派生自此类型</p>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.backtest.CallBack">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">CallBack</code><a class="headerlink" href="#finance_tools_py.backtest.CallBack" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>回测时的回调。</p>
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.CallBack.on_calc_buy_amount">
-<em class="property">abstract </em><code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -194,9 +194,9 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.CallBack.on_calc_sell_amount">
-<em class="property">abstract </em><code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -218,9 +218,9 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.CallBack.on_check_buy">
-<em class="property">abstract </em><code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_buy" title="永久链接至目标">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a><a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_buy" title="永久链接至目标">¶</a></dt>
 <dd><p>检查是否需要买入。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -240,9 +240,9 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.CallBack.on_check_sell">
-<em class="property">abstract </em><code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_sell" title="永久链接至目标">¶</a></dt>
+<em class="property">abstract </em><code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a><a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_check_sell" title="永久链接至目标">¶</a></dt>
 <dd><p>检查是否需要卖出。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -269,12 +269,12 @@
 </div>
 <div class="section" id="id3">
 <h2>最小买卖的回调<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.backtest.MinAmountChecker">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">MinAmountChecker</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">MinAmountChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.CallBack" title="finance_tools_py.backtest.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.CallBack</span></code></a></p>
 <p>每次买入和卖出数量都是最小数量（数量为 <cite>min_amount</cite> 定义）的回调。</p>
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.buy_dict">
 <code class="sig-name descname">buy_dict</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.buy_dict" title="永久链接至目标">¶</a></dt>
 <dd><p>购买日期字典。key值为股票代码，value值为日期集合。</p>
@@ -285,7 +285,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.sell_dict">
 <code class="sig-name descname">sell_dict</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.sell_dict" title="永久链接至目标">¶</a></dt>
 <dd><p>卖出日期字典。key值为股票代码，value值为日期集合。</p>
@@ -296,7 +296,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.tax_coeff">
 <code class="sig-name descname">tax_coeff</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.tax_coeff" title="永久链接至目标">¶</a></dt>
 <dd><p>印花税费率。默认为 <cite>0.001</cite> 。</p>
@@ -307,7 +307,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.commission_coeff">
 <code class="sig-name descname">commission_coeff</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.commission_coeff" title="永久链接至目标">¶</a></dt>
 <dd><p>手续费费率。默认为 <cite>0.001</cite> 。</p>
@@ -318,7 +318,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.min_commission">
 <code class="sig-name descname">min_commission</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.min_commission" title="永久链接至目标">¶</a></dt>
 <dd><p>最小手续费费率。默认为 <cite>5</cite> 。</p>
@@ -329,7 +329,7 @@
 </dl>
 </dd></dl>
 
-<dl class="attribute">
+<dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.min_amount">
 <code class="sig-name descname">min_amount</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>每次交易最小交易数量。默认为 <cite>100</cite> （股）。</p>
@@ -340,9 +340,9 @@
 </dl>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -379,29 +379,29 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount">
-<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。当交易实际花费金额小于 <cite>cash</cite> （可用现金） 时，返回参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="finance_tools_py.backtest.MinAmountChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）。</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount">
-<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量。
 当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="finance_tools_py.backtest.MinAmountChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
 <span class="pre">否则返回</span> <span class="pre">`0</span></code>。</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_check_buy">
-<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.buy_dict" title="finance_tools_py.backtest.MinAmountChecker.buy_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">buy_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_check_sell">
-<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.sell_dict" title="finance_tools_py.backtest.MinAmountChecker.sell_dict"><code class="xref py py-attr docutils literal notranslate"><span class="pre">sell_dict</span></code></a> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
@@ -410,14 +410,14 @@
 </div>
 <div class="section" id="id4">
 <h2>全部资金出的回调<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
-<dl class="class">
+<dl class="py class">
 <dt id="finance_tools_py.backtest.AllInChecker">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AllInChecker</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AllInChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker" title="finance_tools_py.backtest.MinAmountChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.MinAmountChecker</span></code></a></p>
 <p>全部资金进入及全部持仓卖出的回调</p>
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.AllInChecker.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param">buy_dict</em>, <em class="sig-param">sell_dict</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -454,30 +454,30 @@
 </div>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_calc_buy_amount">
-<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。
 根据 <cite>cash</cite> （可用现金）及 <cite>price</cite> （当前价格）计算实际可以买入的数量（参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code> 的倍数）
 （计算时包含考虑了交易时可能产生的印花税和手续费）</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_calc_sell_amount">
-<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; float<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量
 直接返回 <cite>hold_amount</cite> 。表示全部可以卖出。</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_check_buy">
-<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_buy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_buy" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">buy_dict</span></code> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
-<dl class="method">
+<dl class="py method">
 <dt id="finance_tools_py.backtest.AllInChecker.on_check_sell">
-<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param">date: None.datetime.timestamp</em>, <em class="sig-param">code: str</em>, <em class="sig-param">price: float</em>, <em class="sig-param">cash: float</em>, <em class="sig-param">hold_amount: float</em>, <em class="sig-param">hold_price: float</em><span class="sig-paren">)</span> &#x2192; bool<a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">on_check_sell</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)">bool</a><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_check_sell" title="永久链接至目标">¶</a></dt>
 <dd><p>当 <cite>date</cite> 及 <cite>code</cite> 包含在参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">sell_dict</span></code> 中时返回 <cite>True</cite> 。否则返回 <cite>False</cite> 。</p>
 </dd></dl>
 
