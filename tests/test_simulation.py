@@ -138,6 +138,68 @@ def test_example_CCI(init_global_data):
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
+def test_example_ATR(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import ATR')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import ATR
+    print(">>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)],\n\
+                        'high': [y for y in range(10.1,15.0)],\n\
+                        'low': [y for y in range(0.0, 4.9)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(5.0, 10.0)],
+        'high': [y for y in np.arange(10.1, 15.0)],
+        'low': [y for y in np.arange(0.0, 4.9)]
+    })
+    print(">>> print(data)")
+    print(data)
+    t = 3
+    print('>>> t = {}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[ATR(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[ATR(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'atr' in col]")
+    cols = [col for col in s.data.columns if 'atr' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
+def test_example_NATR(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import NATR')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import NATR
+    print(">>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)],\n\
+                        'high': [y for y in range(10.1,15.0)],\n\
+                        'low': [y for y in range(0.0, 4.9)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(5.0, 10.0)],
+        'high': [y for y in np.arange(10.1, 15.0)],
+        'low': [y for y in np.arange(0.0, 4.9)]
+    })
+    print(">>> print(data)")
+    print(data)
+    t = 3
+    print('>>> t = {}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[NATR(t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[NATR(t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'atr' in col]")
+    cols = [col for col in s.data.columns if 'natr' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
 def test_example_MFI(init_global_data):
     print('>>> from finance_tools_py.simulation.callbacks.talib import MFI')
     print('>>> from finance_tools_py.simulation import Simulation')
@@ -217,6 +279,7 @@ def test_example_EMA(init_global_data):
     for col in cols:
         print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
 
+
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
@@ -265,7 +328,6 @@ def test_example_WMA(init_global_data):
     print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
     for col in cols:
         print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
-
 
 
 @pytest.mark.skipif(
@@ -342,6 +404,7 @@ def test_SMA(init_global_data):
     real = talib.SMA(pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[col])
 
+
 def test_WMA(init_global_data):
     t = 5
     b = cb_talib.WMA(t)
@@ -351,6 +414,7 @@ def test_WMA(init_global_data):
     assert col in pytest.global_data.columns
     real = talib.WMA(pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[col])
+
 
 def test_EMA(init_global_data):
     t = 5
@@ -410,6 +474,32 @@ def test_Sim_CCI(init_global_data):
     assert pd.Series.equals(real, s.data[w])
 
 
+def test_Sim_ATR(init_global_data):
+    """测试通过回测调用ATR，逻辑与`test_ATR`一致"""
+    t = 5
+    b = cb_talib.ATR(t)
+    s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'atr_5'
+    assert w in s.data.columns
+    real = talib.ATR(s.data['high'], s.data['low'], s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
+
+def test_Sim_ATR(init_global_data):
+    """测试通过回测调用NATR，逻辑与`test_NATR`一致"""
+    t = 5
+    b = cb_talib.NATR(t)
+    s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = 'natr_5'
+    assert w in s.data.columns
+    real = talib.NATR(s.data['high'], s.data['low'], s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
+
 def test_Sim_MFI(mock_data):
     """测试通过回测调用MFI，逻辑与`test_MFI`一致"""
     t = 5
@@ -461,6 +551,7 @@ def test_Sim_WMA(mock_data):
     assert w in s.data.columns
     real = talib.WMA(s.data['close'], t)
     assert pd.Series.equals(real, s.data[w])
+
 
 def test_WILLR(init_global_data):
     t = 5
@@ -531,6 +622,30 @@ def test_CCI(init_global_data):
     assert w in pytest.global_data.columns
     real = talib.CCI(pytest.global_data['high'], pytest.global_data['low'],
                      pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[w])
+
+
+def test_ATR(init_global_data):
+    t = 5
+    b = cb_talib.ATR(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    w = 'atr_5'
+    assert w in pytest.global_data.columns
+    real = talib.ATR(pytest.global_data['high'], pytest.global_data['low'],
+                     pytest.global_data['close'], t)
+    assert pd.Series.equals(real, pytest.global_data[w])
+
+
+def test_NATR(init_global_data):
+    t = 5
+    b = cb_talib.NATR(t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    w = 'natr_5'
+    assert w in pytest.global_data.columns
+    real = talib.NATR(pytest.global_data['high'], pytest.global_data['low'],
+                      pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[w])
 
 

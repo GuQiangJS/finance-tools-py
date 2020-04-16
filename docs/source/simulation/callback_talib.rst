@@ -152,3 +152,36 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 .. autoclass:: RSI
     :exclude-members: on_preparing_data
     :inherited-members: col_close
+
+波动率型指标计算回调
+---------------------------------
+
+实现 talib 中 `Volatility Indicator`_ 相关函数的回调。
+
+.. Volatility Indicators: https://mrjbq7.github.io/ta-lib/func_groups/volatility_indicators.html
+
+* :py:class:`ATR` 平均真实波幅指标
+* :py:class:`NATR` 归一化平均真实波幅
+
+**ATR - Average True Range - 平均真实波幅指标**
+
+简介：均幅指标是显示市场变化率的指标，由威尔德（Welles Wilder）在《技术交易系统中的新概念》一书中首次提出，已成为众多指标经常引用的技术量。威尔德发现较高的ATR值常发生在市场底部，并伴随恐慌性抛盘。当其值较低时，则往往发生在合并以后的市场顶部。
+
+著名的海龟法则中,海龟交易法则按照价格高于初始价格0.5ATR进行加仓操作,按照价格低于建仓价2ATR进行止损操作。
+
+均幅指标一般不单独使用，应结合其他指标综合研判。
+
+分析和应用：`百度百科 <https://baike.baidu.com/item/%E5%9D%87%E5%B9%85%E6%8C%87%E6%A0%87/3618107>`__
+
+.. autoclass:: ATR
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close,col_high,col_low
+
+
+**NATR - Normalized Average True Range**
+
+简介：归一化平均真实波幅是对平均真实波幅的一种改进。NATR在ATR的基础上，将ATR的值进行归一化，便于跨期比较。
+
+.. autoclass:: NATR
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close,col_high,col_low

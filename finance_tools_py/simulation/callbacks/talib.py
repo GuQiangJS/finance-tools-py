@@ -360,6 +360,7 @@ class EMA(CallBack):
         real = 'ema_{}_{}'.format(self.col_name, self.timeperiod)
         data[real] = talib.EMA(data[self.col_name].values, self.timeperiod)
 
+
 class WMA(CallBack):
     """附加计算WMA - 加权移动平均线
 
@@ -394,3 +395,95 @@ class WMA(CallBack):
         """附加计算WMA - 加权移动平均线"""
         real = 'wma_{}_{}'.format(self.col_name, self.timeperiod)
         data[real] = talib.WMA(data[self.col_name].values, self.timeperiod)
+
+
+class ATR(CallBack):
+    """附加计算ATR - 平均真实波幅指标
+
+        执行后会对数据源中附加如下的列：
+
+        * atr_x: x日平均真实波幅指标。（ `x` 为 `timeperiod` ）。
+
+    Warnings:
+        根据 talib 官网说明，ATR功能的周期并不稳定。
+
+    Attributes:
+        timeperiod: 参考 `talib.ATR` 中的相关参数。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import ATR
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)],
+                                'high': [y for y in range(10.1,15.0)],
+                                'low': [y for y in range(0.0, 4.9)]})
+        >>> print(data)
+           close  high  low
+        0    5.0  10.1  0.0
+        1    6.0  11.1  1.0
+        2    7.0  12.1  2.0
+        3    8.0  13.1  3.0
+        4    9.0  14.1  4.0
+        >>> t = 3
+        >>> s = Simulation(data,'',callbacks=[ATR(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'atr' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        atr_3:[ nan  nan  nan 10.1 10.1]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算平均真实波幅指标"""
+        real = 'atr_{}'.format(self.timeperiod)
+        data[real] = talib.ATR(data[self.col_high].values,
+                               data[self.col_low].values,
+                               data[self.col_close].values, self.timeperiod)
+
+
+class NATR(CallBack):
+    """附加计算NATR - 归一化平均真实波幅
+
+        执行后会对数据源中附加如下的列：
+
+        * natr_x: x日平均真实波幅指标。（ `x` 为 `timeperiod` ）。
+
+    Warnings:
+        根据 talib 官网说明，NATR功能的周期并不稳定。
+
+    Attributes:
+        timeperiod: 参考 `talib.NATR` 中的相关参数。
+
+    Examples:
+        >>> from finance_tools_py.simulation.callbacks.talib import NATR
+        >>> from finance_tools_py.simulation import Simulation
+        >>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)],
+                                'high': [y for y in range(10.1,15.0)],
+                                'low': [y for y in range(0.0, 4.9)]})
+        >>> print(data)
+           close  high  low
+        0    5.0  10.1  0.0
+        1    6.0  11.1  1.0
+        2    7.0  12.1  2.0
+        3    8.0  13.1  3.0
+        4    9.0  14.1  4.0
+        >>> t = 3
+        >>> s = Simulation(data,'',callbacks=[NATR(t)])
+        >>> s.simulate()
+        >>> cols = [col for col in data.columns if 'atr' in col]
+        >>> for col in cols:
+        >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+        natr_3:[   nan    nan    nan 126.25 112.22]
+    """
+    def __init__(self, timeperiod, **kwargs):
+        super().__init__(**kwargs)
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        """附加计算归一化平均真实波幅"""
+        real = 'natr_{}'.format(self.timeperiod)
+        data[real] = talib.NATR(data[self.col_high].values,
+                                data[self.col_low].values,
+                                data[self.col_close].values, self.timeperiod)
