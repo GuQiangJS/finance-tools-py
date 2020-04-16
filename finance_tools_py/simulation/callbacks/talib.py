@@ -496,9 +496,6 @@ class TRANGE(CallBack):
 
         * trange: 真正的范围。
 
-    Warnings:
-        根据 talib 官网说明，TRANGE功能的周期并不稳定。
-
     Examples:
         >>> from finance_tools_py.simulation.callbacks.talib import TRANGE
         >>> from finance_tools_py.simulation import Simulation
