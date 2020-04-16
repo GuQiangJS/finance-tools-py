@@ -153,8 +153,11 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
     :exclude-members: on_preparing_data
     :inherited-members: col_close
 
+
+
+
 波动率型指标计算回调
----------------------------------
+-----------------------------------------------------
 
 实现 talib 中 `Volatility Indicator`_ 相关函数的回调。
 
@@ -162,6 +165,7 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 
 * :py:class:`ATR` 平均真实波幅指标
 * :py:class:`NATR` 归一化平均真实波幅
+* :py:class:`TRANGE` 真正的范围
 
 **ATR - Average True Range - 平均真实波幅指标**
 
@@ -178,10 +182,17 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
     :inherited-members: col_close,col_high,col_low
 
 
-**NATR - Normalized Average True Range**
+**NATR - Normalized Average True Range - 归一化平均真实波幅**
 
 简介：归一化平均真实波幅是对平均真实波幅的一种改进。NATR在ATR的基础上，将ATR的值进行归一化，便于跨期比较。
 
 .. autoclass:: NATR
+    :exclude-members: on_preparing_data
+    :inherited-members: col_close,col_high,col_low
+
+
+**TRANGE - True Range**
+
+.. autoclass:: TRANGE
     :exclude-members: on_preparing_data
     :inherited-members: col_close,col_high,col_low

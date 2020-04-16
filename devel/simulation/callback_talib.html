@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>趋势型指标计算回调 &mdash; finance-tools-py 0+untagged.50.g3527e79 文档</title>
+  <title>趋势型指标计算回调 &mdash; finance-tools-py 0+untagged.50.gcb88617 文档</title>
   
 
   
@@ -647,6 +647,7 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 <ul class="simple">
 <li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.ATR" title="finance_tools_py.simulation.callbacks.talib.ATR"><code class="xref py py-class docutils literal notranslate"><span class="pre">ATR</span></code></a> 平均真实波幅指标</p></li>
 <li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.NATR" title="finance_tools_py.simulation.callbacks.talib.NATR"><code class="xref py py-class docutils literal notranslate"><span class="pre">NATR</span></code></a> 归一化平均真实波幅</p></li>
+<li><p><a class="reference internal" href="#finance_tools_py.simulation.callbacks.talib.TRANGE" title="finance_tools_py.simulation.callbacks.talib.TRANGE"><code class="xref py py-class docutils literal notranslate"><span class="pre">TRANGE</span></code></a> 真正的范围</p></li>
 </ul>
 <p><strong>ATR - Average True Range - 平均真实波幅指标</strong></p>
 <p>简介：均幅指标是显示市场变化率的指标，由威尔德（Welles Wilder）在《技术交易系统中的新概念》一书中首次提出，已成为众多指标经常引用的技术量。威尔德发现较高的ATR值常发生在市场底部，并伴随恐慌性抛盘。当其值较低时，则往往发生在合并以后的市场顶部。</p>
@@ -698,7 +699,7 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 </div>
 </dd></dl>
 
-<p><strong>NATR - Normalized Average True Range</strong></p>
+<p><strong>NATR - Normalized Average True Range - 归一化平均真实波幅</strong></p>
 <p>简介：归一化平均真实波幅是对平均真实波幅的一种改进。NATR在ATR的基础上，将ATR的值进行归一化，便于跨期比较。</p>
 <dl class="py class">
 <dt id="finance_tools_py.simulation.callbacks.talib.NATR">
@@ -741,6 +742,45 @@ RSI值如果超过50,表明市场进入强市,可以考虑买入,但是如果继
 <span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
 <span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
 <span class="go">natr_3:[   nan    nan    nan 126.25 112.22]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p><strong>TRANGE - True Range</strong></p>
+<dl class="py class">
+<dt id="finance_tools_py.simulation.callbacks.talib.TRANGE">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.simulation.callbacks.talib.</code><code class="sig-name descname">TRANGE</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.simulation.callbacks.talib.TRANGE" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference internal" href="callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a></p>
+<p>附加计算TRANGE - 真正的范围</p>
+<blockquote>
+<div><p>执行后会对数据源中附加如下的列：</p>
+<ul class="simple">
+<li><p>trange: 真正的范围。</p></li>
+</ul>
+</div></blockquote>
+<div class="admonition warning">
+<p class="admonition-title">警告</p>
+<p>根据 talib 官网说明，TRANGE功能的周期并不稳定。</p>
+</div>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">TRANGE</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation</span> <span class="kn">import</span> <span class="n">Simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;close&#39;</span><span class="p">:</span> <span class="p">[</span><span class="n">y</span> <span class="k">for</span> <span class="n">y</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">)],</span>
+<span class="go">                        &#39;high&#39;: [y for y in range(10.1,15.0)],</span>
+<span class="go">                        &#39;low&#39;: [y for y in range(0.0, 4.9)]})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+<span class="go">   close  high  low</span>
+<span class="go">0    5.0  10.1  0.0</span>
+<span class="go">1    6.0  11.1  1.0</span>
+<span class="go">2    7.0  12.1  2.0</span>
+<span class="go">3    8.0  13.1  3.0</span>
+<span class="go">4    9.0  14.1  4.0</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span> <span class="o">=</span> <span class="n">Simulation</span><span class="p">(</span><span class="n">data</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">TRANGE</span><span class="p">()])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">s</span><span class="o">.</span><span class="n">simulate</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">columns</span> <span class="k">if</span> <span class="s1">&#39;trange&#39;</span> <span class="ow">in</span> <span class="n">col</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="si">{}</span><span class="s1">:</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">col</span><span class="p">,</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span><span class="mi">2</span><span class="p">)))</span>
+<span class="go">trange:[ nan 10.1 10.1 10.1 10.1]</span>
 </pre></div>
 </div>
 </dd></dl>
