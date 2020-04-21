@@ -346,7 +346,7 @@ def test_calc():
 
         def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
                           price: float, cash: float, hold_amount: float,
-                          hold_price: float) -> bool:
+                          hold_price: float,**kwargs) -> bool:
             if price < hold_price:
                 # 当前价格小于持仓价时，不可卖
                 return False
@@ -359,7 +359,7 @@ def test_calc():
             return False
 
         def on_calc_buy_amount(self, date, code: str, price: float,
-                               cash: float) -> float:
+                               cash: float,**kwargs) -> float:
             amount = 100
             if self._min_price > 0:
                 if cash < self._min_price:
@@ -374,7 +374,7 @@ def test_calc():
         def on_calc_sell_amount(self, date: datetime.datetime.timestamp,
                                 code: str, price: float, cash: float,
                                 hold_amount: float,
-                                hold_price: float) -> float:
+                                hold_price: float,**kwargs) -> float:
             """返回所有持仓数量，一次卖出所有"""
             return hold_amount
 

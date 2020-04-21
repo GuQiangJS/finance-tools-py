@@ -12,7 +12,7 @@ class CallBack():
 
     @abc.abstractmethod
     def on_check_buy(self, date: datetime.datetime.timestamp, code: str,
-                     price: float, cash: float) -> bool:
+                     price: float, cash: float,**kwargs) -> bool:
         """检查是否需要买入。
 
         Args:
@@ -20,6 +20,7 @@ class CallBack():
             code: 股票代码。
             price: 当前价格。
             cash: 持有现金。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
 
         Returns:
             bool: 是否买入。返回 `False`。
@@ -29,7 +30,7 @@ class CallBack():
     @abc.abstractmethod
     def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
                       price: float, cash: float, hold_amount: float,
-                      hold_price: float) -> bool:
+                      hold_price: float,**kwargs) -> bool:
         """检查是否需要卖出。
 
         Args:
@@ -39,6 +40,7 @@ class CallBack():
             cash: 持有现金。
             hold_amount: 当前持仓数量。
             hold_price: 当前持仓成本。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
 
         Returns:
             bool: 是否卖出。返回 `False`。
@@ -47,7 +49,7 @@ class CallBack():
 
     @abc.abstractmethod
     def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
-                           price: float, cash: float) -> float:
+                           price: float, cash: float,**kwargs) -> float:
         """计算买入数量
 
         Args:
@@ -55,6 +57,7 @@ class CallBack():
             code: 股票代码。
             price: 当前价格。
             cash: 持有现金。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
 
         Return:
             float: 返回买入数量。返回 `0`。
@@ -64,7 +67,7 @@ class CallBack():
     @abc.abstractmethod
     def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
                             price: float, cash: float, hold_amount: float,
-                            hold_price: float) -> float:
+                            hold_price: float,**kwargs) -> float:
         """计算卖出数量
 
         Args:
@@ -74,6 +77,7 @@ class CallBack():
             cash: 持有现金。
             hold_amount: 当前持仓数量。
             hold_price: 当前持仓成本。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
 
         Return:
             float: 返回卖出数量。返回 `0`。
@@ -133,7 +137,7 @@ class MinAmountChecker(CallBack):
         self.min_amount = kwargs.pop('min_amount', 100)
 
     def on_check_buy(self, date: datetime.datetime.timestamp, code: str,
-                     price: float, cash: float) -> bool:
+                     price: float, cash: float,**kwargs) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`buy_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.buy_dict.keys() and date in self.buy_dict[code]:
             return True
@@ -142,7 +146,7 @@ class MinAmountChecker(CallBack):
 
     def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
                       price: float, cash: float, hold_amount: float,
-                      hold_price: float) -> bool:
+                      hold_price: float,**kwargs) -> bool:
         """当 `date` 及 `code` 包含在参数 :py:attr:`sell_dict` 中时返回 `True` 。否则返回 `False` 。"""
         if code in self.sell_dict.keys() and date in self.sell_dict[code]:
             return True
@@ -158,7 +162,7 @@ class MinAmountChecker(CallBack):
         return price * amount * self.tax_coeff
 
     def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
-                           price: float, cash: float) -> float:
+                           price: float, cash: float,**kwargs) -> float:
         """计算买入数量。当交易实际花费金额小于 `cash` （可用现金） 时，返回参数 :py:attr:`min_amount` （每次交易数量）。"""
         amount = self.min_amount
         if price * amount + self._calc_commission(
@@ -168,7 +172,7 @@ class MinAmountChecker(CallBack):
 
     def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
                             price: float, cash: float, hold_amount: float,
-                            hold_price: float) -> float:
+                            hold_price: float,**kwargs) -> float:
         """计算卖出数量。
             当 `hold_amount` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
             否则返回 `0`。"""
@@ -180,7 +184,7 @@ class MinAmountChecker(CallBack):
 class AllInChecker(MinAmountChecker):
     """全部资金进入及全部持仓卖出的回调"""
     def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
-                           price: float, cash: float) -> float:
+                           price: float, cash: float,**kwargs) -> float:
         """计算买入数量。
             根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr:`min_amount` 的倍数）
             （计算时包含考虑了交易时可能产生的印花税和手续费）
@@ -194,7 +198,7 @@ class AllInChecker(MinAmountChecker):
 
     def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
                             price: float, cash: float, hold_amount: float,
-                            hold_price: float) -> float:
+                            hold_price: float,**kwargs) -> float:
         """计算买入数量
         直接返回 `hold_amount` 。表示全部可以卖出。"""
         return hold_amount
@@ -436,9 +440,9 @@ class BackTest():
         """计算印花税"""
         return price * amount * self.tax_coeff
 
-    def _check_callback_buy(self, date, code, price) -> bool:
+    def _check_callback_buy(self, date, code, price,**kwargs) -> bool:
         for cb in self._calbacks:
-            if cb.on_check_buy(date, code, price, self.available_cash):
+            if cb.on_check_buy(date, code, price, self.available_cash,**kwargs):
                 return True
         return False
 
@@ -491,29 +495,29 @@ class BackTest():
                     hold_amount[0] = hold_amount[0] - amount
                     amount = 0
 
-    def _check_callback_sell(self, date, code, price) -> bool:
+    def _check_callback_sell(self, date, code, price,**kwargs) -> bool:
         for cb in self._calbacks:
             hold_price, hold_amount = self.__get_buy_avg_price(code)
             if cb.on_check_sell(date, code, price, self.available_cash,
-                                hold_amount, hold_price):
+                                hold_amount, hold_price,**kwargs):
                 return True
         return False
 
-    def _calc_buy_amount(self, date, code, price) -> float:
+    def _calc_buy_amount(self, date, code, price,**kwargs) -> float:
         for cb in self._calbacks:
             amount = cb.on_calc_buy_amount(date, code, price,
-                                           self.available_cash)
+                                           self.available_cash,**kwargs)
             if amount:
                 return amount
         return 0
 
-    def _calc_sell_amount(self, date, code, price) -> float:
+    def _calc_sell_amount(self, date, code, price,**kwargs) -> float:
         for cb in self._calbacks:
             hold_price, hold_amount = self.__get_buy_avg_price(code)
             if hold_amount > 0:
                 amount = cb.on_calc_sell_amount(date, code, price,
                                                 self.available_cash,
-                                                hold_amount, hold_price)
+                                                hold_amount, hold_price,**kwargs)
                 if amount:
                     return amount
         return 0
@@ -544,8 +548,8 @@ class BackTest():
             date = row['date']
             code = row['code']
             price = row['close']  # 价格
-            if self._check_callback_buy(date, code, price):
-                amount = self._calc_buy_amount(date, code, price)  # 买入数量
+            if self._check_callback_buy(date, code, price,row=row):
+                amount = self._calc_buy_amount(date, code, price,row=row)  # 买入数量
                 commission = self._calc_commission(price, amount)
                 tax = self._calc_tax(price, amount)
                 value = price * amount + commission + tax
@@ -571,8 +575,8 @@ class BackTest():
                     if verbose > 1:
                         print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(
                             date, code, price))
-            if self._check_callback_sell(date, code, price):
-                amount = self._calc_sell_amount(date, code, price)
+            if self._check_callback_sell(date, code, price,row=row):
+                amount = self._calc_sell_amount(date, code, price,row=row)
                 if amount > 0:
                     commission = self._calc_commission(price, amount)
                     tax = self._calc_tax(price, amount)
