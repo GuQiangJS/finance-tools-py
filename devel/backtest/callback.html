@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.50.gd3b33e6 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.51.gadcddc0 文档</title>
   
 
   
@@ -275,7 +275,7 @@
 <h2>最小买卖的回调<a class="headerlink" href="#id11" title="永久链接至标题">¶</a></h2>
 <dl class="py class">
 <dt id="finance_tools_py.backtest.MinAmountChecker">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">MinAmountChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">MinAmountChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.CallBack" title="finance_tools_py.backtest.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.CallBack</span></code></a></p>
 <p>每次买入和卖出数量都是最小数量（数量为 <cite>min_amount</cite> 定义）的回调。</p>
 <dl class="py attribute">
@@ -346,7 +346,7 @@
 
 <dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -416,12 +416,12 @@
 <h2>全部资金出的回调<a class="headerlink" href="#id12" title="永久链接至标题">¶</a></h2>
 <dl class="py class">
 <dt id="finance_tools_py.backtest.AllInChecker">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AllInChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AllInChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker" title="finance_tools_py.backtest.MinAmountChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.MinAmountChecker</span></code></a></p>
 <p>全部资金进入及全部持仓卖出的回调</p>
 <dl class="py method">
 <dt id="finance_tools_py.backtest.AllInChecker.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span></em>, <em class="sig-param"><span class="n">sell_dict</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>初始化</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
