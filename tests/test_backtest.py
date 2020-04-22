@@ -347,7 +347,7 @@ def test_calc():
 
         def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
                           price: float, cash: float, hold_amount: float,
-                          hold_price: float,**kwargs) -> bool:
+                          hold_price: float, **kwargs) -> bool:
             if price < hold_price:
                 # 当前价格小于持仓价时，不可卖
                 return False
@@ -360,7 +360,7 @@ def test_calc():
             return False
 
         def on_calc_buy_amount(self, date, code: str, price: float,
-                               cash: float,**kwargs) -> float:
+                               cash: float, **kwargs) -> float:
             amount = 100
             if self._min_price > 0:
                 if cash < self._min_price:
@@ -374,8 +374,8 @@ def test_calc():
 
         def on_calc_sell_amount(self, date: datetime.datetime.timestamp,
                                 code: str, price: float, cash: float,
-                                hold_amount: float,
-                                hold_price: float,**kwargs) -> float:
+                                hold_amount: float, hold_price: float,
+                                **kwargs) -> float:
             """返回所有持仓数量，一次卖出所有"""
             return hold_amount
 
@@ -426,9 +426,9 @@ def test_init_hold():
     bt = BackTest(data, init_hold=init_hold)
     assert not bt.available_hold_df.empty
     assert bt.available_hold_df['000001'] == 400
-    assert bt.hold_price_cur_df.loc['000001','buy_price']==3.0
-    assert bt.hold_price_cur_df.loc['000001','amount']==400
-    assert bt.hold_price_cur_df.loc['000001','price_cur']==10.0
+    assert bt.hold_price_cur_df.loc['000001', 'buy_price'] == 3.0
+    assert bt.hold_price_cur_df.loc['000001', 'amount'] == 400
+    assert bt.hold_price_cur_df.loc['000001', 'price_cur'] == 10.0
     bt.calc_trade_history()
     print(bt.report())
 
