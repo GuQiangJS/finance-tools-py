@@ -92,7 +92,7 @@ class MinAmountChecker(CallBack):
         min_commission (float): 最小手续费费率。默认为 `5` 。
         min_amount (float): 每次交易最小交易数量。默认为 `100` （股）。
     """
-    def __init__(self, buy_dict, sell_dict, **kwargs):
+    def __init__(self, buy_dict={}, sell_dict={}, **kwargs):
         """初始化
 
         Args:
@@ -244,13 +244,15 @@ class BackTest():
                  commission_coeff=0.001,
                  min_commission=5,
                  col_name='close',
-                 callbacks=[CallBack()]):
+                 callbacks=[CallBack()],
+                 **kwargs):
         """初始化
 
         Args:
             data (:py:class:`pandas.DataFrame`): 完整的日线数据。数据中需要包含 `date` 列，用来标记日期。
                 数据中至少需要包含 `date` 列、 `code` 列和 `close` 列，其中 `close` 列可以由参数 `colname` 参数指定。
             init_cash (float): 初始资金。
+            init_hold (:py:class:`pandas.DataFrame`): 初始持仓。数据中需要包含 `code`,`amount`,`price` 列。
             tax_coeff (float): 印花税费率。默认0.001。
             commission_coeff (float): 手续费率。默认0.001。
             min_commission (float): 最小印花税费。默认5。
@@ -266,12 +268,16 @@ class BackTest():
         self.commission_coeff = commission_coeff
         self.min_commission = min_commission
         self.history = []  # 交易历史
-        self._init_hold = pd.Series([], name='amount')
-        self._init_hold.index.name = 'code'
+        self._init_hold = kwargs.pop(
+            'init_hold', pd.DataFrame(columns=['code', 'amount', 'price']))
         self._calced = False
         self._colname = col_name
         self._calbacks = callbacks
         self._buy_price_cur = {}  #购买成本。
+        if not self._init_hold.empty:
+            for index, row in self._init_hold.iterrows():
+                self.__update_buy_price(row['code'], row['amount'],
+                                        row['price'], 1)
         self._history_headers = [
             'datetime',  # 时间
             'code',  # 代码
@@ -283,6 +289,9 @@ class BackTest():
             'total',  # 总金额
             'toward',  # 方向
         ]
+        self.__start_date = self.data.iloc[0]['date']  #数据起始日期
+        self._init_hold['datetime'] = self.__start_date + datetime.timedelta(
+            days=-1)
         # self.hold_amount=[]#当前持仓数量
         # self.hold_price=[]#当前持仓金额
 
@@ -294,8 +303,10 @@ class BackTest():
         else:
             lens = len(self._history_headers)
 
-        return pd.DataFrame(data=self.history,
-                            columns=self._history_headers[:lens]).sort_index()
+        his = pd.DataFrame(data=self.history,
+                           columns=self._history_headers[:lens])
+        hold = self._init_hold.reset_index().drop(columns=['index'])
+        return his.append(hold).sort_values('datetime')
 
     @property
     def available_hold_df(self):
@@ -360,14 +371,13 @@ class BackTest():
 
             if sum(x['amount']) != 0:
                 return np.average(x['price'],
-                                  weights=x['amount'],
+                                  weights=x['amount'].to_list(),
                                   returned=True)
             else:
                 return np.nan
 
-        return self.history_df.set_index(
-            'datetime',
-            drop=False).sort_index().groupby('code').apply(weights).dropna()
+        df = self.history_df.set_index('datetime')
+        return df.sort_index().groupby('code').apply(weights).dropna()
 
     def hold_time(self, dt=None):
         """持仓时间。根据参数 `dt` 查询截止时间之前的交易，并与当前时间计算差异。

@@ -256,7 +256,8 @@ def test_backtest_holdprice(init_global_data):
     assert np.round(
         (71.9 + 61.7 + 151.3) / 3,
         2) == np.round(bt.hold_price_cur_df.loc['000002']['buy_price'], 2)
-    assert bt.total_assets_cur == bt.available_cash + (15.3*200)+(151.3*300)
+    assert bt.total_assets_cur == bt.available_cash + (15.3 * 200) + (151.3 *
+                                                                      300)
 
 
 def test_example():
@@ -405,3 +406,38 @@ def test_calc():
     assert np.round(bt.total_assets_cur,
                     2) == np.round(bt.available_cash + (5.0) * 600, 2)
     assert bt._BackTest__get_buy_avg_price('000001') == (5.0, 600.0)
+
+
+def test_init_hold():
+    data = pd.DataFrame({
+        'code': ['000001' for x in range(4)],
+        'date':
+        [dt(1998, 1, 1),
+         dt(1999, 1, 1),
+         dt(2000, 1, 1),
+         dt(2001, 1, 1)],
+        'close': [4.5, 7.9, 6.7, 10],
+    })
+    init_hold = pd.DataFrame({
+        'code': ['000001'],
+        'amount': [400],
+        'price': [3]
+    })
+    bt = BackTest(data, init_hold=init_hold)
+    assert not bt.available_hold_df.empty
+    assert bt.available_hold_df['000001'] == 400
+
+    bt = BackTest(
+        data,
+        init_hold=init_hold,
+        callbacks=[
+            MinAmountChecker(
+                sell_dict={'000001': [dt(1999, 1, 1),
+                                      dt(2000, 1, 1)]})
+        ])
+    bt.calc_trade_history()
+    assert not bt.history_df.empty
+    assert bt.available_hold_df['000001'] == 200
+    assert bt.available_cash > bt.init_cash
+    assert bt.total_assets_cur == bt.available_cash + 200 * 10  #最新价格10元，总共持有200股
+    print(bt.report())
