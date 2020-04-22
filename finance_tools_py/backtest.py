@@ -374,7 +374,7 @@ class BackTest():
             x = x[n + 1:]
 
             if sum(x['amount']) != 0:
-                return np.average(x['price'],
+                return np.average(x['price'].to_list(),
                                   weights=x['amount'].to_list(),
                                   returned=True)
             else:

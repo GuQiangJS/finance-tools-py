@@ -426,6 +426,11 @@ def test_init_hold():
     bt = BackTest(data, init_hold=init_hold)
     assert not bt.available_hold_df.empty
     assert bt.available_hold_df['000001'] == 400
+    assert bt.hold_price_cur_df.loc['000001','buy_price']==3.0
+    assert bt.hold_price_cur_df.loc['000001','amount']==400
+    assert bt.hold_price_cur_df.loc['000001','price_cur']==10.0
+    bt.calc_trade_history()
+    print(bt.report())
 
     bt = BackTest(
         data,
