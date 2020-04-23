@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测工具 &mdash; finance-tools-py 0+untagged.51.ga89f253 文档</title>
+  <title>回测工具 &mdash; finance-tools-py 0+untagged.51.g172584b 文档</title>
   
 
   
@@ -215,6 +215,7 @@
 <li><p><strong>tax_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 印花税费率。默认0.001。</p></li>
 <li><p><strong>commission_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 手续费率。默认0.001。</p></li>
 <li><p><strong>min_commission</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最小印花税费。默认5。</p></li>
+<li><p><strong>live_start_date</strong> (<em>datetime</em>) – 回测起始时间。默认为 data 中的第一行的 <cite>date</cite> 数据。</p></li>
 <li><p><strong>col_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)"><em>str</em></a>) – 计算用的列名。默认为 <cite>close</cite> 。
 这个列名必须包含在参数 <cite>data</cite> 中。是用来进行回测计算的列，用来标记回测时使用的价格数据。</p></li>
 <li><p><strong>callbacks</strong> ([<a class="reference internal" href="callback.html#finance_tools_py.backtest.CallBack" title="finance_tools_py.backtest.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.CallBack</span></code></a>]) – 回调函数集合。</p></li>
