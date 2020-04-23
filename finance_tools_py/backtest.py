@@ -294,9 +294,9 @@ class BackTest():
             'total',  # 总金额
             'toward',  # 方向
         ]
-        self._live_start_date = kwargs.pop('live_start_date',
-                                           self.data.iloc[0]['date'])
         self.__start_date = self.data.iloc[0]['date']  #数据起始日期
+        self._live_start_date = kwargs.pop('live_start_date',
+                                           self.__start_date)
         self._init_hold['datetime'] = self.__start_date + datetime.timedelta(
             days=-1)
         # self.hold_amount=[]#当前持仓数量
@@ -567,6 +567,7 @@ class BackTest():
                 if verbose > 1:
                     print('{:%Y-%m-%d} < 起始日期:{:%Y-%m-%d} 跳过判断。'.format(
                         date, self.__start_date))
+                continue
             code = row['code']
             price = row['close']  # 价格
             if self._check_callback_buy(date, code, price, row=row):
