@@ -446,3 +446,92 @@ def test_init_hold():
     assert bt.available_cash > bt.init_cash
     assert bt.total_assets_cur == bt.available_cash + 200 * 10  #最新价格10元，总共持有200股
     print(bt.report())
+
+
+def test_calc_Skip():
+
+    data = pd.DataFrame({
+        'code': ['000001' for x in range(7)],
+        'date': [
+            dt(1998, 1, 1),
+            dt(1999, 1, 1),
+            dt(2000, 1, 1),
+            dt(2001, 1, 1),
+            dt(2002, 1, 1),
+            dt(2003, 1, 1),
+            dt(2004, 1, 1)
+        ],
+        'close': [4.5, 7.9, 6.7, 10, 3.0, 3.5, 5.0],
+    })
+
+    class chker(MinAmountChecker):
+        def __init__(self,
+                     buy_dict,
+                     sell_dict,
+                     min_price=3000,
+                     min_increase=1.15,
+                     **kwargs):
+            super().__init__(buy_dict, sell_dict, **kwargs)
+            self._min_price = min_price
+            self._min_increase = min_increase
+
+        def on_check_sell(self, date: datetime.datetime.timestamp, code: str,
+                          price: float, cash: float, hold_amount: float,
+                          hold_price: float, **kwargs) -> bool:
+            if price < hold_price:
+                # 当前价格小于持仓价时，不可卖
+                return False
+            if code in self.sell_dict.keys() and date in self.sell_dict[code]:
+                # 其他情况均可卖
+                return True
+            # if hold_amount > 0 and self._min_increase > 0 and price >= hold_price * self._min_increase:
+            #     # 当前价格超过成本价15%时，可卖
+            #     return True
+            return False
+
+        def on_calc_buy_amount(self, date, code: str, price: float,
+                               cash: float, **kwargs) -> float:
+            amount = 100
+            if self._min_price > 0:
+                if cash < self._min_price:
+                    return super().on_calc_buy_amount(date, code, price, cash)
+                while True:
+                    amount = amount + 100
+                    if price * amount > self._min_price:
+                        break
+                amount = amount - 100
+            return amount
+
+        def on_calc_sell_amount(self, date: datetime.datetime.timestamp,
+                                code: str, price: float, cash: float,
+                                hold_amount: float, hold_price: float,
+                                **kwargs) -> float:
+            """返回所有持仓数量，一次卖出所有"""
+            return hold_amount
+
+    bt = BackTest(
+        data,
+        init_cash=50000,
+        live_start_date=dt(2000, 1, 1),
+        callbacks=[
+            chker(buy_dict={
+                '000001': [
+                    dt(1998, 1, 1),
+                    dt(2000, 1, 1),
+                    dt(2002, 1, 1),
+                    dt(2004, 1, 1)
+                ]
+            },
+                  sell_dict={'000001': [dt(2001, 1, 1),
+                                        dt(2003, 1, 1)]})
+        ])
+    bt.calc_trade_history()
+    print(bt.report())
+    assert 600 == bt.hold_price_cur_df.loc['000001']['amount']
+    assert np.round(5., 2) == np.round(
+        bt.hold_price_cur_df.loc['000001']['buy_price'], 2)
+    assert np.round(bt.total_assets_cur,
+                    2) == np.round(bt.available_cash + (5.0) * 600, 2)
+    assert bt._BackTest__get_buy_avg_price('000001') == (5.0, 600.0)
+    assert bt.history_df.sort_values(
+        'datetime').iloc[0]['datetime'] == dt(2000, 1, 1)

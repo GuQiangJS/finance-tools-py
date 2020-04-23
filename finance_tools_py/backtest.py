@@ -260,7 +260,7 @@ class BackTest():
             tax_coeff (float): 印花税费率。默认0.001。
             commission_coeff (float): 手续费率。默认0.001。
             min_commission (float): 最小印花税费。默认5。
-            live_start_date (datetime): 回测起始时间。默认为 data 中的第一行的 `date` 数据。
+            live_start_date (date): 回测起始时间。默认为 data 中的第一行的 `date` 数据。
             col_name (str): 计算用的列名。默认为 `close` 。
                 这个列名必须包含在参数 `data` 中。是用来进行回测计算的列，用来标记回测时使用的价格数据。
             callbacks ([:py:class:`finance_tools_py.backtest.CallBack`]): 回调函数集合。
@@ -563,10 +563,10 @@ class BackTest():
                                total=len(self.data),
                                desc='回测计算中...'):
             date = row['date']
-            if date < self.__start_date:
+            if date < self._live_start_date:
                 if verbose > 1:
                     print('{:%Y-%m-%d} < 起始日期:{:%Y-%m-%d} 跳过判断。'.format(
-                        date, self.__start_date))
+                        date, self._live_start_date))
                 continue
             code = row['code']
             price = row['close']  # 价格
