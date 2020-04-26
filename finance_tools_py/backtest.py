@@ -300,8 +300,8 @@ class BackTest():
                                            self.__start_date)
         self._init_hold['datetime'] = self.__start_date + datetime.timedelta(
             days=-1)
-        self._init_assets = self.init_cash + sum(
-            self._init_hold['price'] * self._init_hold['amount'])  #期初资产
+        self._init_assets = self.init_cash + ((sum(
+            self._init_hold['price'] * self._init_hold['amount'])) if self._init_hold.empty else 0)  #期初资产
         # self.hold_amount=[]#当前持仓数量
         # self.hold_price=[]#当前持仓金额
 
@@ -662,7 +662,7 @@ class BackTest():
         result = result + '\n期末资产:{:.2f}(现金+持股现价值)'.format(
             self.total_assets_cur)
         result = result + '\n资产变化率:{:.2%}'.format(
-            self.total_assets_cur / self._init_assets)
+            (self.total_assets_cur / self._init_assets) if self._init_assets!=0 else 0)
         result = result + '\n交易次数:{} (买入/卖出各算1次)'.format(len(self.history))
         result = result + '\n可用资金:{:.2f}'.format(self.available_cash)
         if kwargs.pop('show_hold', True):
