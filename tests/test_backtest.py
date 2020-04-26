@@ -634,3 +634,53 @@ def test_example_bar_pnl_ratio():
     plt.gcf().autofmt_xdate()
     Utils.plt_win_rate(profit_df, ax=axes[2])
     # plt.show()
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
+def test_example_plt_pnl():
+    import matplotlib.pyplot as plt
+    desired_width = 320
+    pd.set_option('display.width', desired_width)
+    pd.set_option('display.max_columns', 10)
+    history_df = pd.DataFrame({
+        'code': ['000001', '000001', '000001', '000001'],
+        'amount': [100, -100, 100, -100],
+        'price': [6.3, 6.4, 6.2, 6.1],
+        'datetime': ['2020-04-11', '2020-04-13', '2020-04-15', '2020-04-17']
+    })
+
+    data = pd.DataFrame({
+        'date': [
+            datetime.datetime(2020, 4, 10),
+            datetime.datetime(2020, 4, 11),
+            datetime.datetime(2020, 4, 12),
+            datetime.datetime(2020, 4, 13),
+            datetime.datetime(2020, 4, 14),
+            datetime.datetime(2020, 4, 15),
+            datetime.datetime(2020, 4, 16),
+            datetime.datetime(2020, 4, 17)
+        ],
+        'close': [6.25, 6.3, 6.35, 6.4, 6.3, 6.2, 6.15, 6.1]
+    })
+
+    profit_df = BackTest._pnl_fifo(history_df, history_df.code.unique())
+
+    print('>>> data')
+    print(data)
+    print('>>> profit_df')
+    print(profit_df)
+    print(">>> Utils.plt_pnl(data=data,\
+                       v=profit_df,\
+                       x='date',\
+                       y='close',\
+                       subplot_kws={'title': 'test'},\
+                       line_kws={'c': 'b'})")
+    ax = Utils.plt_pnl(data=data,
+                       v=profit_df,
+                       x='date',
+                       y='close',
+                       subplot_kws={'title': 'test'},
+                       line_kws={'c': 'b'})
+    # plt.show()

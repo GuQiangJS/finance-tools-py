@@ -858,6 +858,65 @@ class BackTest():
 
 class Utils():
     @staticmethod
+    def plt_pnl(data, v, x, y, subplot_kws={},line_kws={},**kwargs):
+        """绘制持仓图。会自动按照红色/绿色，区分盈亏。
+
+        线形图的基础上叠加交易盈亏。
+
+        Examples:
+            >>> data
+                    date  close
+            0 2020-04-10   6.25
+            1 2020-04-11   6.30
+            2 2020-04-12   6.35
+            3 2020-04-13   6.40
+            4 2020-04-14   6.30
+            5 2020-04-15   6.20
+            6 2020-04-16   6.15
+            7 2020-04-17   6.10
+            >>> profit_df
+                     buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap
+            code
+            000001 2020-04-11 2020-04-13        6.3         6.4     100   0.015873       10.0   2 days
+            000001 2020-04-15 2020-04-17        6.2         6.1     100  -0.016129      -10.0   2 days
+            >>> Utils.plt_pnl(data=data,
+                              v=profit_df,
+                              x='date',
+                              y='close',
+                              subplot_kws={'title': 'test'},
+                              line_kws={'c': 'b'})
+
+        Args:
+            data: 完整数据。
+            v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
+            x: data中的列名，用来绘制X轴。
+            y: data中的列名，用来绘制Y轴。
+            line_kws (dict): 绘制线性图时的参数。
+            subplot_kws (dict): 绘制线性图时的参数。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+
+        """
+        d = Utils._get_profit_loss_df(v).copy()
+        pnl_col = kwargs.pop('pnl_col', 'pnl_money')
+        pnl_bd_col = kwargs.pop('pnl_bd_col', 'buy_date')
+        pnl_sd_col = kwargs.pop('pnl_sd_col', 'sell_date')
+        ax = kwargs.pop('ax', None)
+        if ax is None:
+            ax = plt.subplot(**subplot_kws)
+        ax.plot(data[x], data[y], **line_kws)
+        for i, r in d.iterrows():
+            l = data[(data[x] <= r[pnl_sd_col]) & (data[x] >= r[pnl_bd_col])]
+            plt.fill_between(l[x],
+                             0,
+                             l[y],
+                             facecolor='r' if r[pnl_col] > 0 else 'g',
+                             alpha=0.5)
+        return ax
+
+    @staticmethod
     def win_rate(v):
         """胜率
 
@@ -877,6 +936,7 @@ class Utils():
 
         Args:
             v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
         """
         data = Utils._get_profit_loss_df(v)
         try:
@@ -893,6 +953,7 @@ class Utils():
 
         Args:
             v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             colors: 默认会自动按照红色/绿色，区分盈亏。
 
         Returns:
@@ -928,6 +989,7 @@ class Utils():
 
         Args:
             v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             kind: 绘图类型。支持（`bar`或`scatter`）。默认为 `bar`。
 
         Returns:
@@ -948,6 +1010,7 @@ class Utils():
 
         Args:
             v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             kind: 绘图类型。支持（`bar`或`scatter`）。默认为 `bar`。
             ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
 
@@ -969,6 +1032,7 @@ class Utils():
 
         Args:
             v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
 
         Returns:
@@ -995,6 +1059,7 @@ class Utils():
 
         Args:
             v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
 
         Returns:
@@ -1021,6 +1086,7 @@ class Utils():
 
         Args:
             v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
 
         Returns:
@@ -1047,6 +1113,7 @@ class Utils():
 
         Args:
             v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+                如果传入 :py:class:`pandas.DataFrame` 时需要为 :py:func:`BackTest.profit_loss_df` 所返回的数据结构。
             ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
 
         Returns:
