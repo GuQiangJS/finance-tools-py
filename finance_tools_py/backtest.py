@@ -827,9 +827,6 @@ class BackTest():
         ]
         pnl = pd.DataFrame(pair_table, columns=pair_title)
 
-        pnl['buy_date'] = pd.to_datetime(pnl['buy_date'])
-        pnl['sell_date'] = pd.to_datetime(pnl['sell_date'])
-
         pnl = pnl.assign(
             # unit=1,
             pnl_ratio=(pnl.sell_price / pnl.buy_price) - 1,  #盈利比率
@@ -1050,6 +1047,7 @@ class Utils():
         data = Utils._get_profit_loss_df(v).copy()
         data['c'] = 'g'
         data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
+        data['sell_date']=pd.to_datetime(data['sell_date'])
         ax.bar(x=data.sell_date.dt.strftime('%Y-%m-%d'),
                height=data.pnl_ratio,
                color=data['c'].values,
@@ -1077,6 +1075,7 @@ class Utils():
         data = Utils._get_profit_loss_df(v)
         data['c'] = 'g'
         data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
+        data['sell_date']=pd.to_datetime(data['sell_date'])
         ax.scatter(x=data.sell_date.dt.strftime('%Y-%m-%d'),
                    y=data.pnl_ratio,
                    color=data['c'].values,
@@ -1104,6 +1103,7 @@ class Utils():
         data = Utils._get_profit_loss_df(v).copy()
         data['c'] = 'g'
         data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
+        data['sell_date']=pd.to_datetime(data['sell_date'])
         ax.bar(x=data.sell_date.dt.strftime('%Y-%m-%d'),
                height=data.pnl_money,
                color=data['c'].values,
@@ -1129,5 +1129,6 @@ class Utils():
         if ax is None:
             ax = plt.subplot(**kwargs)
         data = Utils._get_profit_loss_df(v)
+        data['sell_date']=pd.to_datetime(data['sell_date'])
         ax.scatter(x=data.sell_date.dt.strftime('%Y-%m-%d'), y=data.pnl_money, **kwargs)
         return ax
