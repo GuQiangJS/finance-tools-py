@@ -301,7 +301,7 @@ class BackTest():
         self._init_hold['datetime'] = self.__start_date + datetime.timedelta(
             days=-1)
         self._init_assets = self.init_cash + ((sum(
-            self._init_hold['price'] * self._init_hold['amount'])) if self._init_hold.empty else 0)  #期初资产
+            self._init_hold['price'] * self._init_hold['amount'])) if not self._init_hold.empty else 0)  #期初资产
         # self.hold_amount=[]#当前持仓数量
         # self.hold_price=[]#当前持仓金额
 
