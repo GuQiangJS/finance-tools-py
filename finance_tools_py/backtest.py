@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import abc
 from tqdm.auto import tqdm
+import matplotlib.pyplot as plt
 
 
 class CallBack():
@@ -20,7 +21,7 @@ class CallBack():
             code: 股票代码。
             price: 当前价格。
             cash: 持有现金。
-            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows` 方法。
 
         Returns:
             bool: 是否买入。返回 `False`。
@@ -40,7 +41,7 @@ class CallBack():
             cash: 持有现金。
             hold_amount: 当前持仓数量。
             hold_price: 当前持仓成本。
-            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows` 方法。
 
         Returns:
             bool: 是否卖出。返回 `False`。
@@ -57,7 +58,7 @@ class CallBack():
             code: 股票代码。
             price: 当前价格。
             cash: 持有现金。
-            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows` 方法。
 
         Return:
             float: 返回买入数量。返回 `0`。
@@ -77,7 +78,7 @@ class CallBack():
             cash: 持有现金。
             hold_amount: 当前持仓数量。
             hold_price: 当前持仓成本。
-            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows`方法。
+            row: 当前处理的数据行。参见 :py:func:`pandas.DataFrame.iterrows` 方法。
 
         Return:
             float: 返回卖出数量。返回 `0`。
@@ -163,7 +164,7 @@ class MinAmountChecker(CallBack):
 
     def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
                            price: float, cash: float, **kwargs) -> float:
-        """计算买入数量。当交易实际花费金额小于 `cash` （可用现金） 时，返回参数 :py:attr:`min_amount` （每次交易数量）。"""
+        """计算买入数量。当交易实际花费金额小于 `cash` （可用现金） 时，返回参数 :py:attr: `min_amount` （每次交易数量）。"""
         amount = self.min_amount
         if price * amount + self._calc_commission(
                 price, amount) + self._calc_tax(price, amount) <= cash:
@@ -186,7 +187,7 @@ class AllInChecker(MinAmountChecker):
     def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
                            price: float, cash: float, **kwargs) -> float:
         """计算买入数量。
-            根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr:`min_amount` 的倍数）
+            根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr: `min_amount` 的倍数）
             （计算时包含考虑了交易时可能产生的印花税和手续费）
         """
         amount = self.min_amount
@@ -345,9 +346,10 @@ class BackTest():
         """当前持仓成本附加最新价格的 DataFrame 格式数据
 
         Examples:
-                buy_price  amount  price_cur
-        code
-        000001       13.4   100.0       15.3
+            >>>
+                    buy_price  amount  price_cur
+            code
+            000001       13.4   100.0       15.3
 
         Returns:
             :class:`pandas.DataFrame` : 结果数据
@@ -367,7 +369,7 @@ class BackTest():
 
     @property
     def _hold_price_cur(self):
-        """目前持仓的成本。是 :py:class: `pandas.Series` 类型或 :py:class: `pandas.DataFrame` 类型。
+        """目前持仓的成本。是 :py:class:`pandas.Series` 类型或 :py:class:`pandas.DataFrame` 类型。
             其中 `code` 是索引，通过索引访问会返回一个数组（price,amount）"""
         def weights(x):
             n = len(x)
@@ -675,3 +677,384 @@ class BackTest():
             result = result + self.history_df.sort_values(
                 'datetime').to_string()
         return result
+
+    def profit_loss_df(self):
+        """按照 **先进先出** 的方式计算并返回 PNL（profit and loss）损益表
+
+        Examples:
+            >>> history_df
+            code  amount  price    datetime
+            0  000001     100    6.3  2020-04-11
+            1  000001     200    5.4  2020-05-12
+            2  000001    -200    7.1  2020-05-14
+            3  000001    -100    4.3  2020-07-11
+            >>> BackTest._pnl_fifo(history_df,[1])
+                     buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap
+            code
+            000001 2020-04-11 2020-05-14        6.3         7.1     100   0.126984       80.0  33 days
+            000001 2020-05-12 2020-05-14        5.4         7.1     100   0.314815      170.0   2 days
+            000001 2020-05-12 2020-07-11        5.4         4.3     100  -0.203704     -110.0  60 days
+
+            >>> history_df
+                 code  amount  price    datetime
+            0  000001     100   6.30  2020-04-11
+            1  000001     200   5.40  2020-05-12
+            2  000002     400   3.30  2020-05-12
+            3  000001    -200   7.10  2020-05-14
+            4  000002    -200   3.51  2020-05-14
+            5  000003     100   1.09  2020-07-11
+            6  000001    -100   4.30  2020-07-11
+            >>> BackTest._pnl_fifo(history_df, history_df.code.unique())
+                     buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap
+            code
+            000001 2020-04-11 2020-05-14        6.3        7.10     100   0.126984       80.0  33 days
+            000001 2020-05-12 2020-05-14        5.4        7.10     100   0.314815      170.0   2 days
+            000002 2020-05-12 2020-05-14        3.3        3.51     200   0.063636       42.0   2 days
+            000001 2020-05-12 2020-07-11        5.4        4.30     100  -0.203704     -110.0  60 days
+        """
+        return BackTest._pnl_fifo(self.history_df,
+                                  self.history_df.code.unique())
+
+    @staticmethod
+    def _pnl_fifo(history_df, code):
+        """按照 **先进先出** 的方式计算并返回 PNL（profit and loss）损益表
+
+        Examples:
+            >>> history_df
+            code  amount  price    datetime
+            0  000001     100    6.3  2020-04-11
+            1  000001     200    5.4  2020-05-12
+            2  000001    -200    7.1  2020-05-14
+            3  000001    -100    4.3  2020-07-11
+            >>> BackTest._pnl_fifo(history_df,[1])
+                     buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap
+            code
+            000001 2020-04-11 2020-05-14        6.3         7.1     100   0.126984       80.0  33 days
+            000001 2020-05-12 2020-05-14        5.4         7.1     100   0.314815      170.0   2 days
+            000001 2020-05-12 2020-07-11        5.4         4.3     100  -0.203704     -110.0  60 days
+
+            >>> history_df
+                 code  amount  price    datetime
+            0  000001     100   6.30  2020-04-11
+            1  000001     200   5.40  2020-05-12
+            2  000002     400   3.30  2020-05-12
+            3  000001    -200   7.10  2020-05-14
+            4  000002    -200   3.51  2020-05-14
+            5  000003     100   1.09  2020-07-11
+            6  000001    -100   4.30  2020-07-11
+            >>> BackTest._pnl_fifo(history_df, history_df.code.unique())
+                     buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap
+            code
+            000001 2020-04-11 2020-05-14        6.3        7.10     100   0.126984       80.0  33 days
+            000001 2020-05-12 2020-05-14        5.4        7.10     100   0.314815      170.0   2 days
+            000002 2020-05-12 2020-05-14        3.3        3.51     200   0.063636       42.0   2 days
+            000001 2020-05-12 2020-07-11        5.4        4.30     100  -0.203704     -110.0  60 days
+        """
+        from collections import deque
+        X = dict(
+            zip(code, [{
+                'buy': deque(),
+                'sell': deque()
+            } for i in range(len(code))]))
+        pair_table = []
+        for _, data in history_df.iterrows():
+            if abs(data.amount) < 1:
+                pass
+            else:
+                while True:
+                    if data.amount > 0:
+                        X[data.code]['buy'].append(
+                            (data.datetime, data.amount, data.price, 1))
+                        break
+                    elif data.amount < 0:
+                        rawoffset = 'buy'
+                        l = X[data.code][rawoffset].popleft()
+                        if abs(l[1]) > abs(data.amount):
+                            """
+                            if raw> new_close:
+                            """
+                            temp = (l[0], l[1] + data.amount, l[2])
+                            X[data.code][rawoffset].appendleft(temp)
+                            if data.amount < 0:
+                                pair_table.append([
+                                    data.code, data.datetime, l[0],
+                                    abs(data.amount), data.price, l[2],
+                                    rawoffset
+                                ])
+                                break
+                            else:
+                                pair_table.append([
+                                    data.code, l[0], data.datetime,
+                                    abs(data.amount), l[2], data.price,
+                                    rawoffset
+                                ])
+                                break
+
+                        elif abs(l[1]) < abs(data.amount):
+                            data.amount = data.amount + l[1]
+
+                            if data.amount < 0:
+                                pair_table.append([
+                                    data.code, data.datetime, l[0], l[1],
+                                    data.price, l[2], rawoffset
+                                ])
+                            else:
+                                pair_table.append([
+                                    data.code, l[0], data.datetime, l[1], l[2],
+                                    data.price, rawoffset
+                                ])
+                        else:
+                            if data.amount < 0:
+                                pair_table.append([
+                                    data.code, data.datetime, l[0],
+                                    abs(data.amount), data.price, l[2],
+                                    rawoffset
+                                ])
+                                break
+                            else:
+                                pair_table.append([
+                                    data.code, l[0], data.datetime,
+                                    abs(data.amount), l[2], data.price,
+                                    rawoffset
+                                ])
+                                break
+        pair_title = [
+            'code', 'sell_date', 'buy_date', 'amount', 'sell_price',
+            'buy_price', 'rawdirection'
+        ]
+        pnl = pd.DataFrame(pair_table, columns=pair_title)
+
+        pnl = pnl.assign(
+            # unit=1,
+            pnl_ratio=(pnl.sell_price / pnl.buy_price) - 1,  #盈利比率
+            sell_date=pd.to_datetime(pnl.sell_date),
+            buy_date=pd.to_datetime(pnl.buy_date))
+        pnl = pnl.assign(
+            pnl_money=(pnl.sell_price - pnl.buy_price) * pnl.amount * 1,  #盈利金额
+            hold_gap=abs(pnl.sell_date - pnl.buy_date),  #持仓时间
+            # if_buyopen=pnl.rawdirection == 'buy'
+        )
+        # pnl = pnl.assign(
+        #     openprice=pnl.if_buyopen.apply(lambda pnl: 1 if pnl else 0) *
+        #               pnl.buy_price +
+        #               pnl.if_buyopen.apply(lambda pnl: 0 if pnl else 1) * pnl.sell_price,
+        #     opendate=pnl.if_buyopen.apply(lambda pnl: 1 if pnl else 0) *
+        #              pnl.buy_date.map(str) +
+        #              pnl.if_buyopen.apply(lambda pnl: 0 if pnl else 1) *
+        #              pnl.sell_date.map(str),
+        #     closeprice=pnl.if_buyopen.apply(lambda pnl: 0 if pnl else 1) *
+        #                pnl.buy_price +
+        #                pnl.if_buyopen.apply(lambda pnl: 1 if pnl else 0) * pnl.sell_price,
+        #     closedate=pnl.if_buyopen.apply(lambda pnl: 0 if pnl else 1) *
+        #               pnl.buy_date.map(str) +
+        #               pnl.if_buyopen.apply(lambda pnl: 1 if pnl else 0) *
+        #               pnl.sell_date.map(str)
+        # )
+        return pnl[[
+            'code', 'buy_date', 'sell_date', 'buy_price', 'sell_price',
+            'amount', 'pnl_ratio', 'pnl_money', 'hold_gap'
+        ]].set_index('code')
+
+
+class Utils():
+    @staticmethod
+    def win_rate(v):
+        """胜率
+
+        盈利次数/总次数
+
+        Examples:
+
+        >>> profit_df
+                 buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap
+        code
+        000001 2020-04-11 2020-05-14        6.3        7.10     100   0.126984       80.0  33 days
+        000001 2020-05-12 2020-05-14        5.4        7.10     100   0.314815      170.0   2 days
+        000002 2020-05-12 2020-05-14        3.3        3.51     200   0.063636       42.0   2 days
+        000001 2020-05-12 2020-07-11        5.4        4.30     100  -0.203704     -110.0  60 days
+        >>> Utils.win_rate(profit_df)
+        0.75
+
+        Args:
+            v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+        """
+        data = Utils._get_profit_loss_df(v)
+        try:
+            return round(len(data.query('pnl_money>0')) / len(data), 2)
+        except ZeroDivisionError:
+            return 0
+
+    @staticmethod
+    def plt_win_rate(v, **kwargs):
+        """按照饼图方式绘制胜率
+
+        See Also:
+            :py:func:`Utils.win_rate`
+
+        Args:
+            v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            colors: 默认会自动按照红色/绿色，区分盈亏。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+
+        """
+        ax = kwargs.pop('ax', None)
+        colors = kwargs.pop('colors', ['r', 'g'])
+        if ax is None:
+            ax = plt.subplot(**kwargs)
+        rate = Utils.win_rate(v)
+        ax.pie([rate, 1 - rate],
+               labels=['盈利', '亏损'],
+               colors=colors,
+               autopct='%1.1f%%')
+        return ax
+
+    @staticmethod
+    def _get_profit_loss_df(v):
+        if isinstance(v, BackTest):
+            return v.profit_loss_df()
+        elif isinstance(v, pd.DataFrame):
+            return v
+        else:
+            raise ValueError('不支持的类型')
+
+    @staticmethod
+    def plt_pnl_ratio(v, kind='bar', **kwargs):
+        """画出 PNL（profit and loss）损益表中的比率。
+
+        See Also:
+            :py:func:`BackTest.profit_loss_df`
+
+        Args:
+            v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            kind: 绘图类型。支持（`bar`或`scatter`）。默认为 `bar`。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+        """
+        kind = kind.upper()
+        if kind == 'BAR':
+            return Utils._bar_pnl_ratio(v, **kwargs)
+        elif kind == 'SCATTER':
+            return Utils._scatter_pnl_ratio(v, **kwargs)
+
+    @staticmethod
+    def plt_pnl_money(v, kind='bar', **kwargs):
+        """绘制 PNL（profit and loss）损益表中的金额.
+
+        See Also:
+            :py:func:`BackTest.profit_loss_df`
+
+        Args:
+            v: 数据源。可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            kind: 绘图类型。支持（`bar`或`scatter`）。默认为 `bar`。
+            ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+        """
+        kind = kind.upper()
+        if kind == 'BAR':
+            return Utils._bar_pnl_money(v, **kwargs)
+        elif kind == 'SCATTER':
+            return Utils._scatter_pnl_money(v, **kwargs)
+
+    @staticmethod
+    def _bar_pnl_ratio(v, **kwargs):
+        """绘制pnl比率柱状图。会自动按照红色/绿色，区分盈亏。
+
+        See Also:
+            :py:func:`BackTest.profit_loss_df`
+
+        Args:
+            v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+        """
+        ax = kwargs.pop('ax', None)
+        if ax is None:
+            ax = plt.subplot(**kwargs)
+        data = Utils._get_profit_loss_df(v).copy()
+        data['c'] = 'g'
+        data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
+        ax.bar(x=data.sell_date.apply(str),
+               height=data.pnl_ratio,
+               color=data['c'].values,
+               **kwargs)
+        return ax
+
+    @staticmethod
+    def _scatter_pnl_ratio(v, **kwargs):
+        """绘制比率散点图。会自动按照红色/绿色，区分盈亏。
+
+        See Also:
+            :py:func:`BackTest.profit_loss_df`
+
+        Args:
+            v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+        """
+        ax = kwargs.pop('ax', None)
+        if ax is None:
+            ax = plt.subplot(**kwargs)
+        data = Utils._get_profit_loss_df(v)
+        data['c'] = 'g'
+        data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
+        ax.scatter(x=data.sell_date.apply(str),
+                   y=data.pnl_ratio,
+                   color=data['c'].values,
+                   **kwargs)
+        return ax
+
+    @staticmethod
+    def _bar_pnl_money(v, **kwargs):
+        """绘制pnl盈亏额柱状图。会自动按照红色/绿色，区分盈亏。
+
+        See Also:
+            :py:func:`BackTest.profit_loss_df`
+
+        Args:
+            v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+        """
+        ax = kwargs.pop('ax', None)
+        if ax is None:
+            ax = plt.subplot(**kwargs)
+        data = Utils._get_profit_loss_df(v).copy()
+        data['c'] = 'g'
+        data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
+        ax.bar(x=data.sell_date.apply(str),
+               height=data.pnl_money,
+               color=data['c'].values,
+               **kwargs)
+        return ax
+
+    @staticmethod
+    def _scatter_pnl_money(v, **kwargs):
+        """绘制pnl盈亏额散点图
+
+        See Also:
+            :py:func:`BackTest.profit_loss_df`
+
+        Args:
+            v: 可以接受 :py:class:`BackTest` 对象实例，也可以接受 :py:class:`pandas.DataFrame` 对象实例。
+            ax (:py:class:`matplotlib.axes.Axes`): 绘图对象。可以为None。
+
+        Returns:
+            :py:class:`matplotlib.axes.Axes`:
+        """
+        ax = kwargs.pop('ax', None)
+        if ax is None:
+            ax = plt.subplot(**kwargs)
+        data = Utils._get_profit_loss_df(v)
+        ax.scatter(x=data.sell_date.apply(str), y=data.pnl_money, **kwargs)
+        return ax

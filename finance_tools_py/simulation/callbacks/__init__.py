@@ -24,7 +24,7 @@ class CallBack:
         """数据读取完成后的准备事件。派生类中实现该事件从而实现对数据的包装。
 
         Args:
-            data (:py:class:`pandas.DataFrame`): 待处理的数据。
+            data (:py:class: `pandas.DataFrame`): 待处理的数据。
         """
         pass
 

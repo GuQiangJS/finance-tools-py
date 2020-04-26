@@ -6,6 +6,8 @@ import datetime
 from finance_tools_py.backtest import BackTest
 from finance_tools_py.backtest import MinAmountChecker
 from finance_tools_py.backtest import AllInChecker
+from finance_tools_py.backtest import Utils
+import os
 
 
 @pytest.fixture
@@ -533,5 +535,102 @@ def test_calc_Skip():
     assert np.round(bt.total_assets_cur,
                     2) == np.round(bt.available_cash + (5.0) * 600, 2)
     assert bt._BackTest__get_buy_avg_price('000001') == (5.0, 600.0)
-    assert bt.history_df.sort_values(
-        'datetime').iloc[0]['datetime'] == dt(2000, 1, 1)
+    assert bt.history_df.sort_values('datetime').iloc[0]['datetime'] == dt(
+        2000, 1, 1)
+
+
+def test_calc_pnl_fifo():
+    desired_width = 320
+    pd.set_option('display.width', desired_width)
+    pd.set_option('display.max_columns', 10)
+
+    history_df = pd.DataFrame({
+        'code': ['000001', '000001', '000001', '000001'],
+        'amount': [100, 200, -200, -100],
+        'price': [6.3, 5.4, 7.1, 4.3],
+        'datetime': ['2020-04-11', '2020-05-12', '2020-05-14', '2020-07-11']
+    })
+    print(history_df)
+    profit_df = BackTest._pnl_fifo(history_df, history_df.code.unique())
+    print(profit_df)
+    assert not profit_df.empty
+    assert len(profit_df) == 3
+    assert profit_df.loc['000001'].iloc[0]['buy_price'] == 6.3
+    assert profit_df.loc['000001'].iloc[0]['amount'] == 100
+    assert profit_df.loc['000001'].iloc[0]['sell_price'] == 7.1
+    assert profit_df.loc['000001'].iloc[0]['pnl_ratio'] == 7.1 / 6.3 - 1
+    assert profit_df.loc['000001'].iloc[0]['pnl_money'] == (7.1 - 6.3) * 100
+    assert profit_df.loc['000001'].iloc[0]['hold_gap'] == profit_df.loc[
+        '000001'].iloc[0].sell_date - profit_df.loc['000001'].iloc[0].buy_date
+
+    history_df = pd.DataFrame({
+        'code':
+        ['000001', '000001', '000002', '000001', '000002', '000003', '000001'],
+        'amount': [100, 200, 400, -200, -200, 100, -100],
+        'price': [6.3, 5.4, 3.3, 7.1, 3.51, 1.09, 4.3],
+        'datetime': [
+            '2020-04-11', '2020-05-12', '2020-05-12', '2020-05-14',
+            '2020-05-14', '2020-07-11', '2020-07-11'
+        ]
+    })
+    print(history_df)
+    profit_df = BackTest._pnl_fifo(history_df, history_df.code.unique())
+    print(profit_df)
+    assert not profit_df.empty
+    assert len(profit_df) == 4
+    assert profit_df.loc['000001'].iloc[0]['buy_price'] == 6.3
+    assert profit_df.loc['000001'].iloc[0]['amount'] == 100
+    assert profit_df.loc['000001'].iloc[0]['sell_price'] == 7.1
+    assert profit_df.loc['000001'].iloc[0]['pnl_ratio'] == 7.1 / 6.3 - 1
+    assert profit_df.loc['000001'].iloc[0]['pnl_money'] == (7.1 - 6.3) * 100
+    assert profit_df.loc['000001'].iloc[0]['hold_gap'] == profit_df.loc[
+        '000001'].iloc[0].sell_date - profit_df.loc['000001'].iloc[0].buy_date
+
+    assert profit_df.loc['000002']['buy_price'] == 3.3
+    assert profit_df.loc['000002']['amount'] == 200
+    assert profit_df.loc['000002']['sell_price'] == 3.51
+    assert profit_df.loc['000002']['pnl_ratio'] == 3.51 / 3.3 - 1
+    assert profit_df.loc['000002']['pnl_money'] == (3.51 - 3.3) * 200
+    assert profit_df.loc['000002']['hold_gap'] == profit_df.loc[
+        '000002'].sell_date - profit_df.loc['000002'].buy_date
+
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
+def test_example_bar_pnl_ratio():
+    import matplotlib.pyplot as plt
+    desired_width = 320
+    pd.set_option('display.width', desired_width)
+    pd.set_option('display.max_columns', 10)
+    history_df = pd.DataFrame({
+        'code':
+        ['000001', '000001', '000002', '000001', '000002', '000003', '000001'],
+        'amount': [100, 200, 400, -200, -200, 100, -100],
+        'price': [6.3, 5.4, 3.3, 7.1, 3.51, 1.09, 4.3],
+        'datetime': [
+            '2020-04-11', '2020-05-12', '2020-05-12', '2020-05-14',
+            '2020-05-14', '2020-07-11', '2020-07-11'
+        ]
+    })
+
+    profit_df = BackTest._pnl_fifo(history_df, history_df.code.unique())
+
+    print('>>> profit_df')
+    print(profit_df)
+    print('>>> Utils.win_rate(profit_df)')
+    print(Utils.win_rate(profit_df))
+
+    Utils._bar_pnl_ratio(profit_df)
+    # plt.show()
+    Utils._bar_pnl_money(profit_df)
+    # plt.show()
+
+    fig, axes = plt.subplots(1, 3)
+    Utils.plt_pnl_ratio(profit_df, ax=axes[0])
+    axes[0].set_title("柱状图")
+    Utils.plt_pnl_ratio(profit_df, kind='scatter', ax=axes[1])
+    axes[1].set_title("散列图")
+    plt.gcf().autofmt_xdate()
+    Utils.plt_win_rate(profit_df, ax=axes[2])
+    # plt.show()

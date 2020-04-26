@@ -6,6 +6,7 @@
 
    backtest/backtest
    backtest/callback
+   backtest/utils
    simulation/simulation
    simulation/callback
    jupyter_helper
