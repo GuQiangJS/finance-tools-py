@@ -1,0 +1,319 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>回测常用帮助类 &mdash; finance-tools-py 0+untagged.51.g90d7171 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script src="../_static/translations.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="搜索" href="../search.html" />
+    <link rel="next" title="模拟工具" href="../simulation/simulation.html" />
+    <link rel="prev" title="回测时的回调" href="callback.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> finance-tools-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="backtest.html">回测工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="callback.html">回测时的回调</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">回测常用帮助类</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../simulation/simulation.html">模拟工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../simulation/callback.html">模拟工具使用的回调</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../jupyter_helper.html">jupyter notebook 中可能用到的常用方法封装</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">finance-tools-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>回测常用帮助类</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/backtest/utils.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>回测常用帮助类<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<dl class="py class">
+<dt id="finance_tools_py.backtest.Utils">
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">Utils</code><a class="headerlink" href="#finance_tools_py.backtest.Utils" title="永久链接至目标">¶</a></dt>
+<dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<dl class="py method">
+<dt id="finance_tools_py.backtest.Utils.plt_pnl_money">
+<em class="property">static </em><code class="sig-name descname">plt_pnl_money</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'bar'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.Utils.plt_pnl_money" title="永久链接至目标">¶</a></dt>
+<dd><p>绘制 PNL（profit and loss）损益表中的金额.</p>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p><a class="reference internal" href="backtest.html#finance_tools_py.backtest.BackTest.profit_loss_df" title="finance_tools_py.backtest.BackTest.profit_loss_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">BackTest.profit_loss_df()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> – 数据源。可以接受 <a class="reference internal" href="backtest.html#finance_tools_py.backtest.BackTest" title="finance_tools_py.backtest.BackTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackTest</span></code></a> 对象实例，也可以接受 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> 对象实例。</p></li>
+<li><p><strong>kind</strong> – 绘图类型。支持（<cite>bar`或`scatter</cite>）。默认为 <cite>bar</cite>。</p></li>
+<li><p><strong>ax</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code>) – 绘图对象。可以为None。</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">返回类型</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.Utils.plt_pnl_ratio">
+<em class="property">static </em><code class="sig-name descname">plt_pnl_ratio</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">kind</span><span class="o">=</span><span class="default_value">'bar'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.Utils.plt_pnl_ratio" title="永久链接至目标">¶</a></dt>
+<dd><p>画出 PNL（profit and loss）损益表中的比率。</p>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p><a class="reference internal" href="backtest.html#finance_tools_py.backtest.BackTest.profit_loss_df" title="finance_tools_py.backtest.BackTest.profit_loss_df"><code class="xref py py-func docutils literal notranslate"><span class="pre">BackTest.profit_loss_df()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> – 数据源。可以接受 <a class="reference internal" href="backtest.html#finance_tools_py.backtest.BackTest" title="finance_tools_py.backtest.BackTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackTest</span></code></a> 对象实例，也可以接受 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> 对象实例。</p></li>
+<li><p><strong>kind</strong> – 绘图类型。支持（<cite>bar`或`scatter</cite>）。默认为 <cite>bar</cite>。</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">返回类型</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.Utils.plt_win_rate">
+<em class="property">static </em><code class="sig-name descname">plt_win_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.Utils.plt_win_rate" title="永久链接至目标">¶</a></dt>
+<dd><p>按照饼图方式绘制胜率</p>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p><a class="reference internal" href="#finance_tools_py.backtest.Utils.win_rate" title="finance_tools_py.backtest.Utils.win_rate"><code class="xref py py-func docutils literal notranslate"><span class="pre">Utils.win_rate()</span></code></a></p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>v</strong> – 数据源。可以接受 <a class="reference internal" href="backtest.html#finance_tools_py.backtest.BackTest" title="finance_tools_py.backtest.BackTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackTest</span></code></a> 对象实例，也可以接受 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> 对象实例。</p></li>
+<li><p><strong>colors</strong> – 默认会自动按照红色/绿色，区分盈亏。</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">返回类型</dt>
+<dd class="field-odd"><p><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.Utils.win_rate">
+<em class="property">static </em><code class="sig-name descname">win_rate</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">v</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.Utils.win_rate" title="永久链接至目标">¶</a></dt>
+<dd><p>胜率</p>
+<p>盈利次数/总次数</p>
+<p>Examples:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">profit_df</span>
+<span class="go">         buy_date  sell_date  buy_price  sell_price  amount  pnl_ratio  pnl_money hold_gap</span>
+<span class="go">code</span>
+<span class="go">000001 2020-04-11 2020-05-14        6.3        7.10     100   0.126984       80.0  33 days</span>
+<span class="go">000001 2020-05-12 2020-05-14        5.4        7.10     100   0.314815      170.0   2 days</span>
+<span class="go">000002 2020-05-12 2020-05-14        3.3        3.51     200   0.063636       42.0   2 days</span>
+<span class="go">000001 2020-05-12 2020-07-11        5.4        4.30     100  -0.203704     -110.0  60 days</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Utils</span><span class="o">.</span><span class="n">win_rate</span><span class="p">(</span><span class="n">profit_df</span><span class="p">)</span>
+<span class="go">0.75</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><p><strong>v</strong> – 可以接受 <a class="reference internal" href="backtest.html#finance_tools_py.backtest.BackTest" title="finance_tools_py.backtest.BackTest"><code class="xref py py-class docutils literal notranslate"><span class="pre">BackTest</span></code></a> 对象实例，也可以接受 <a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a> 对象实例。</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../simulation/simulation.html" class="btn btn-neutral float-right" title="模拟工具" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="callback.html" class="btn btn-neutral float-left" title="回测时的回调" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, GuQiangJS
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
