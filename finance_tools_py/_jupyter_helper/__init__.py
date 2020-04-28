@@ -268,7 +268,7 @@ def plot_basic_plotly(symbol, data=None, sim_callbacks=[], ys=[], **kwargs):
     y = kwargs.pop('y', 'close')
     fig = go.Figure()
     for yt in ys:
-        fig.add_trace(go.Scatter(x=data[x], y=data[yt], mode='lines', name=y))
+        fig.add_trace(go.Scatter(x=data[x], y=data[yt], mode='lines', name=yt))
     if buy:
         b = data[data[x].isin(buy)]
         fig.add_trace(
