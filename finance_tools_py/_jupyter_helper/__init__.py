@@ -13,12 +13,140 @@ from finance_tools_py.backtest import AllInChecker
 import logging
 import traceback
 from tqdm.auto import tqdm
+import empyrical
 
 plt.rcParams['font.family'] = 'SimHei'
 # IN_COLAB = 'google.colab' in sys.modules
 
 # if not IN_COLAB:
 #     logging.warning('Colab用。如果不是在Colab下可能会有各种各样的问题！！！')
+
+
+def report_metrics(strategy_rets, benchmark_rets, factor_returns=0):
+    """使用 `empyrical`_ 库计算各种常见财务风险和绩效指标。
+
+    Args:
+        strategy_rets (:py:class:`pandas.Series): 策略收益。
+        benchmark_rets (:py:class:`pandas.Series): 基准收益。
+        factor_returns : 计算 excess_sharpe 时使用，策略计算时使用`strategy_rets`作为`factor_returns`，
+            当不存在`strategy_rets`时使用`factor_returns`。
+            `factor_returns`参考:py:func:`empyrical.excess_sharpe`中的`factor_returns`参数的解释。
+
+    Examples:
+        >>> from finance_tools_py._jupyter_helper import report_metrics
+        >>> import pandas as pd
+        >>> rep = report_metrics(pd.Series([-0.01,0.04,0.03,-0.02]),
+                                 pd.Series([0.04,0.05,0.06,0.07]))
+        >>> print(rep)
+                                  基准         策略
+        最大回撤                0.000000  -0.020000
+        年化收益           713630.025679  10.326756
+        年度波动性               0.204939   0.467333
+        夏普比率               67.629875   5.392302
+        R平方                 0.994780   0.614649
+        盈利比率                1.650602   2.081081
+        excess_sharpe       4.260282  -1.317465
+        年复合增长率         713630.025679  10.326756
+
+
+    Returns:
+        :py:class:`pandas.DataFrame`:
+
+    .. _empyrical:
+        http://quantopian.github.io/empyrical/
+
+    """
+    if not benchmark_rets.empty:
+        max_drawdown_benchmark = empyrical.max_drawdown(benchmark_rets)
+        annual_return_benchmark = empyrical.annual_return(benchmark_rets)
+        annual_volatility_benchmark = empyrical.annual_volatility(
+            benchmark_rets)
+        sharpe_ratio_benchmark = empyrical.sharpe_ratio(benchmark_rets)
+        stability_of_timeseries_benchmark = empyrical.stability_of_timeseries(
+            benchmark_rets)
+        tail_ratio_benchmark = empyrical.tail_ratio(benchmark_rets)
+        excess_sharpe_benchmark = empyrical.excess_sharpe(benchmark_rets, factor_returns)
+        cagr_benchmark = empyrical.cagr(benchmark_rets)
+    else:
+        max_drawdown_benchmark = None
+        annual_return_benchmark = None
+        annual_volatility_benchmark = None
+        sharpe_ratio_benchmark = None
+        stability_of_timeseries_benchmark = None
+        tail_ratio_benchmark = None
+        excess_sharpe_benchmark = None
+        cagr_benchmark = None
+    max_drawdown_strategy = empyrical.max_drawdown(strategy_rets)
+    annual_return_strategy = empyrical.annual_return(strategy_rets)
+    annual_volatility_strategy = empyrical.annual_volatility(strategy_rets)
+    sharpe_ratio_strategy = empyrical.sharpe_ratio(strategy_rets)
+    stability_of_timeseries_strategy = empyrical.stability_of_timeseries(
+        strategy_rets)
+    tail_ratio_strategy = empyrical.tail_ratio(strategy_rets)
+    excess_sharpe_strategy = empyrical.excess_sharpe(
+        strategy_rets, benchmark_rets if not benchmark_rets.empty else factor_returns)
+    cagr_strategy = empyrical.cagr(strategy_rets)
+
+    return pd.DataFrame(
+        {
+            '基准': [
+                max_drawdown_benchmark, annual_return_benchmark,
+                annual_volatility_benchmark, sharpe_ratio_benchmark,
+                stability_of_timeseries_benchmark, tail_ratio_benchmark,
+                excess_sharpe_benchmark, cagr_benchmark
+            ],
+            '策略': [
+                max_drawdown_strategy, annual_return_strategy,
+                annual_volatility_strategy, sharpe_ratio_strategy,
+                stability_of_timeseries_strategy, tail_ratio_strategy,
+                excess_sharpe_strategy, cagr_strategy
+            ]
+        },
+        index=[
+            '最大回撤', '年化收益', '年度波动性', '夏普比率', 'R平方', '盈利比率', 'excess_sharpe', '年复合增长率'
+        ])
+
+    # return s
+    # if not benchmark_rets.empty:
+    #     print('标准最大回撤:{:.2%}'.format(empyrical.max_drawdown(benchmark_rets)))
+    # print('策略最大回撤:{:.2%}'.format(empyrical.max_drawdown(strategy_rets)))
+    # if not benchmark_rets.empty:
+    #     print('标准年化收益：{:.2%}'.format(empyrical.annual_return(benchmark_rets)))
+    # print('策略年化收益：{:.2%}'.format(empyrical.annual_return(strategy_rets)))
+    # if not benchmark_rets.empty:
+    #     print('标准年度波动性：{:.2%}'.format(empyrical.annual_volatility(benchmark_rets)))
+    # print('策略年度波动性：{:.2%}'.format(empyrical.annual_volatility(strategy_rets)))
+    # if not benchmark_rets.empty:
+    #     print('标准夏普比率：{:.2f}'.format(empyrical.sharpe_ratio(benchmark_rets)))
+    # print('策略夏普比率：{:.2f}'.format(empyrical.sharpe_ratio(strategy_rets)))
+    # print('标准alpha：{:.2f}，beta：{:.2f}'.format(empyrical.alpha_beta(benchmark_rets,0)))
+    # print('策略alpha：{:.2f}，beta：{:.2f}'.format(empyrical.alpha_beta(strategy_rets,0)))
+    # if not benchmark_rets.empty:
+    #     print('标准R平方：{:.2f}'.format(empyrical.stability_of_timeseries(benchmark_rets)))
+    # print('策略R平方：{:.2f}'.format(empyrical.stability_of_timeseries(strategy_rets)))
+    # if not benchmark_rets.empty:
+    #     print('标准盈利比率：{:.2f}'.format(empyrical.tail_ratio(benchmark_rets)))
+    # print('策略盈利比率：{:.2f}'.format(empyrical.tail_ratio(strategy_rets)))
+    # print('>> 盈利比率：确定右（95％）和左尾巴（5％）之间的比率。 例如，比率0.25意味着损失是利润的四倍。')
+    # if not benchmark_rets.empty:
+    #     print('标准信息风险：{:.2f}'.format(empyrical.excess_sharpe(benchmark_rets, 0)))
+    # print('策略信息风险：{:.2f}'.format(empyrical.excess_sharpe(strategy_rets, 0)))
+    # if not benchmark_rets.empty:
+    #     print('信息风险：{:.2f}'.format(empyrical.excess_sharpe(strategy_rets, benchmark_rets)))
+    # print(
+    #     '>> 信息风险，也被称为评价比。它代表投资者每增加单位风险所获得的额外收益。\n它通常用于评估共同基金，对冲基金等经理人的技能。它衡量经理人投资组合的有效收益除以经理人相对于基准所承担的风险量。信息比率越高，给定承担的风险数量，投资组合的有效收益就越高，管理者也越好\n信息比率与夏普比率类似，主要区别在于，夏普比率使用无风险收益作为基准（例如美国国库券），而信息比率使用风险指数作为基准（例如S＆P500） 。'
+    # )
+    # if not benchmark_rets.empty:
+    #     print('标准年复合增长率：{:.2%}'.format(empyrical.cagr(benchmark_rets)))
+    # print('策略年复合增长率：{:.2%}'.format(empyrical.cagr(strategy_rets)))
+
+    # return empyrical.aggregate_returns(
+    #     benchmark_rets, convert_to='yearly').to_frame().rename(columns={
+    #         'rets_log': '标准年回报'
+    #     }).join(
+    #         empyrical.aggregate_returns(
+    #             strategy_rets,
+    #             convert_to='yearly').to_frame().rename(columns={0: '策略年回报'}))
 
 
 def __plot_BACKTEST_bar(v, title):
