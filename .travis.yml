@@ -24,7 +24,7 @@ before_install:
     - sudo make install
     - cd ..
 install:
-  - pip install talib
+  - pip install TA-Lib
   - pip install plotly
   - pip install coverage
   - pip install pandas
