@@ -25,6 +25,8 @@ before_install:
     - cd ..
 install:
   - pip install TA-Lib
+  - pip install ipython
+  - pip install empyrical
   - pip install plotly
   - pip install coverage
   - pip install pandas
