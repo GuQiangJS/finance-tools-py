@@ -365,9 +365,6 @@ class TurtleStrategy(MinAmountChecker):
                 if h.stoploss_price >= price:
                     result = result + h.amount
                     self.holds[code].remove(h)
-                    if len(self.holds[code]) <= 0:
-                        del self.holds[code]
-                        break
             if result > 0:
                 if kwargs.get('verbose', 0) == 2:
                     print(
@@ -378,9 +375,6 @@ class TurtleStrategy(MinAmountChecker):
                 if h.stopprofit_price <= price:
                     result = result + h.amount
                     self.holds[code].remove(h)
-                    if len(self.holds[code]) <= 0:
-                        del self.holds[code]
-                        break
             if result > 0:
                 if kwargs.get('verbose', 0) == 2:
                     print(
