@@ -3,14 +3,12 @@ import numpy as np
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sys
 from IPython.display import clear_output
 from finance_tools_py.backtest import BackTest
 from finance_tools_py.simulation.callbacks import CallBack
 from finance_tools_py.simulation import Simulation
 import datetime
 from finance_tools_py.backtest import AllInChecker
-import logging
 import traceback
 from tqdm.auto import tqdm
 import empyrical

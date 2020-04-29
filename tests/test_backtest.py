@@ -424,7 +424,11 @@ def test_init_hold():
     init_hold = pd.DataFrame({
         'code': ['000001'],
         'amount': [400],
-        'price': [3]
+        'price': [3],
+        'buy_date': [dt(1998, 1, 1)],
+        'stoploss_price':[-1],
+        'stopprofit_price':[-1],
+        'next_price':[-1],
     })
     bt = BackTest(data, init_hold=init_hold)
     assert not bt.available_hold_df.empty
@@ -688,6 +692,8 @@ def test_example_plt_pnl():
 
 
 
+
+@pytest.mark.skip
 def test_temp():
 
     import logging

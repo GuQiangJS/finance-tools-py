@@ -24,6 +24,10 @@ before_install:
     - sudo make install
     - cd ..
 install:
+  - pip install TA-Lib
+  - pip install ipython
+  - pip install empyrical
+  - pip install plotly
   - pip install coverage
   - pip install pandas
   - pip install numpy
@@ -31,6 +35,7 @@ install:
   - pip install pytest pytest-cov python-coveralls
   - pip install tqdm
   - pip install matplotlib
+  - pip install seaborn
   - python setup.py install
   - if [[ $DOCBUILD ]]; then
     pip install sphinx sphinx_rtd_theme doctr sphinxcontrib-napoleon;
