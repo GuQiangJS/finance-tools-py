@@ -687,77 +687,6 @@ def test_example_plt_pnl():
     # plt.show()
 
 
-def test_TurtleStrategy():
-    ts = TurtleStrategy(colname='atr5')
-    assert ts.stoploss_point == 2
-    assert ts.stopprofit_point == 10
-    assert ts.next_point == 1
-    row = pd.Series({'atr5': 0.05})
-    ls, lf, n = ts.calc_price(1, row=row)
-    assert ls == (1 - ts.stoploss_point * 0.05)
-    assert lf == (1 + ts.stopprofit_point * 0.05)
-    assert n == (1 + ts.next_point * 0.05)
-
-    print(">>> from finance_tools_py.backtest import TurtleStrategy")
-    print(">>> ts = TurtleStrategy(colname='atr5')")
-    print(">>> ts.calc_price(1, row={'atr5': 0.05})")
-    print("(0.9, 1.5, 1.05)")
-
-    ts = TurtleStrategy(colname='',
-                        stoploss_point=0.5,
-                        stopprofit_point=20,
-                        next_point=2)
-    assert ts.stoploss_point == 0.5
-    assert ts.stopprofit_point == 20
-    assert ts.next_point == 2
-
-    ls, lf, n = ts.calc_price(1, row=row)
-    assert ls == -1
-    assert lf == -1
-    assert n == -1
-
-    # 只有一笔持仓时的判断-开始
-    ts = TurtleStrategy(colname='atr5', single_max=100, verbose=2,
-                        buy_dict={'0':[datetime.date(2000,1,1),datetime.date(2000,1,2)]})
-    ts.on_calc_buy_amount(datetime.date(2000,1,1),'0',1,1000,row=row,verbose=2)
-    print(ts.holds['0'][0])
-    # 超过最大持仓线时不再购买
-    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.01,500,row=row,verbose=2)
-    print(ts.holds['0'][0])
-    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.1,500,row=row,verbose=2)
-
-    # 没有达到止损线，不卖
-    assert not ts.on_check_sell(datetime.date(2000,1,3),'0',0.95,0,0,0,row=row,verbose=2)
-    # 低于止损线，卖出
-    assert ts.on_check_sell(datetime.date(2000,1,3),'0',0.89,0,0,0,row=row,verbose=2)
-    # 低于止盈，不卖
-    assert not ts.on_check_sell(datetime.date(2000,1,3),'0',1.49,0,0,0,row=row,verbose=2)
-    # 超过止盈，卖出
-    assert ts.on_check_sell(datetime.date(2000,1,3),'0',1.51,0,0,0,row=row,verbose=2)
-
-    # 止损数量
-    assert 100==ts.on_calc_sell_amount(datetime.date(2000,1,3),'0',0,0,0,0,row=row,verbose=2)
-    # 只有一笔持仓时的判断-结束
-
-
-    # 多笔持仓时的判断-开始
-    ts = TurtleStrategy(colname='atr5', single_max=100, verbose=2,
-                        buy_dict={'0':[datetime.date(2000,1,1),datetime.date(2000,1,2),datetime.date(2000,1,3)]})
-
-    ts.on_calc_buy_amount(datetime.date(2000,1,1),'0',1,1000,row=row,verbose=2)
-    ts.on_calc_buy_amount(datetime.date(2000,1,2),'0',2,1000,row=row,verbose=2)
-    print(ts.holds['0'][0])
-    print(ts.holds['0'][1])
-    # 超过最大持仓线时不再购买
-    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.01,500,row=row,verbose=2)
-    print(ts.holds['0'][0])
-    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.1,500,row=row,verbose=2)
-
-    # 止损数量
-    assert 100==ts.on_calc_sell_amount(datetime.date(2000,1,3),'0',1.8,0,0,0,row=row,verbose=2)
-    print(ts.holds['0'][0])
-    assert 100==ts.holds['0'][0].amount
-    # 多笔持仓时的判断-结束
 
 def test_temp():
 
@@ -910,7 +839,7 @@ def test_temp():
                             'stopprofit_price': [v1.stopprofit_price],
                             'next_price': [v1.next_price],
                         }))
-                hold = pd.concat(hs)
+                hold = pd.concat(hs) if hs else pd.DataFrame()
 
             init_cash = bt.available_cash
             if show_report:
@@ -952,4 +881,4 @@ def test_temp():
     pds['rets'] = pds['assert'].pct_change()
     pds['rets1'] = pds['assert'] / pds['assert'].iloc[0] - 1
     pds.fillna(0, inplace=True)
-    pd.concat([v.profit_loss_df() for v in report.values()])
+    print(pd.concat([v.profit_loss_df() for v in report.values()]))

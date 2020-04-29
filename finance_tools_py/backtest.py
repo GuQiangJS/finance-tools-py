@@ -232,7 +232,7 @@ class TurtleStrategy(MinAmountChecker):
                 amount: 买入数量。
                 stoploss_price: 止损价格。
                 stopprofit_price: 止盈价格。
-            next_price: 加仓价位。
+                next_price: 加仓价位。
             """
             self.symbol = symbol
             self.date = date
@@ -365,9 +365,6 @@ class TurtleStrategy(MinAmountChecker):
                 if h.stoploss_price >= price:
                     result = result + h.amount
                     self.holds[code].remove(h)
-                    if len(self.holds[code]) <= 0:
-                        del self.holds[code]
-                        break
             if result > 0:
                 if kwargs.get('verbose', 0) == 2:
                     print(
@@ -378,9 +375,6 @@ class TurtleStrategy(MinAmountChecker):
                 if h.stopprofit_price <= price:
                     result = result + h.amount
                     self.holds[code].remove(h)
-                    if len(self.holds[code]) <= 0:
-                        del self.holds[code]
-                        break
             if result > 0:
                 if kwargs.get('verbose', 0) == 2:
                     print(
