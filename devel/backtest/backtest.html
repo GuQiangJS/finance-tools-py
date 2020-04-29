@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测工具 &mdash; finance-tools-py 0+untagged.51.gae77e57 文档</title>
+  <title>回测工具 &mdash; finance-tools-py 0+untagged.51.g1b9ad1b 文档</title>
   
 
   
@@ -212,7 +212,9 @@
 <li><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 完整的日线数据。数据中需要包含 <cite>date</cite> 列，用来标记日期。
 数据中至少需要包含 <cite>date</cite> 列、 <cite>code</cite> 列和 <cite>close</cite> 列，其中 <cite>close</cite> 列可以由参数 <cite>colname</cite> 参数指定。</p></li>
 <li><p><strong>init_cash</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 初始资金。</p></li>
-<li><p><strong>init_hold</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 初始持仓。数据中需要包含 <cite>code</cite>,`amount`,`price` 列。</p></li>
+<li><p><strong>init_hold</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 初始持仓。
+数据中需要包含 ‘code’, ‘amount’, ‘price’, ‘buy_date’, ‘stoploss_price’,
+‘stopprofit_price’, ‘next_price’ 列。</p></li>
 <li><p><strong>tax_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 印花税费率。默认0.001。</p></li>
 <li><p><strong>commission_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 手续费率。默认0.001。</p></li>
 <li><p><strong>min_commission</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最小印花税费。默认5。</p></li>
