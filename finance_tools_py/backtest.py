@@ -4,7 +4,7 @@ import datetime
 import abc
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
-
+import logging
 
 class CallBack():
     """回测时的回调。"""
@@ -205,6 +205,227 @@ class AllInChecker(MinAmountChecker):
         return hold_amount
 
 
+class TurtleStrategy(MinAmountChecker):
+    """海龟交易法则适用的交易策略的基类
+
+    可以计算止盈/止损/加仓的价位，并且按照这些价位进行仓位控制。
+    """
+    class Hold():
+        """持仓记录
+
+        Attributes:
+            symbol: 股票代码。
+            date: 买入日期。
+            price: 买入价格。
+            amount: 买入数量。
+            stoploss_price: 止损价格。
+            stopprofit_price: 止盈价格。
+            next_price: 加仓价位。
+        """
+        def __init__(self, symbol, date, price, amount, stoploss_price,
+                     stopprofit_price, next_price):
+            """
+            Args:
+                symbol: 股票代码。
+                date: 买入日期。
+                price: 买入价格。
+                amount: 买入数量。
+                stoploss_price: 止损价格。
+                stopprofit_price: 止盈价格。
+            next_price: 加仓价位。
+            """
+            self.symbol = symbol
+            self.date = date
+            self.price = price
+            self.amount = amount
+            self.stoploss_price = stoploss_price
+            self.stopprofit_price = stopprofit_price
+            self.next_price = next_price
+
+        def __str__(self):
+            return '{}-{:%Y-%m-%d}:价格:{:.2f},数量:{:.2f},止损价格:{:.2f},止盈价格:{:.2f},下一个仓位价格:{:.2f}'.format(
+                self.symbol, self.date, self.price, self.amount,
+                self.stoploss_price, self.stopprofit_price, self.next_price)
+
+    def __init__(self,
+                 colname,
+                 buy_dict={},
+                 sell_dict={},
+                 single_max=400,
+                 **kwargs):
+        """
+
+        Args:
+            buy_dict:
+            sell_dict:
+            colname (str): 计算止盈/止损等价格的列名。会由:py:func:`calc_price`方法调用。调用时会取`**kwargs`参数中的`row`参数。尝试找到这个数值。
+            stoploss_point (float): 止损点。根据`colname`指定的数据进行计算。默认为2。设置为None时，表示不计算。
+                计算止损价格`stoploss_price=price-stoploss_point*row[colname]`。
+            stopprofit_point (float): 止盈点。根据`colname`指定的数据进行计算。默认为10。设置为None时，表示不计算。
+                计算止损价格`stopprofit_price=price+stoploss_point*row[colname]`。
+            next_point (float): 下一个可买点。根据`colname`指定的数据进行计算。默认为1。设置为None时，表示不计算。
+                计算止损价格`next_price=price+next_point*row[colname]`。
+            single_max (int): 最大持仓数量。默认为400。
+            holds (dict): 初始持仓。{symbol:[:py:class:`TurtleStrategy.Hold`]}
+            **kwargs:
+        """
+        super().__init__(buy_dict, sell_dict, **kwargs)
+        self.colname = colname
+        self.stoploss_point = kwargs.pop('stoploss_point', 2)
+        self.stopprofit_point = kwargs.pop('stopprofit_point', 10)
+        self.next_point = kwargs.pop('next_point', 1)
+        self.single_max = single_max
+        self.holds = kwargs.pop('holds', {})
+
+    def _add_hold(self, symbol, date, price, amount, stoploss_price,
+                  stopprofit_price, next_price):
+        """记录新增持仓"""
+        if symbol not in self.holds:
+            self.holds[symbol] = []
+        self.holds[symbol].append(
+            TurtleStrategy.Hold(symbol, date, price, amount, stoploss_price,
+                                stopprofit_price, next_price))
+
+    def on_check_buy(self, date, code, price, cash, **kwargs):
+        result = super().on_check_buy(date, code, price, cash, **kwargs)
+        verbose = kwargs.get('verbose', 0)
+        if result and code in self.holds and len(self.holds[code])>0:
+            hold = self.holds[code][-1]
+            if hold and hold.next_price > 0 and price < hold.next_price:
+                if verbose == 2:
+                    print(
+                        '{:%Y-%m-%d}-{}-当前价位:{:.2f}小于上次购买价位:{:.2f}的下一个价位:{:.2f},不再购买.当前持仓数量:{}'
+                        .format(date, code, price, hold.price, hold.next_price,
+                                sum(h.amount for h in self.holds[code])))
+                return False
+        h = sum([h.amount
+                 for h in self.holds[code]]) if code in self.holds else 0
+        if h >= self.single_max:
+            """超过最大持仓线时不再购买"""
+            if verbose == 2:
+                print('{:%Y-%m-%d}-{}-超过最大持仓线时不再购买.当前持仓数量:{}'.format(
+                    date, code, h))
+            return False
+        return result
+
+    def calc_price(self, price, **kwargs):
+        '''计算止损/止盈价格
+
+        Examples:
+            >>> from finance_tools_py.backtest import TurtleStrategy
+            >>> ts = TurtleStrategy(colname='atr5')
+            >>> ts.calc_price(1, row={'atr5': 0.05})
+            (0.9, 1.5, 1.05)
+
+        Returns:
+            (float,float,float): 止损价，止盈价，加仓价
+        '''
+        row = kwargs.get('row', None)
+        stoploss_price = -1
+        stopprofit_price = -1
+        next_price = -1
+        if self.colname and not row.empty:
+            v = row[self.colname]
+            if v:
+                if self.stoploss_point:
+                    stoploss_price = price - self.stoploss_point * v
+                if self.stopprofit_point:
+                    stopprofit_price = price + self.stopprofit_point * v
+                if self.next_point:
+                    next_price = price + self.next_point * v
+        return stoploss_price, stopprofit_price, next_price
+
+    def on_calc_buy_amount(self, date, code, price, cash, **kwargs):
+        """计算买入数量
+
+
+        Args:
+            date:
+            code:
+            price:
+            cash:
+            **kwargs:
+
+        Returns:
+
+        """
+        result = super().on_calc_buy_amount(date, code, price, cash, **kwargs)
+        if result:
+            stoploss_price, stopprofit_price, next_price = self.calc_price(
+                price, **kwargs)
+            self._add_hold(code, date, price, result, stoploss_price,
+                           stopprofit_price, next_price)
+        return result
+
+    def on_calc_sell_amount(self, date, code, price, cash, hold_amount,
+                            hold_price, **kwargs):
+        if code in self.holds:
+            result = 0
+            for h in reversed(self.holds[code]):
+                if h.stoploss_price >= price:
+                    result = result + h.amount
+                    self.holds[code].remove(h)
+                    if len(self.holds[code]) <= 0:
+                        del self.holds[code]
+                        break
+            if result > 0:
+                if kwargs.get('verbose', 0) == 2:
+                    print(
+                        '{:%Y-%m-%d}-{}-止损.止损数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                        format(date, code, result, price, hold_price))
+                return result
+            for h in reversed(self.holds[code]):
+                if h.stopprofit_price <= price:
+                    result = result + h.amount
+                    self.holds[code].remove(h)
+                    if len(self.holds[code]) <= 0:
+                        del self.holds[code]
+                        break
+            if result > 0:
+                if kwargs.get('verbose', 0) == 2:
+                    print(
+                        '{:%Y-%m-%d}-{}-止盈.止盈数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                        format(date, code, result, price, hold_price))
+                return result
+        result=super().on_calc_sell_amount(date, code, price, cash,
+                                           hold_amount, hold_price, **kwargs)
+        result_temp=result
+        while result_temp>0:
+            if result_temp >= self.holds[code][0].amount:
+                print('{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                        format(date, code, self.holds[code][0].amount, price, self.holds[code][0].price))
+                a = self.holds[code][0]
+                result_temp = result_temp - a.amount
+                self.holds[code].remove(a)
+            else:
+                print('{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                        format(date, code, self.holds[code][0].amount, price, self.holds[code][0].price))
+                self.holds[code][0].amount = self.holds[code][0].amount - result_temp
+                result_temp = 0
+        return result
+
+    def on_check_sell(self, date, code, price, cash, hold_amount, hold_price,
+                      **kwargs):
+        result = super().on_check_sell(date, code, price, cash, hold_amount,
+                                       hold_price, **kwargs)
+        if not result and code in self.holds:
+            result = sum([
+                h.amount for h in self.holds[code]
+                if h.stoploss_price != -1 and h.stoploss_price >= price
+            ])
+            if result and kwargs.get('verbose', 0) == 2:
+                print('{:%Y-%m-%d}-{}-触及止损线.当前可卖数量:{}.'.format(date, code,result))
+                return True
+            result = sum([
+                h.amount for h in self.holds[code]
+                if h.stopprofit_price != -1 and h.stopprofit_price <= price
+            ])
+            if result and kwargs.get('verbose', 0) == 2:
+                print('{:%Y-%m-%d}-{}-触及止盈线.当前可卖数量:{}.'.format(date, code, result))
+                return True
+        return result
+
+
 class BackTest():
     """简单的回测系统。根据传入的购买日期和卖出日期，计算收益。
 
@@ -257,7 +478,9 @@ class BackTest():
             data (:py:class:`pandas.DataFrame`): 完整的日线数据。数据中需要包含 `date` 列，用来标记日期。
                 数据中至少需要包含 `date` 列、 `code` 列和 `close` 列，其中 `close` 列可以由参数 `colname` 参数指定。
             init_cash (float): 初始资金。
-            init_hold (:py:class:`pandas.DataFrame`): 初始持仓。数据中需要包含 `code`,`amount`,`price` 列。
+            init_hold (:py:class:`pandas.DataFrame`): 初始持仓。
+                数据中需要包含 'code', 'amount', 'price', 'buy_date', 'stoploss_price',
+                'stopprofit_price', 'next_price' 列。
             tax_coeff (float): 印花税费率。默认0.001。
             commission_coeff (float): 手续费率。默认0.001。
             min_commission (float): 最小印花税费。默认5。
@@ -275,14 +498,18 @@ class BackTest():
         self.min_commission = min_commission
         self.history = []  # 交易历史
         self._init_hold = kwargs.pop(
-            'init_hold', pd.DataFrame(columns=['code', 'amount', 'price']))
+            'init_hold',
+            pd.DataFrame(columns=[
+                'code', 'amount', 'price', 'buy_date', 'stoploss_price',
+                'stopprofit_price', 'next_price'
+            ]))
         self._calced = False
         self._colname = col_name
         self._calbacks = callbacks
         self._buy_price_cur = {}  #购买成本。
         if not self._init_hold.empty:
             for index, row in self._init_hold.iterrows():
-                self.__update_buy_price(row['code'], row['amount'],
+                self.__update_buy_price(row['buy_date'],row['code'], row['amount'],
                                         row['price'], 1)
         self._history_headers = [
             'datetime',  # 时间
@@ -300,8 +527,9 @@ class BackTest():
                                            self.__start_date)
         self._init_hold['datetime'] = self.__start_date + datetime.timedelta(
             days=-1)
-        self._init_assets = self.init_cash + ((sum(
-            self._init_hold['price'] * self._init_hold['amount'])) if not self._init_hold.empty else 0)  #期初资产
+        self._init_assets = self.init_cash + (
+            (sum(self._init_hold['price'] * self._init_hold['amount']))
+            if not self._init_hold.empty else 0)  #期初资产
         # self.hold_amount=[]#当前持仓数量
         # self.hold_price=[]#当前持仓金额
 
@@ -483,7 +711,7 @@ class BackTest():
     # def __get_hold_price(self,code):
     #     pass
 
-    def __update_buy_price(self, code, amount, price, toward):
+    def __update_buy_price(self, date,code, amount, price, toward):
         """更新买入成本"""
         if toward == 1:
             #买入
@@ -493,6 +721,7 @@ class BackTest():
                 self._buy_price_cur[code] = [hold_amount, hold_price]
             else:
                 hold_amount, hold_price = self._buy_price_cur[code]
+            logging.debug('__update_buy_price-{:%Y-%m-%d}:toward:{},code:{},amount:{},price:{:.2f}'.format(date,toward,code,amount,price))
             self._buy_price_cur[code] = [
                 hold_amount + [amount], hold_price + [price]
             ]
@@ -507,11 +736,13 @@ class BackTest():
 
             while amount > 0:
                 if amount >= hold_amount[0]:
+                    logging.debug('__update_buy_price-{:%Y-%m-%d}:toward:{},code:{},amount:{},price:{:.2f},hold_amount:{}'.format(date,toward,code,amount,price,hold_amount))
                     a = hold_amount[0]
                     hold_amount.remove(a)
                     hold_price.remove(hold_price[0])
                     amount = amount - a
                 else:
+                    logging.debug('__update_buy_price:toward:{},code:{},amount:{},price:{:.2f}'.format(toward,code,amount,price))
                     hold_amount[0] = hold_amount[0] - amount
                     amount = 0
 
@@ -574,9 +805,9 @@ class BackTest():
                 continue
             code = row['code']
             price = row['close']  # 价格
-            if self._check_callback_buy(date, code, price, row=row):
+            if self._check_callback_buy(date, code, price, row=row,verbose=verbose):
                 amount = self._calc_buy_amount(date, code, price,
-                                               row=row)  # 买入数量
+                                               row=row,verbose=verbose)  # 买入数量
                 commission = self._calc_commission(price, amount)
                 tax = self._calc_tax(price, amount)
                 value = price * amount + commission + tax
@@ -593,7 +824,7 @@ class BackTest():
                         tax,
                         1,
                     )
-                    self.__update_buy_price(code, amount, price, 1)
+                    self.__update_buy_price(date,code, amount, price, 1)
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
@@ -602,8 +833,8 @@ class BackTest():
                     if verbose > 1:
                         print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(
                             date, code, price))
-            if self._check_callback_sell(date, code, price, row=row):
-                amount = self._calc_sell_amount(date, code, price, row=row)
+            if self._check_callback_sell(date, code, price, row=row,verbose=verbose):
+                amount = self._calc_sell_amount(date, code, price, row=row,verbose=verbose)
                 if amount > 0:
                     commission = self._calc_commission(price, amount)
                     tax = self._calc_tax(price, amount)
@@ -620,7 +851,7 @@ class BackTest():
                         tax,
                         -1,
                     )
-                    self.__update_buy_price(code, amount, price, -1)
+                    self.__update_buy_price(date,code, amount, price, -1)
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
@@ -662,7 +893,8 @@ class BackTest():
         result = result + '\n期末资产:{:.2f}(现金+持股现价值)'.format(
             self.total_assets_cur)
         result = result + '\n资产变化率:{:.2%}'.format(
-            (self.total_assets_cur / self._init_assets) if self._init_assets!=0 else 0)
+            (self.total_assets_cur /
+             self._init_assets) if self._init_assets != 0 else 0)
         result = result + '\n交易次数:{} (买入/卖出各算1次)'.format(len(self.history))
         result = result + '\n可用资金:{:.2f}'.format(self.available_cash)
         if kwargs.pop('show_hold', True):
@@ -1047,7 +1279,7 @@ class Utils():
         data = Utils._get_profit_loss_df(v).copy()
         data['c'] = 'g'
         data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
-        data['sell_date']=pd.to_datetime(data['sell_date'])
+        data['sell_date'] = pd.to_datetime(data['sell_date'])
         ax.bar(x=data.sell_date.dt.strftime('%Y-%m-%d'),
                height=data.pnl_ratio,
                color=data['c'].values,
@@ -1075,7 +1307,7 @@ class Utils():
         data = Utils._get_profit_loss_df(v)
         data['c'] = 'g'
         data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
-        data['sell_date']=pd.to_datetime(data['sell_date'])
+        data['sell_date'] = pd.to_datetime(data['sell_date'])
         ax.scatter(x=data.sell_date.dt.strftime('%Y-%m-%d'),
                    y=data.pnl_ratio,
                    color=data['c'].values,
@@ -1103,7 +1335,7 @@ class Utils():
         data = Utils._get_profit_loss_df(v).copy()
         data['c'] = 'g'
         data.loc[data['pnl_ratio'] > 0, 'c'] = 'r'
-        data['sell_date']=pd.to_datetime(data['sell_date'])
+        data['sell_date'] = pd.to_datetime(data['sell_date'])
         ax.bar(x=data.sell_date.dt.strftime('%Y-%m-%d'),
                height=data.pnl_money,
                color=data['c'].values,
@@ -1129,6 +1361,8 @@ class Utils():
         if ax is None:
             ax = plt.subplot(**kwargs)
         data = Utils._get_profit_loss_df(v)
-        data['sell_date']=pd.to_datetime(data['sell_date'])
-        ax.scatter(x=data.sell_date.dt.strftime('%Y-%m-%d'), y=data.pnl_money, **kwargs)
+        data['sell_date'] = pd.to_datetime(data['sell_date'])
+        ax.scatter(x=data.sell_date.dt.strftime('%Y-%m-%d'),
+                   y=data.pnl_money,
+                   **kwargs)
         return ax

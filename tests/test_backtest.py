@@ -7,6 +7,7 @@ from finance_tools_py.backtest import BackTest
 from finance_tools_py.backtest import MinAmountChecker
 from finance_tools_py.backtest import AllInChecker
 from finance_tools_py.backtest import Utils
+from finance_tools_py.backtest import TurtleStrategy
 import os
 
 
@@ -684,3 +685,271 @@ def test_example_plt_pnl():
                        subplot_kws={'title': 'test'},
                        line_kws={'c': 'b'})
     # plt.show()
+
+
+def test_TurtleStrategy():
+    ts = TurtleStrategy(colname='atr5')
+    assert ts.stoploss_point == 2
+    assert ts.stopprofit_point == 10
+    assert ts.next_point == 1
+    row = pd.Series({'atr5': 0.05})
+    ls, lf, n = ts.calc_price(1, row=row)
+    assert ls == (1 - ts.stoploss_point * 0.05)
+    assert lf == (1 + ts.stopprofit_point * 0.05)
+    assert n == (1 + ts.next_point * 0.05)
+
+    print(">>> from finance_tools_py.backtest import TurtleStrategy")
+    print(">>> ts = TurtleStrategy(colname='atr5')")
+    print(">>> ts.calc_price(1, row={'atr5': 0.05})")
+    print("(0.9, 1.5, 1.05)")
+
+    ts = TurtleStrategy(colname='',
+                        stoploss_point=0.5,
+                        stopprofit_point=20,
+                        next_point=2)
+    assert ts.stoploss_point == 0.5
+    assert ts.stopprofit_point == 20
+    assert ts.next_point == 2
+
+    ls, lf, n = ts.calc_price(1, row=row)
+    assert ls == -1
+    assert lf == -1
+    assert n == -1
+
+    # 只有一笔持仓时的判断-开始
+    ts = TurtleStrategy(colname='atr5', single_max=100, verbose=2,
+                        buy_dict={'0':[datetime.date(2000,1,1),datetime.date(2000,1,2)]})
+    ts.on_calc_buy_amount(datetime.date(2000,1,1),'0',1,1000,row=row,verbose=2)
+    print(ts.holds['0'][0])
+    # 超过最大持仓线时不再购买
+    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.01,500,row=row,verbose=2)
+    print(ts.holds['0'][0])
+    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.1,500,row=row,verbose=2)
+
+    # 没有达到止损线，不卖
+    assert not ts.on_check_sell(datetime.date(2000,1,3),'0',0.95,0,0,0,row=row,verbose=2)
+    # 低于止损线，卖出
+    assert ts.on_check_sell(datetime.date(2000,1,3),'0',0.89,0,0,0,row=row,verbose=2)
+    # 低于止盈，不卖
+    assert not ts.on_check_sell(datetime.date(2000,1,3),'0',1.49,0,0,0,row=row,verbose=2)
+    # 超过止盈，卖出
+    assert ts.on_check_sell(datetime.date(2000,1,3),'0',1.51,0,0,0,row=row,verbose=2)
+
+    # 止损数量
+    assert 100==ts.on_calc_sell_amount(datetime.date(2000,1,3),'0',0,0,0,0,row=row,verbose=2)
+    # 只有一笔持仓时的判断-结束
+
+
+    # 多笔持仓时的判断-开始
+    ts = TurtleStrategy(colname='atr5', single_max=100, verbose=2,
+                        buy_dict={'0':[datetime.date(2000,1,1),datetime.date(2000,1,2),datetime.date(2000,1,3)]})
+
+    ts.on_calc_buy_amount(datetime.date(2000,1,1),'0',1,1000,row=row,verbose=2)
+    ts.on_calc_buy_amount(datetime.date(2000,1,2),'0',2,1000,row=row,verbose=2)
+    print(ts.holds['0'][0])
+    print(ts.holds['0'][1])
+    # 超过最大持仓线时不再购买
+    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.01,500,row=row,verbose=2)
+    print(ts.holds['0'][0])
+    assert not ts.on_check_buy(datetime.date(2000,1,2),'0',1.1,500,row=row,verbose=2)
+
+    # 止损数量
+    assert 100==ts.on_calc_sell_amount(datetime.date(2000,1,3),'0',1.8,0,0,0,row=row,verbose=2)
+    print(ts.holds['0'][0])
+    assert 100==ts.holds['0'][0].amount
+    # 多笔持仓时的判断-结束
+
+def test_temp():
+
+    import logging
+    logging.debug = print
+    logging.info = print
+
+    ret_datas = pd.read_csv(os.path.join(r'C:\Users\GuQiang\Documents\GitHub\StockTest\datas', 'qfq_2005_2_2020_rets.csv'),
+                            index_col=None,
+                            dtype={'code': str},
+                            parse_dates=['date'])
+    ret_datas.sort_values('date', inplace=True)
+    ret_datas.set_index(['code', 'date'], inplace=True)
+
+    symbol = '600036'
+
+    df_symbol = ret_datas[ret_datas.index.get_level_values(0) == symbol]
+
+    from finance_tools_py.simulation import Simulation
+    from finance_tools_py.simulation.callbacks.talib import SMA
+    from finance_tools_py.simulation.callbacks import CallBack
+    from finance_tools_py.simulation.callbacks.talib import BBANDS
+    from finance_tools_py.simulation.callbacks.talib import ATR
+    import talib
+
+    class CALC_LINEARREG_SLOPE(CallBack):
+        """计算线性角度"""
+
+        def __init__(self, colname, timeperiod, **kwargs):
+            super().__init__(**kwargs)
+            self.colname = colname
+            self.timeperiod = timeperiod
+
+        def on_preparing_data(self, data, **kwargs):
+            col_name = '{}_lineSlope_{}'.format(self.colname, self.timeperiod)
+            data[col_name] = talib.LINEARREG_SLOPE(data[self.colname], self.timeperiod)
+
+    class CALC_OPT(CallBack):
+        def on_preparing_data(self, data, **kwargs):
+            data.dropna(inplace=True)
+            data['opt'] = np.NaN
+            data.loc[data['close'] > data['bbands_20_2_2_up'], 'opt'] = 1
+            data.loc[data['close'] < data['bbands_20_2_2_low'], 'opt'] = 0
+
+    #         data['opt'].fillna(method='ffill',inplace=True)
+    #         data['opt'].fillna(method='bfill',inplace=True)
+
+    cbs = [
+        ATR(20),
+        BBANDS(20, 2, 2),
+        CALC_LINEARREG_SLOPE('bbands_20_2_2_mean', 20),
+        CALC_OPT(),
+    ]
+
+    import statistics
+
+    def test_all_years_single_symbol(symbol,
+                                     init_cash=10000,
+                                     start_year=2005,
+                                     end_year=2007,
+                                     verbose=2,
+                                     show_report=True,
+                                     show_plot=True,
+                                     cbs=cbs,
+                                     show_history=False,
+                                     min_amount=100,
+                                     single_max=400,
+                                     **kwargs):
+        """
+
+        Args:
+            init_cash:
+            start_year (int): 开始计算年份。
+            end_year (int): 结束计算年份。
+
+
+        Returns:
+            report (dict): BackTest字典。key值为年份。
+            datas (dict): 回测用的数据源字典。key值为年份。
+            buys (dict): 买点字典。key值为年份。
+            sells (dict): 卖点字典。key值为年份。
+        """
+        hold = pd.DataFrame()
+        report = {}
+        datas = {}
+        buys = {}
+        sells = {}
+        h = {}
+
+        from tqdm import tqdm
+
+        for year in tqdm(range(start_year, end_year)):
+            df_symbol_year = ret_datas[
+                (ret_datas.index.get_level_values(0) == symbol)
+                & (ret_datas.index.get_level_values(1) <= '{}-12-31'.format(year))]
+            s = Simulation(df_symbol_year.reset_index(), symbol, callbacks=cbs)
+            s.simulate()
+            df_symbol_years = s.data
+            df_symbol_years.sort_values('date', inplace=True)
+            # 遍历股票，对每支股票进行数据处理-结束
+
+            buy_dict = df_symbol_years[df_symbol_years['opt'] == 1].reset_index(
+            ).groupby('code')['date'].apply(
+                lambda x: x.dt.to_pydatetime()).to_dict()
+
+            sell_dict = df_symbol_years[df_symbol_years['opt'] == 0].reset_index(
+            ).groupby('code')['date'].apply(
+                lambda x: x.dt.to_pydatetime()).to_dict()
+
+            buys[year] = buy_dict
+            sells[year] = sell_dict
+
+            df_symbol_years = df_symbol_years[
+                df_symbol_years['date'] >= '{}-01-01'.format(year)]
+
+            datas[year] = df_symbol_years
+
+            if verbose == 2:
+                print('起止日期:{:%Y-%m-%d}~{:%Y-%m-%d}'.format(
+                    min(df_symbol_years['date']), max(df_symbol_years['date'])))
+            #     print('数据量:{}'.format(len(df_symbol_years)))
+
+            ts = TurtleStrategy(
+                colname='atr_20',
+                buy_dict=buy_dict,
+                sell_dict=sell_dict,
+                holds=h,
+                single_max=single_max,
+                min_amount=min_amount,
+            )
+            bt = BackTest(df_symbol_years,
+                          init_cash=init_cash,
+                          init_hold=hold,
+                          live_start_date=datetime.datetime(year, 1, 1),
+                          callbacks=[ts])
+            bt.calc_trade_history(verbose=2)
+            report[year] = bt
+
+            h = ts.holds
+            if h:
+                hs = []
+                for k, v in h.items():
+                    for v1 in v:
+                        hs.append(pd.DataFrame({
+                            'code': [k],
+                            'amount': [v1.amount],
+                            'price': [v1.price],
+                            'buy_date': [v1.date],
+                            'stoploss_price': [v1.stoploss_price],
+                            'stopprofit_price': [v1.stopprofit_price],
+                            'next_price': [v1.next_price],
+                        }))
+                hold = pd.concat(hs)
+
+            init_cash = bt.available_cash
+            if show_report:
+                print(bt.report(show_history=show_history))
+            if show_report or show_plot:
+                rp = bt.profit_loss_df()
+            if show_report:
+                print(rp)
+        return report, datas, buys, sells
+
+    init_cash = 10000
+    report, datas, buys, sells = test_all_years_single_symbol('600036',
+                                                              init_cash=init_cash,
+                                                              start_year=2005,
+                                                              end_year=2020,
+                                                              verbose=0,
+                                                              show_report=False,
+                                                              show_history=False,
+                                                              show_plot=False)
+    # clear_output(True)
+    print('计算起止日期:{:%Y-%m-%d}~{:%Y-%m-%d}'.format(
+        list(datas.values())[0].sort_values('date').iloc[0]['date'],
+        list(datas.values())[-1].sort_values('date').iloc[0]['date']))
+    print('测试年份:{}-{}'.format(len(list(datas.keys())), list(datas.keys())))
+    print('总体期初资产:{:.2f},总体期末资产:{:.2f};变化率:{:.2%}'.format(
+        init_cash,
+        list(report.values())[-1].total_assets_cur,
+        list(report.values())[-1].total_assets_cur / init_cash))
+    pds = pd.DataFrame({
+        'assert': [x.total_assets_cur for x in list(report.values())],
+        'year':
+            list(report.keys())
+    })
+    pds = pds.append(
+        pd.DataFrame({
+            'assert': [init_cash],
+            'year': [list(report.keys())[0] - 1]
+        })).sort_values('year')
+    pds['rets'] = pds['assert'].pct_change()
+    pds['rets1'] = pds['assert'] / pds['assert'].iloc[0] - 1
+    pds.fillna(0, inplace=True)
+    pd.concat([v.profit_loss_df() for v in report.values()])
