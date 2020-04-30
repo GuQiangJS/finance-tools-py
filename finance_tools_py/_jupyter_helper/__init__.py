@@ -14,6 +14,8 @@ import traceback
 from tqdm.auto import tqdm
 import empyrical
 import warnings
+import copy
+from finance_tools_py.calc import fluidity
 
 plt.rcParams['font.family'] = 'SimHei'
 
@@ -435,7 +437,7 @@ def plot_basic_seaborn(symbol, data=None, ys=[], **kwargs):
 
     """
     figsize = kwargs.pop('figsize', (15, len(ys) * 3))
-    x=kwargs.pop('x','date')
+    x = kwargs.pop('x', 'date')
     # if data is None:
     #     data = read_data_QFQ(symbol)
     #     s = Simulation(data, symbol, callbacks=sim_callbacks)
@@ -800,6 +802,7 @@ def test_all_years_single_symbol(symbol,
     buys = {}
     sells = {}
     h = {}
+    tb_kwgs_copy = copy.deepcopy(tb_kwgs)
 
     for year in tqdm(range(start_year, end_year)):
         df_symbol_year = fulldata[
@@ -835,7 +838,164 @@ def test_all_years_single_symbol(symbol,
         ts = TurtleStrategy(buy_dict=buy_dict,
                             sell_dict=sell_dict,
                             holds=h,
-                            **tb_kwgs)
+                            **tb_kwgs_copy)
+        bt = BackTest(df_symbol_years,
+                      init_cash=init_cash,
+                      init_hold=hold,
+                      live_start_date=datetime.datetime(year, 1, 1),
+                      callbacks=[ts])
+        bt.calc_trade_history(verbose=2)
+        report[year] = bt
+
+        h = ts.holds
+        if h:
+            hs = []
+            for k, v in h.items():
+                for v1 in v:
+                    hs.append(
+                        pd.DataFrame({
+                            'code': [k],
+                            'amount': [v1.amount],
+                            'price': [v1.price],
+                            'buy_date': [v1.date],
+                            'stoploss_price': [v1.stoploss_price],
+                            'stopprofit_price': [v1.stopprofit_price],
+                            'next_price': [v1.next_price],
+                        }))
+            hold = pd.concat(hs) if hs else pd.DataFrame()
+
+        init_cash = bt.available_cash
+        if show_report:
+            print(bt.report(show_history=show_history))
+        if show_report or show_plot:
+            rp = bt.profit_loss_df()
+        if show_report:
+            print(rp)
+        if show_plot:
+            fig, axes = plt.subplots(1, 2, figsize=(10, 3))
+            Utils.plt_win_rate(rp, ax=axes[0])
+            Utils.plt_pnl_ratio(rp, ax=axes[1])
+            plt.gcf().autofmt_xdate()
+            plt.show()
+    return report, datas, buys, sells
+
+
+def test_all_years(fulldata,
+                   cbs,
+                   init_cash=10000,
+                   start_year=2005,
+                   end_year=2020,
+                   lookback=1,
+                   verbose=2,
+                   show_report=True,
+                   show_plot=True,
+                   tb_kwgs={},
+                   top=10,
+                   show_history=False,
+                   **kwargs):
+    """逐年度对流动性最大的n支股票进行回测。
+
+    采用 :py:class:`finance_tools_py.backtest.TurtleStrategy` 进行回测
+
+    Args:
+        fulldata (:py:class:`pandas.DataFrame`): 完整的原始数据。
+            index[0]为股票代码,index[1]为日期。
+        init_cash:
+        top (int): 选取流动性最大的n值股票。默认为10。
+            流动性计算参考 :py:func:`finance_tools_py.calc.fluidity`
+        start_year (int): 开始计算年份。
+        end_year (int): 结束计算年份。
+        lookback (int): 回看几年的数据，用来计算流动性。当lookback==1时，实际会回看
+        cbs ([:py:class:`finance_tools_py.simulation.callbacks.CallBack`]): 对数据进行模拟填充时的回调。参考 :py:class:`finance_tools_py.simulation.Simulation` 中的`callbacks`参数。
+        tb_kwgs (dict): :py:class:`finance_tools_py.backtest.TurtleStrategy` 的参数集合。
+
+    Returns:
+        - dict: BackTest字典。key值为年份。
+
+        - dict: 回测用的数据源字典。key值为年份。
+
+        - dict: 买点字典。key值为年份。
+
+        - dict: 卖点字典。key值为年份。
+    """
+    hold = pd.DataFrame()
+    report = {}
+    datas = {}
+    buys = {}
+    sells = {}
+    h = {}
+    tb_kwgs_copy = copy.deepcopy(tb_kwgs)
+
+    lookbacks = []
+    years = []
+    lookback = lookback - 1
+    for i in range(start_year, end_year):
+        if i + lookback + 1 <= end_year:
+            lookbacks.append([i, i + lookback])
+            years.append(i + lookback + 1)
+
+    if verbose == 2:
+        for lookback, year in zip(lookbacks, years):
+            print(lookback, year)
+
+    for look, year in tqdm(zip(lookbacks, years)):
+        # 取 year 年的n支流动性最大的股票-开始
+        year_df = fulldata[
+            (fulldata.index.get_level_values(1) <= '{}-12-31'.format(look[-1]))
+            &
+            (fulldata.index.get_level_values(1) >= '{}-01-01'.format(look[0]))]
+
+        year_df = fluidity(year_df)
+        top_year = year_df[:top] if top > 0 else year_df
+        # 取 year 年的10支流动性最大的股票-结束
+        #     print('{}年的10支流动性最大的股票'.format(year))
+        # 遍历股票，对每支股票进行数据处理-开始
+        df_symbol_years = []
+        for symbol in top_year.index.values:
+            df_symbol_year = fulldata[
+                (fulldata.index.get_level_values(0) == symbol)
+                &
+                (fulldata.index.get_level_values(1) <= '{}-12-31'.format(year))
+                & (fulldata.index.get_level_values(1) >= '{}-01-01'.format(
+                    look[0]))]
+            s = Simulation(df_symbol_year.reset_index(), symbol, callbacks=cbs)
+            s.simulate()
+            df_symbol_years.append(s.data)
+        df_symbol_years = pd.concat(df_symbol_years)
+        df_symbol_years.sort_values('date', inplace=True)
+        # 遍历股票，对每支股票进行数据处理-结束
+
+        buy_dict = df_symbol_years[df_symbol_years['opt'] == 1].reset_index(
+        ).groupby('code')['date'].apply(
+            lambda x: x.dt.to_pydatetime()).to_dict()
+
+        sell_dict = df_symbol_years[df_symbol_years['opt'] == 0].reset_index(
+        ).groupby('code')['date'].apply(
+            lambda x: x.dt.to_pydatetime()).to_dict()
+
+        if not hold.empty:
+            for onlysell in set(hold['code'].to_list()).difference(
+                    set(top_year.index.values)):
+                if onlysell in buy_dict:
+                    del buy_dict[onlysell]
+
+        buys[year] = buy_dict
+        sells[year] = sell_dict
+
+        df_symbol_years = df_symbol_years[
+            df_symbol_years['date'] >= '{}-01-01'.format(year)]
+
+        datas[year] = df_symbol_years
+
+        if verbose == 2:
+            print('起止日期:{:%Y-%m-%d}~{:%Y-%m-%d}'.format(
+                min(df_symbol_years['date']), max(df_symbol_years['date'])))
+        #     print('数据量:{}'.format(len(df_symbol_years)))
+
+        ts = TurtleStrategy(buy_dict=buy_dict,
+                            sell_dict=sell_dict,
+                            holds=h,
+                            **tb_kwgs_copy)
         bt = BackTest(df_symbol_years,
                       init_cash=init_cash,
                       init_hold=hold,

@@ -206,9 +206,7 @@ class AllInChecker(MinAmountChecker):
 
 
 class TurtleStrategy(MinAmountChecker):
-    """海龟交易法则适用的交易策略的基类
-
-    可以计算止盈/止损/加仓的价位，并且按照这些价位进行仓位控制。
+    """海龟交易法则适用的交易策略。可以计算止盈/止损/加仓的价位，并且按照这些价位进行仓位控制。
     """
     class Hold():
         """持仓记录
@@ -253,12 +251,12 @@ class TurtleStrategy(MinAmountChecker):
                  sell_dict={},
                  single_max=400,
                  **kwargs):
-        """
+        """构造函数
 
         Args:
             buy_dict:
             sell_dict:
-            colname (str): 计算止盈/止损等价格的列名。会由:py:func:`calc_price`方法调用。调用时会取`**kwargs`参数中的`row`参数。尝试找到这个数值。
+            colname (str): 计算止盈/止损/加仓等价格的列名。调用时会尝试从参数`row`中找到这个数值。
             stoploss_point (float): 止损点。根据`colname`指定的数据进行计算。默认为2。设置为None时，表示不计算。
                 计算止损价格`stoploss_price=price-stoploss_point*row[colname]`。
             stopprofit_point (float): 止盈点。根据`colname`指定的数据进行计算。默认为10。设置为None时，表示不计算。
