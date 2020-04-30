@@ -89,6 +89,23 @@ def test_example_backtest_date(init_global_data):
     assert not bt.history_df.empty
     print(bt.report())
 
+def test_backtest_calc_sameday(init_global_data):
+    bt = BackTest(pytest.global_data,
+                  callbacks=[
+                      MinAmountChecker(colname=None,
+                          buy_dict={
+                              pytest.global_code:
+                              [dt(1999, 1, 1), dt(2001, 1, 1)]
+                          },
+                          sell_dict={
+                              pytest.global_code:
+                              [dt(2001, 1, 1), dt(2002, 1, 1)]
+                          },
+                      )
+                  ])
+    bt.calc_trade_history(verbose=2)
+    assert bt.available_hold_df.empty
+    assert 2==len(bt.history_df)
 
 def test_backtest_calc(init_global_data):
     bt = BackTest(pytest.global_data,

@@ -8,7 +8,7 @@ def position_unit(price, v, funds):
 
     Examples:
         当前价格为6.39；ATR指标为0.08；最大可亏损资金1000（总金额10万，最大允许亏损1%）。
-        
+
         >>> from finance_tools_py.calc import position_unit
         >>> position_unit(6.39,0.08,1000)
         1956

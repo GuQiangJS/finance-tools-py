@@ -6,6 +6,7 @@ from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
 import logging
 
+
 class CallBack():
     """回测时的回调。"""
     def __init__(self):
@@ -84,6 +85,16 @@ class CallBack():
             float: 返回卖出数量。返回 `0`。
         """
         return 0
+
+    def on_buy_sell_on_same_day(self, date, code, price, **kwargs):
+        """同一天出现买入和卖出信号时的操作
+
+        可能由于止盈/止损或其他自定义事件，造成了买卖同天
+        """
+        if kwargs.get('verbose', 0) == 2:
+            print('{:%Y-%m-%d}-{}-同天买卖.买入价格:{:.2f},卖出价格:{:.2f}.'.format(
+                date, code, kwargs.pop('buy_price', -1),
+                kwargs.pop('sell_price', -1)))
 
 
 class MinAmountChecker(CallBack):
@@ -262,10 +273,10 @@ class TurtleStrategy(MinAmountChecker):
             stopprofit_point (float): 止盈点。根据`colname`指定的数据进行计算。默认为10。设置为None时，表示不计算。
                 计算止损价格`stopprofit_price=price+stoploss_point*row[colname]`。
             next_point (float): 下一个可买点。根据`colname`指定的数据进行计算。默认为1。设置为None时，表示不计算。
-                计算止损价格`next_price=price+next_point*row[colname]`。
+                计算下一个可买点`next_price=price+next_point*row[colname]`。
             single_max (int): 最大持仓数量。默认为400。
             holds (dict): 初始持仓。{symbol:[:py:class:`TurtleStrategy.Hold`]}
-            **kwargs:
+            update_price_onsameday (float): 当买卖在同天发生时，是否允许更新最后一笔持仓的止盈价及下一个可买价。
         """
         super().__init__(buy_dict, sell_dict, **kwargs)
         self.colname = colname
@@ -274,6 +285,8 @@ class TurtleStrategy(MinAmountChecker):
         self.next_point = kwargs.pop('next_point', 1)
         self.single_max = single_max
         self.holds = kwargs.pop('holds', {})
+        self.update_price_onsameday = kwargs.pop(
+            'update_price_onsameday', True)
 
     def _add_hold(self, symbol, date, price, amount, stoploss_price,
                   stopprofit_price, next_price):
@@ -287,7 +300,7 @@ class TurtleStrategy(MinAmountChecker):
     def on_check_buy(self, date, code, price, cash, **kwargs):
         result = super().on_check_buy(date, code, price, cash, **kwargs)
         verbose = kwargs.get('verbose', 0)
-        if result and code in self.holds and len(self.holds[code])>0:
+        if result and code in self.holds and len(self.holds[code]) > 0:
             hold = self.holds[code][-1]
             if hold and hold.next_price > 0 and price < hold.next_price:
                 if verbose == 2:
@@ -312,7 +325,8 @@ class TurtleStrategy(MinAmountChecker):
         Examples:
             >>> from finance_tools_py.backtest import TurtleStrategy
             >>> ts = TurtleStrategy(colname='atr5')
-            >>> ts.calc_price(1, row={'atr5': 0.05})
+            >>> row = pd.Series({'atr5': 0.05})
+            >>> ts.calc_price(1, row=row)
             (0.9, 1.5, 1.05)
 
         Returns:
@@ -332,6 +346,29 @@ class TurtleStrategy(MinAmountChecker):
                 if self.next_point:
                     next_price = price + self.next_point * v
         return stoploss_price, stopprofit_price, next_price
+
+    def _update_last_price(self, code, price, **kwargs):
+        stoploss_price, stopprofit_price, next_price = self.calc_price(
+            price, **kwargs)
+        if stopprofit_price != -1:
+            if kwargs.get('verbose', 0) == 2:
+                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(
+                    self.holds[code][-1].stopprofit_price, stopprofit_price))
+            self.holds[code][-1].stopprofit_price = stopprofit_price
+        if next_price != -1:
+            self.holds[code][-1].next_price = next_price
+            if kwargs.get('verbose', 0) == 2:
+                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(
+                    self.holds[code][-1].next_price, next_price))
+
+    def on_buy_sell_on_same_day(self, date, code, price, **kwargs):
+        """同一天出现买入和卖出信号时的操作
+
+        可能由于止盈/止损或其他自定义事件，造成了买卖同天
+        """
+        super().on_buy_sell_on_same_day(date, code, price, **kwargs)
+        if self.update_price_onsameday:
+            self._update_last_price(code, price, **kwargs)
 
     def on_calc_buy_amount(self, date, code, price, cash, **kwargs):
         """计算买入数量
@@ -365,9 +402,8 @@ class TurtleStrategy(MinAmountChecker):
                     self.holds[code].remove(h)
             if result > 0:
                 if kwargs.get('verbose', 0) == 2:
-                    print(
-                        '{:%Y-%m-%d}-{}-止损.止损数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
-                        format(date, code, result, price, hold_price))
+                    print('{:%Y-%m-%d}-{}-止损.止损数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                          format(date, code, result, price, hold_price))
                 return result
             for h in reversed(self.holds[code]):
                 if h.stopprofit_price <= price:
@@ -375,24 +411,28 @@ class TurtleStrategy(MinAmountChecker):
                     self.holds[code].remove(h)
             if result > 0:
                 if kwargs.get('verbose', 0) == 2:
-                    print(
-                        '{:%Y-%m-%d}-{}-止盈.止盈数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
-                        format(date, code, result, price, hold_price))
+                    print('{:%Y-%m-%d}-{}-止盈.止盈数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                          format(date, code, result, price, hold_price))
                 return result
-        result=super().on_calc_sell_amount(date, code, price, cash,
-                                           hold_amount, hold_price, **kwargs)
-        result_temp=result
-        while result_temp>0:
+        result = super().on_calc_sell_amount(date, code, price, cash,
+                                             hold_amount, hold_price, **kwargs)
+        result_temp = result
+        while result_temp > 0:
             if result_temp >= self.holds[code][0].amount:
-                print('{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
-                        format(date, code, self.holds[code][0].amount, price, self.holds[code][0].price))
+                print(
+                    '{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.format(
+                        date, code, self.holds[code][0].amount, price,
+                        self.holds[code][0].price))
                 a = self.holds[code][0]
                 result_temp = result_temp - a.amount
                 self.holds[code].remove(a)
             else:
-                print('{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
-                        format(date, code, self.holds[code][0].amount, price, self.holds[code][0].price))
-                self.holds[code][0].amount = self.holds[code][0].amount - result_temp
+                print(
+                    '{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.format(
+                        date, code, self.holds[code][0].amount, price,
+                        self.holds[code][0].price))
+                self.holds[code][
+                    0].amount = self.holds[code][0].amount - result_temp
                 result_temp = 0
         return result
 
@@ -406,14 +446,16 @@ class TurtleStrategy(MinAmountChecker):
                 if h.stoploss_price != -1 and h.stoploss_price >= price
             ])
             if result and kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-触及止损线.当前可卖数量:{}.'.format(date, code,result))
+                print('{:%Y-%m-%d}-{}-触及止损线.当前可卖数量:{}.'.format(
+                    date, code, result))
                 return True
             result = sum([
                 h.amount for h in self.holds[code]
                 if h.stopprofit_price != -1 and h.stopprofit_price <= price
             ])
             if result and kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-触及止盈线.当前可卖数量:{}.'.format(date, code, result))
+                print('{:%Y-%m-%d}-{}-触及止盈线.当前可卖数量:{}.'.format(
+                    date, code, result))
                 return True
         return result
 
@@ -501,8 +543,8 @@ class BackTest():
         self._buy_price_cur = {}  #购买成本。
         if not self._init_hold.empty:
             for index, row in self._init_hold.iterrows():
-                self.__update_buy_price(row['buy_date'],row['code'], row['amount'],
-                                        row['price'], 1)
+                self.__update_buy_price(row['buy_date'], row['code'],
+                                        row['amount'], row['price'], 1)
         self._history_headers = [
             'datetime',  # 时间
             'code',  # 代码
@@ -686,6 +728,14 @@ class BackTest():
                 return True
         return False
 
+    def _on_buy_sell_on_same_day(self, date, code, price, **kwargs):
+        """同一天出现买入和卖出信号时的操作
+
+        可能由于止盈/止损或其他自定义事件，造成了买卖同天
+        """
+        for cb in self._calbacks:
+            cb.on_buy_sell_on_same_day(date, code, price, **kwargs)
+
     def __get_buy_avg_price(self, code):
         """当前买入平均成本
 
@@ -703,7 +753,7 @@ class BackTest():
     # def __get_hold_price(self,code):
     #     pass
 
-    def __update_buy_price(self, date,code, amount, price, toward):
+    def __update_buy_price(self, date, code, amount, price, toward):
         """更新买入成本"""
         if toward == 1:
             #买入
@@ -713,7 +763,9 @@ class BackTest():
                 self._buy_price_cur[code] = [hold_amount, hold_price]
             else:
                 hold_amount, hold_price = self._buy_price_cur[code]
-            logging.debug('__update_buy_price-{:%Y-%m-%d}:toward:{},code:{},amount:{},price:{:.2f}'.format(date,toward,code,amount,price))
+            logging.debug(
+                '__update_buy_price-{:%Y-%m-%d}:toward:{},code:{},amount:{},price:{:.2f}'
+                .format(date, toward, code, amount, price))
             self._buy_price_cur[code] = [
                 hold_amount + [amount], hold_price + [price]
             ]
@@ -728,13 +780,18 @@ class BackTest():
 
             while amount > 0:
                 if amount >= hold_amount[0]:
-                    logging.debug('__update_buy_price-{:%Y-%m-%d}:toward:{},code:{},amount:{},price:{:.2f},hold_amount:{}'.format(date,toward,code,amount,price,hold_amount))
+                    logging.debug(
+                        '__update_buy_price-{:%Y-%m-%d}:toward:{},code:{},amount:{},price:{:.2f},hold_amount:{}'
+                        .format(date, toward, code, amount, price,
+                                hold_amount))
                     a = hold_amount[0]
                     hold_amount.remove(a)
                     hold_price.remove(hold_price[0])
                     amount = amount - a
                 else:
-                    logging.debug('__update_buy_price:toward:{},code:{},amount:{},price:{:.2f}'.format(toward,code,amount,price))
+                    logging.debug(
+                        '__update_buy_price:toward:{},code:{},amount:{},price:{:.2f}'
+                        .format(toward, code, amount, price))
                     hold_amount[0] = hold_amount[0] - amount
                     amount = 0
 
@@ -766,11 +823,14 @@ class BackTest():
                     return amount
         return 0
 
-    def calc_trade_history(self, verbose=0):
+    def calc_trade_history(self, verbose=0, **kwargs):
         """计算交易记录
 
         Args:
             verbose (int): 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。
+            bssd_buy (bool): 买卖发生在同一天，是否允许买入。默认False。
+            bssd_sell (bool): 买卖发生在同一天，是否允许买入。默认False。
+
         """
         def update_history(history, date, code, price, amount, available_cash,
                            commission, tax, toward):
@@ -786,6 +846,9 @@ class BackTest():
                 toward,  # 方向
             ])
 
+        _bssd_buy = kwargs.pop('bssd_buy', False)  #买卖发生在同一天，是否允许买入。默认False
+        _bssd_sell = kwargs.pop('bssd_sell', False)  #买卖发生在同一天，是否允许卖出。默认False
+
         for index, row in tqdm(self.data.iterrows(),
                                total=len(self.data),
                                desc='回测计算中...'):
@@ -797,9 +860,34 @@ class BackTest():
                 continue
             code = row['code']
             price = row['close']  # 价格
-            if self._check_callback_buy(date, code, price, row=row,verbose=verbose):
-                amount = self._calc_buy_amount(date, code, price,
-                                               row=row,verbose=verbose)  # 买入数量
+            _buy = self._check_callback_buy(date,
+                                            code,
+                                            price,
+                                            row=row,
+                                            verbose=verbose)
+            _sell = self._check_callback_sell(date,
+                                              code,
+                                              price,
+                                              row=row,
+                                              verbose=verbose)
+            if _buy and _sell:
+                self._on_buy_sell_on_same_day(date,
+                                              code,
+                                              price,
+                                              row=row,
+                                              verbose=verbose)
+                _buy = _bssd_buy
+                _sell = _bssd_sell
+                if verbose == 2:
+                    print('{:%Y-%m-%d}-{}-同天买卖.允许买入:{},允许卖出:{}.'.format(
+                        date, code, _bssd_buy, _bssd_sell))
+
+            if _buy:
+                amount = self._calc_buy_amount(date,
+                                               code,
+                                               price,
+                                               row=row,
+                                               verbose=verbose)  # 买入数量
                 commission = self._calc_commission(price, amount)
                 tax = self._calc_tax(price, amount)
                 value = price * amount + commission + tax
@@ -816,7 +904,7 @@ class BackTest():
                         tax,
                         1,
                     )
-                    self.__update_buy_price(date,code, amount, price, 1)
+                    self.__update_buy_price(date, code, amount, price, 1)
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
@@ -825,8 +913,12 @@ class BackTest():
                     if verbose > 1:
                         print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(
                             date, code, price))
-            if self._check_callback_sell(date, code, price, row=row,verbose=verbose):
-                amount = self._calc_sell_amount(date, code, price, row=row,verbose=verbose)
+            if _sell:
+                amount = self._calc_sell_amount(date,
+                                                code,
+                                                price,
+                                                row=row,
+                                                verbose=verbose)
                 if amount > 0:
                     commission = self._calc_commission(price, amount)
                     tax = self._calc_tax(price, amount)
@@ -843,7 +935,7 @@ class BackTest():
                         tax,
                         -1,
                     )
-                    self.__update_buy_price(date,code, amount, price, -1)
+                    self.__update_buy_price(date, code, amount, price, -1)
                     if verbose > 0:
                         print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
