@@ -621,7 +621,7 @@ class BackTest():
         if self._hold_price_cur.empty:
             return pd.DataFrame(
                 columns=['buy_price', 'amount', 'price_cur']).sort_index()
-        d = self.data.sort_values('date',False)
+        d = self.data.sort_values('date')
         df = pd.DataFrame(self._hold_price_cur.values.tolist(),
                           columns=['buy_price', 'amount'],
                           index=self._hold_price_cur.index)

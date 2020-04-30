@@ -761,8 +761,7 @@ def plot_basic_seaborn(symbol, data=None, ys=[], **kwargs):
 #         plt.plot(b[x], b[col], 'gx', label='sell')
 #     return fig
 
-
-def test_all_years_single_symbol(symbol,
+def all_years_single_symbol(symbol,
                                  fulldata,
                                  cbs,
                                  init_cash=10000,
@@ -880,7 +879,7 @@ def test_all_years_single_symbol(symbol,
     return report, datas, buys, sells
 
 
-def test_all_years(fulldata,
+def all_years(fulldata,
                    cbs,
                    init_cash=10000,
                    start_year=2005,
