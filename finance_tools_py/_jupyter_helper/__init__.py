@@ -1007,7 +1007,7 @@ def all_years(fulldata,
 
         if not hold.empty:
             for onlysell in set(hold['code'].to_list()).difference(
-                    set(top_year.index.values)):
+                    set(top_year)):
                 if onlysell in buy_dict:
                     del buy_dict[onlysell]
 
