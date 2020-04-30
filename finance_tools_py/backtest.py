@@ -356,10 +356,10 @@ class TurtleStrategy(MinAmountChecker):
                     self.holds[code][-1].stopprofit_price, stopprofit_price))
             self.holds[code][-1].stopprofit_price = stopprofit_price
         if next_price != -1:
-            self.holds[code][-1].next_price = next_price
             if kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(date,code,
+                print('{:%Y-%m-%d}-{}-同天买卖.更新加仓价:{:.2f}->{:.2f}.'.format(date,code,
                     self.holds[code][-1].next_price, next_price))
+            self.holds[code][-1].next_price = next_price
 
     def on_buy_sell_on_same_day(self, date, code, price, **kwargs):
         """同一天出现买入和卖出信号时的操作
