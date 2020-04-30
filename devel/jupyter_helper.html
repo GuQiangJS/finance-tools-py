@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>jupyter notebook 中可能用到的常用方法封装 &mdash; finance-tools-py 0+untagged.57.g2352a4f 文档</title>
+  <title>jupyter notebook 中可能用到的常用方法封装 &mdash; finance-tools-py 0+untagged.57.gc5e37cb 文档</title>
   
 
   
@@ -90,17 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="backtest/utils.html">回测常用帮助类</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation/simulation.html">模拟工具</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation/callback.html">模拟工具使用的回调</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">jupyter notebook 中可能用到的常用方法封装</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#id1">回测相关</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id2">绘图相关</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id3">跨年度回测</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id4">按年度回测</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">单支股票回测</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id6">随机回测</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#plotly">使用plotly绘制回测后的数据</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#seaborn">使用seaborn绘制回测后的数据</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">jupyter notebook 中可能用到的常用方法封装</a><ul class="simple">
 </ul>
 </li>
 </ul>
@@ -171,208 +161,122 @@
 <h1>jupyter notebook 中可能用到的常用方法封装<a class="headerlink" href="#jupyter-notebook" title="永久链接至标题">¶</a></h1>
 <div class="toctree-wrapper compound">
 </div>
-<div class="section" id="id1">
-<h2>回测相关<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.BACKTEST_PACK_ALL" title="finance_tools_py._jupyter_helper.BACKTEST_PACK_ALL"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BACKTEST_PACK_ALL()</span></code></a> 跨年度回测</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.BACKTEST_PACK_YEAR" title="finance_tools_py._jupyter_helper.BACKTEST_PACK_YEAR"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BACKTEST_PACK_YEAR()</span></code></a> 按年度回测</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.BACKTEST_SINGLE" title="finance_tools_py._jupyter_helper.BACKTEST_SINGLE"><code class="xref py py-meth docutils literal notranslate"><span class="pre">BACKTEST_SINGLE()</span></code></a> 单支股票回测</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.RANDMON_TEST_BASIC" title="finance_tools_py._jupyter_helper.RANDMON_TEST_BASIC"><code class="xref py py-meth docutils literal notranslate"><span class="pre">RANDMON_TEST_BASIC()</span></code></a> 随机回测</p></li>
-<li><p><code class="xref py py-meth docutils literal notranslate"><span class="pre">SIMULATE_DATA()</span></code> 循环处理所有数据</p></li>
-</ul>
-</div>
-<div class="section" id="id2">
-<h2>绘图相关<a class="headerlink" href="#id2" title="永久链接至标题">¶</a></h2>
-<ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.plot_backtest_plotly" title="finance_tools_py._jupyter_helper.plot_backtest_plotly"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot_backtest_plotly()</span></code></a> 使用plotly绘制回测后的数据</p></li>
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.plot_backtest_seaborn" title="finance_tools_py._jupyter_helper.plot_backtest_seaborn"><code class="xref py py-meth docutils literal notranslate"><span class="pre">plot_backtest_seaborn()</span></code></a> 使用seaborn绘制回测后的数据</p></li>
-</ul>
-<div class="section" id="id3">
-<h3>跨年度回测<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h3>
-<dl class="py method">
-<dt id="finance_tools_py._jupyter_helper.BACKTEST_PACK_ALL">
-<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">BACKTEST_PACK_ALL</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">zs_data</span></em>, <em class="sig-param"><span class="n">sim_callbacks</span></em>, <em class="sig-param"><span class="n">start_year</span><span class="o">=</span><span class="default_value">2005</span></em>, <em class="sig-param"><span class="n">end_year</span><span class="o">=</span><span class="default_value">2019</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.BACKTEST_PACK_ALL" title="永久链接至目标">¶</a></dt>
-<dd><p>跨年度回测数据</p>
-<div class="admonition seealso">
-<p class="admonition-title">参见</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.BACKTEST_PACK_YEAR" title="finance_tools_py._jupyter_helper.BACKTEST_PACK_YEAR"><code class="xref py py-func docutils literal notranslate"><span class="pre">BACKTEST_PACK_YEAR()</span></code></a> 按照年度回测数据。</p></li>
-</ul>
-</div>
+<span class="target" id="module-finance_tools_py._jupyter_helper"></span><dl class="py function">
+<dt id="finance_tools_py._jupyter_helper.plot_basic_plotly">
+<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">plot_basic_plotly</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symbol</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ys</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.plot_basic_plotly" title="永久链接至目标">¶</a></dt>
+<dd><p>绘制收盘价与指标数据的图。可以绘制买入/卖出点。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – 待回测的数据。</p></li>
-<li><p><strong>zs_data</strong> – 指数相关数据。与 <cite>data</cite> 匹配。</p></li>
-<li><p><strong>sim_callbacks</strong> – 回测时使用的回调集合。</p></li>
-<li><p><strong>start_year</strong> – 开始年度</p></li>
-<li><p><strong>end_year</strong> – 结束年度</p></li>
-<li><p><strong>name</strong> – </p></li>
-<li><p><strong>clear_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 清除输出。默认True。</p></li>
+<li><p><strong>symbol</strong> – 股票代码。</p></li>
+<li><p><strong>data</strong> – 待绘制的数据。</p></li>
+<li><p><strong>ys</strong> – 绘制的数据。默认应该至少需要包含1个。</p></li>
+<li><p><strong>figsize</strong> – 默认宽度为15，高度为 <cite>len(ys)*3)</cite></p></li>
+<li><p><strong>x</strong> – x轴。默认为 <cite>date</cite>。</p></li>
+<li><p><strong>y</strong> – y轴。默认为 <cite>close</cite>。</p></li>
+<li><p><strong>buy</strong> – 购买时间集合。</p></li>
+<li><p><strong>sell</strong> – 卖出时间集合。</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">MFI</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qfq_datas</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span> <span class="c1">#所有股票日线数据</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">hs_300_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span> <span class="c1">#沪深300指数日线数据</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">CB</span><span class="p">(</span><span class="n">CallBack</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">v1</span> <span class="o">=</span> <span class="n">v1</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">v2</span> <span class="o">=</span> <span class="n">v2</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="nf">on_preparing_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;opt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mfi_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span> <span class="s1">&#39;opt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mfi_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2</span><span class="p">,</span> <span class="s1">&#39;opt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">BACKTEST_PACK_ALL</span><span class="p">(</span><span class="n">qfq_datas</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">hs_300_data</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="p">[</span><span class="n">MFI</span><span class="p">(</span><span class="mi">14</span><span class="p">),</span> <span class="n">CB</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">80</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>                  <span class="n">name</span><span class="o">=</span><span class="s1">&#39;2015年度比较&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
+<p>Returns:</p>
 </dd></dl>
 
-</div>
-<div class="section" id="id4">
-<h3>按年度回测<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h3>
-<dl class="py method">
-<dt id="finance_tools_py._jupyter_helper.BACKTEST_PACK_YEAR">
-<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">BACKTEST_PACK_YEAR</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">zs_data</span></em>, <em class="sig-param"><span class="n">year</span></em>, <em class="sig-param"><span class="n">sim_callbacks</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.BACKTEST_PACK_YEAR" title="永久链接至目标">¶</a></dt>
-<dd><p>按照年度回测数据</p>
+<dl class="py function">
+<dt id="finance_tools_py._jupyter_helper.plot_basic_seaborn">
+<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">plot_basic_seaborn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symbol</span></em>, <em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">ys</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.plot_basic_seaborn" title="永久链接至目标">¶</a></dt>
+<dd><p>绘制收盘价与指标数据的分列图，每个数据一行。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – 待回测的数据。</p></li>
-<li><p><strong>指数相关数据。与 data 匹配。</strong> (<em>hs_data：</em>) – </p></li>
-<li><p><strong>sim_callbacks</strong> – 回测时使用的回调集合。</p></li>
-<li><p><strong>year</strong> – 年度</p></li>
-<li><p><strong>name</strong> – </p></li>
+<li><p><strong>symbol</strong> – 股票代码。</p></li>
+<li><p><strong>data</strong> – 待绘制的数据。</p></li>
+<li><p><strong>ys</strong> – 绘制的数据。默认应该至少需要包含1个。</p></li>
+<li><p><strong>x</strong> – x轴。默认为 <cite>date</cite>。</p></li>
+<li><p><strong>figsize</strong> – 默认宽度为15，高度为 <cite>len(ys)*3)</cite></p></li>
 </ul>
 </dd>
 </dl>
-<div class="admonition seealso">
-<p class="admonition-title">参见</p>
-<ul class="simple">
-<li><p><a class="reference internal" href="#finance_tools_py._jupyter_helper.BACKTEST_PACK_ALL" title="finance_tools_py._jupyter_helper.BACKTEST_PACK_ALL"><code class="xref py py-func docutils literal notranslate"><span class="pre">BACKTEST_PACK_ALL()</span></code></a> 跨年度回测数据。</p></li>
-</ul>
-</div>
-<p class="rubric">Example</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.simulation.callbacks.talib</span> <span class="kn">import</span> <span class="n">MFI</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">qfq_datas</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span> <span class="c1">#所有股票日线数据</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">hs_300_data</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span> <span class="c1">#沪深300指数日线数据</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">class</span> <span class="nc">CB</span><span class="p">(</span><span class="n">CallBack</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="n">t</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">v1</span> <span class="o">=</span> <span class="n">v1</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="bp">self</span><span class="o">.</span><span class="n">v2</span> <span class="o">=</span> <span class="n">v2</span>
-<span class="gp">&gt;&gt;&gt; </span>    <span class="k">def</span> <span class="nf">on_preparing_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;opt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mfi_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)]</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">v1</span><span class="p">,</span> <span class="s1">&#39;opt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
-<span class="gp">&gt;&gt;&gt; </span>        <span class="n">data</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mfi_</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="p">)]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">v2</span><span class="p">,</span> <span class="s1">&#39;opt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
-<span class="go">&gt;&gt;&gt;</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">BACKTEST_PACK_YEAR</span><span class="p">(</span><span class="n">qfq_datas</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                   <span class="n">hs_300_data</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                   <span class="mi">2015</span><span class="p">,</span>
-<span class="gp">&gt;&gt;&gt; </span>                   <span class="p">[</span><span class="n">MFI</span><span class="p">(</span><span class="mi">14</span><span class="p">),</span> <span class="n">CB</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">80</span><span class="p">)],</span>
-<span class="gp">&gt;&gt;&gt; </span>                   <span class="n">name</span><span class="o">=</span><span class="s1">&#39;2015年度比较&#39;</span><span class="p">)</span>
-<span class="go">可买入时间：2015-01-01~2015-12-31</span>
-<span class="go">数据时间:2015-01-05 00:00:00~2015-12-31 00:00:00（可交易天数244）</span>
-<span class="go">初始资金:10000.00</span>
-<span class="go">交易次数:170 (买入/卖出各算1次)</span>
-<span class="go">可用资金:1402.50</span>
-<span class="go">当前总资产:12135.85(现金+持股现价值)</span>
-<span class="go">资金变化率:14.03%</span>
-<span class="go">资产变化率:121.36%</span>
-<span class="go">总手续费:850.54</span>
-<span class="go">总印花税:138.15</span>
-</pre></div>
-</div>
+<p>Returns:</p>
 </dd></dl>
 
-</div>
-<div class="section" id="id5">
-<h3>单支股票回测<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h3>
-<dl class="py method">
-<dt id="finance_tools_py._jupyter_helper.BACKTEST_SINGLE">
-<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">BACKTEST_SINGLE</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">buy_query</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">sell_query</span><span class="o">=</span><span class="default_value">''</span></em>, <em class="sig-param"><span class="n">sim_callbacks</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.BACKTEST_SINGLE" title="永久链接至目标">¶</a></dt>
-<dd><p>单支股票的回测计算。默认包含先调用 <cite>sim_callbacks</cite> 进行数据处理，
-再从 <cite>buy_data</cite> 中根据 <cite>buy_query</cite> 和 <cite>sell_query</cite> 产生买入卖出是几点，
-最后再进行回测计算。</p>
-<div class="admonition seealso">
-<p class="admonition-title">参见</p>
-<ul class="simple">
-<li><p><code class="xref py py-func docutils literal notranslate"><span class="pre">__BACKTEST_PACK_CORE()</span></code> 多支股票的回测计算。</p></li>
-</ul>
-</div>
+<dl class="py function">
+<dt id="finance_tools_py._jupyter_helper.report_metrics">
+<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">report_metrics</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">strategy_rets</span></em>, <em class="sig-param"><span class="n">benchmark_rets</span></em>, <em class="sig-param"><span class="n">factor_returns</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.report_metrics" title="永久链接至目标">¶</a></dt>
+<dd><p>使用 <a class="reference external" href="http://quantopian.github.io/empyrical/">empyrical</a> 库计算各种常见财务风险和绩效指标。</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>symbol</strong> – </p></li>
-<li><p><strong>data</strong> – </p></li>
-<li><p><strong>buy_query</strong> – 示例：’rsi_close_14&gt;80’</p></li>
-<li><p><strong>sell_query</strong> – </p></li>
-<li><p><strong>sim_callbacks</strong> – </p></li>
-<li><p><strong>show_detail</strong> – 打印买入，卖出占比。默认为 False</p></li>
-<li><p><strong>show_report</strong> – 打印回测报告。默认为 False</p></li>
-<li><p><strong>show_history</strong> – 打印成交明细。默认为 False</p></li>
-<li><p><strong>plot</strong> – 绘图。默认为 False</p></li>
-<li><p><strong>clear_output</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 清除输出。默认True。</p></li>
+<li><p><strong>strategy_rets</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code></a>) – 策略收益。</p></li>
+<li><p><strong>benchmark_rets</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.html#pandas.Series" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.Series</span></code></a>) – 基准收益。</p></li>
+<li><p><strong>factor_returns</strong> – 计算 excess_sharpe 时使用，策略计算时使用`strategy_rets`作为`factor_returns`，
+当不存在`strategy_rets`时使用`factor_returns`。
+<cite>factor_returns`参考 :py:func:`empyrical.excess_sharpe</cite> 中的`factor_returns`参数的解释。</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py._jupyter_helper</span> <span class="kn">import</span> <span class="n">report_metrics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rep</span> <span class="o">=</span> <span class="n">report_metrics</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="o">-</span><span class="mf">0.01</span><span class="p">,</span><span class="mf">0.04</span><span class="p">,</span><span class="mf">0.03</span><span class="p">,</span><span class="o">-</span><span class="mf">0.02</span><span class="p">]),</span>
+<span class="go">                         pd.Series([0.04,0.05,0.06,0.07]))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">rep</span><span class="p">)</span>
+<span class="go">                          基准         策略</span>
+<span class="go">最大回撤                0.000000  -0.020000</span>
+<span class="go">年化收益           713630.025679  10.326756</span>
+<span class="go">年度波动性               0.204939   0.467333</span>
+<span class="go">夏普比率               67.629875   5.392302</span>
+<span class="go">R平方                 0.994780   0.614649</span>
+<span class="go">盈利比率                1.650602   2.081081</span>
+<span class="go">excess_sharpe       4.260282  -1.317465</span>
+<span class="go">年复合增长率         713630.025679  10.326756</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="finance_tools_py._jupyter_helper.test_all_years_single_symbol">
+<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">test_all_years_single_symbol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symbol</span></em>, <em class="sig-param"><span class="n">fulldata</span></em>, <em class="sig-param"><span class="n">cbs</span></em>, <em class="sig-param"><span class="n">init_cash</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">start_year</span><span class="o">=</span><span class="default_value">2005</span></em>, <em class="sig-param"><span class="n">end_year</span><span class="o">=</span><span class="default_value">2007</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">show_report</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_plot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_history</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tb_kwgs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.test_all_years_single_symbol" title="永久链接至目标">¶</a></dt>
+<dd><p>逐年度对单一股票进行回测。</p>
+<p>采用 <a class="reference internal" href="backtest/callback.html#finance_tools_py.backtest.TurtleStrategy" title="finance_tools_py.backtest.TurtleStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.TurtleStrategy</span></code></a> 进行回测</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fulldata</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 完整的原始数据。
+index[0]为股票代码,index[1]为日期。</p></li>
+<li><p><strong>init_cash</strong> – </p></li>
+<li><p><strong>start_year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 开始计算年份。</p></li>
+<li><p><strong>end_year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 结束计算年份。</p></li>
+<li><p><strong>cbs</strong> ([<a class="reference internal" href="simulation/callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a>]) – 对数据进行模拟填充时的回调。参考 <a class="reference internal" href="simulation/simulation.html#finance_tools_py.simulation.Simulation" title="finance_tools_py.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Simulation</span></code></a> 中的`callbacks`参数。</p></li>
+<li><p><strong>tb_kwgs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – <a class="reference internal" href="backtest/callback.html#finance_tools_py.backtest.TurtleStrategy" title="finance_tools_py.backtest.TurtleStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.TurtleStrategy</span></code></a> 的参数集合。</p></li>
 </ul>
 </dd>
 <dt class="field-even">返回</dt>
-<dd class="field-even"><p>backtest实例，数据，买入时间集合，卖出时间集合</p>
-</dd>
-</dl>
-</dd></dl>
-
-</div>
-<div class="section" id="id6">
-<h3>随机回测<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h3>
-<dl class="py method">
-<dt id="finance_tools_py._jupyter_helper.RANDMON_TEST_BASIC">
-<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">RANDMON_TEST_BASIC</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">times</span><span class="o">=</span><span class="default_value">100</span></em>, <em class="sig-param"><span class="n">buy_times</span><span class="o">=</span><span class="default_value">50</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.RANDMON_TEST_BASIC" title="永久链接至目标">¶</a></dt>
-<dd><p>随机执行 <cite>times</cite> 次回测。默认调用 <code class="xref py py-class docutils literal notranslate"><span class="pre">Checker</span></code> 来执行回测。</p>
-<dl class="field-list simple">
-<dt class="field-odd">参数</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> – 所有股票完整数据</p></li>
-<li><p><strong>times</strong> – 随机执行总次数</p></li>
-<li><p><strong>buy_times</strong> – 从所有数据中随机选择购买的次数。</p></li>
-<li><p><strong>clear_output</strong> – 执行完成后清除报告。默认为True。</p></li>
-<li><p><strong>init_cash</strong> – 初始资金。默认50000.</p></li>
-<li><p><strong>buy_data</strong> – 计算买入时间点的数据集。默认为 <cite>data</cite>。其中最少需要包含 <cite>date</cite> 和 <cite>code</cite> 列。</p></li>
+<dd class="field-even"><p><p>BackTest字典。key值为年份。</p>
+<ul class="simple">
+<li><p>dict: 回测用的数据源字典。key值为年份。</p></li>
+<li><p>dict: 买点字典。key值为年份。</p></li>
+<li><p>dict: 卖点字典。key值为年份。</p></li>
 </ul>
+</p>
 </dd>
-<dt class="field-even">返回</dt>
-<dd class="field-even"><p>报告,所有测试的总价值集合,所有测试的剩余现金集合,所有成交明细集合</p>
+<dt class="field-odd">返回类型</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>dict</p></li>
+</ul>
+</p>
 </dd>
 </dl>
 </dd></dl>
 
-</div>
-<div class="section" id="plotly">
-<h3>使用plotly绘制回测后的数据<a class="headerlink" href="#plotly" title="永久链接至标题">¶</a></h3>
-<p>单支股票用</p>
-<dl class="py method">
-<dt id="finance_tools_py._jupyter_helper.plot_backtest_plotly">
-<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">plot_backtest_plotly</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">buy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">col</span><span class="o">=</span><span class="default_value">'close'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.plot_backtest_plotly" title="永久链接至目标">¶</a></dt>
-<dd><p>使用plotly绘制回测后的数据，数据上会标记买入点和卖出点</p>
-</dd></dl>
-
-</div>
-<div class="section" id="seaborn">
-<h3>使用seaborn绘制回测后的数据<a class="headerlink" href="#seaborn" title="永久链接至标题">¶</a></h3>
-<p>单支股票用</p>
-<dl class="py method">
-<dt id="finance_tools_py._jupyter_helper.plot_backtest_seaborn">
-<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">plot_backtest_seaborn</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em>, <em class="sig-param"><span class="n">buy</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">sell</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">figsize</span><span class="o">=</span><span class="default_value">20, 6</span></em>, <em class="sig-param"><span class="n">col</span><span class="o">=</span><span class="default_value">'close'</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.plot_backtest_seaborn" title="永久链接至目标">¶</a></dt>
-<dd><p>使用seaborn绘制回测后的数据，数据上会标记买入点和卖出点</p>
-</dd></dl>
-
-</div>
-</div>
 </div>
 
 
