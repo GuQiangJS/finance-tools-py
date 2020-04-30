@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.57.gc5e37cb 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.57.g5700a0f 文档</title>
   
 
   
@@ -90,13 +90,14 @@
 <li class="toctree-l1 current"><a class="current reference internal" href="#">回测时的回调</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#id2">回调基类</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#id3">可以控制止盈/止损/加仓的策略回调</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id6">最小买卖的回调</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#id7">全部资金出的回调</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">最小买卖的回调</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">全部资金出的回调</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="utils.html">回测常用帮助类</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulation/simulation.html">模拟工具</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../simulation/callback.html">模拟工具使用的回调</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../calc.html">计算方法集</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../jupyter_helper.html">jupyter notebook 中可能用到的常用方法封装</a></li>
 </ul>
 
@@ -279,8 +280,7 @@
 <dt id="finance_tools_py.backtest.TurtleStrategy">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">TurtleStrategy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colname</span></em>, <em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">single_max</span><span class="o">=</span><span class="default_value">400</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker" title="finance_tools_py.backtest.MinAmountChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.MinAmountChecker</span></code></a></p>
-<p>海龟交易法则适用的交易策略的基类</p>
-<p>可以计算止盈/止损/加仓的价位，并且按照这些价位进行仓位控制。</p>
+<p>海龟交易法则适用的交易策略。可以计算止盈/止损/加仓的价位，并且按照这些价位进行仓位控制。</p>
 <dl class="py class">
 <dt id="finance_tools_py.backtest.TurtleStrategy.Hold">
 <em class="property">class </em><code class="sig-name descname">Hold</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symbol</span></em>, <em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="n">amount</span></em>, <em class="sig-param"><span class="n">stoploss_price</span></em>, <em class="sig-param"><span class="n">stopprofit_price</span></em>, <em class="sig-param"><span class="n">next_price</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.Hold" title="永久链接至目标">¶</a></dt>
@@ -351,12 +351,13 @@
 <dl class="py method">
 <dt id="finance_tools_py.backtest.TurtleStrategy.__init__">
 <code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colname</span></em>, <em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">single_max</span><span class="o">=</span><span class="default_value">400</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.__init__" title="永久链接至目标">¶</a></dt>
-<dd><dl class="field-list simple">
+<dd><p>构造函数</p>
+<dl class="field-list simple">
 <dt class="field-odd">参数</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>buy_dict</strong> – </p></li>
 <li><p><strong>sell_dict</strong> – </p></li>
-<li><p><strong>colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)"><em>str</em></a>) – 计算止盈/止损等价格的列名。会由:py:func:<a href="#id4"><span class="problematic" id="id5">`</span></a>calc_price`方法调用。调用时会取`**kwargs`参数中的`row`参数。尝试找到这个数值。</p></li>
+<li><p><strong>colname</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)"><em>str</em></a>) – 计算止盈/止损/加仓等价格的列名。调用时会尝试从参数`row`中找到这个数值。</p></li>
 <li><p><strong>stoploss_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 止损点。根据`colname`指定的数据进行计算。默认为2。设置为None时，表示不计算。
 计算止损价格`stoploss_price=price-stoploss_point*row[colname]`。</p></li>
 <li><p><strong>stopprofit_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 止盈点。根据`colname`指定的数据进行计算。默认为10。设置为None时，表示不计算。
@@ -433,8 +434,8 @@
 </dd></dl>
 
 </div>
-<div class="section" id="id6">
-<h2>最小买卖的回调<a class="headerlink" href="#id6" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id4">
+<h2>最小买卖的回调<a class="headerlink" href="#id4" title="永久链接至标题">¶</a></h2>
 <dl class="py class">
 <dt id="finance_tools_py.backtest.MinAmountChecker">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">MinAmountChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker" title="永久链接至目标">¶</a></dt>
@@ -574,8 +575,8 @@
 </dd></dl>
 
 </div>
-<div class="section" id="id7">
-<h2>全部资金出的回调<a class="headerlink" href="#id7" title="永久链接至标题">¶</a></h2>
+<div class="section" id="id5">
+<h2>全部资金出的回调<a class="headerlink" href="#id5" title="永久链接至标题">¶</a></h2>
 <dl class="py class">
 <dt id="finance_tools_py.backtest.AllInChecker">
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">AllInChecker</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker" title="永久链接至目标">¶</a></dt>

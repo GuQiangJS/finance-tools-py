@@ -1,0 +1,289 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="zh-CN" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="zh-CN" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>计算方法集 &mdash; finance-tools-py 0+untagged.57.g5700a0f 文档</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script src="_static/translations.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="搜索" href="search.html" />
+    <link rel="next" title="jupyter notebook 中可能用到的常用方法封装" href="jupyter_helper.html" />
+    <link rel="prev" title="趋势型指标计算回调" href="simulation/callback_talib.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> finance-tools-py
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="backtest/backtest.html">回测工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtest/callback.html">回测时的回调</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backtest/utils.html">回测常用帮助类</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation/simulation.html">模拟工具</a></li>
+<li class="toctree-l1"><a class="reference internal" href="simulation/callback.html">模拟工具使用的回调</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">计算方法集</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="jupyter_helper.html">jupyter notebook 中可能用到的常用方法封装</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">finance-tools-py</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>计算方法集</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/calc.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="id1">
+<h1>计算方法集<a class="headerlink" href="#id1" title="永久链接至标题">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<span class="target" id="module-finance_tools_py.calc"></span><dl class="py function">
+<dt id="finance_tools_py.calc.fluidity">
+<code class="sig-prename descclassname">finance_tools_py.calc.</code><code class="sig-name descname">fluidity</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">data</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calc.fluidity" title="永久链接至目标">¶</a></dt>
+<dd><p>计算流动性。</p>
+<p>计算规则：取成交量平均值倒序排序（由大到小）+日回报标准差正向排序（由小到大），后的排名。</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><p><strong>data</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 数据源。</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.calc</span> <span class="kn">import</span> <span class="n">fluidity</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="go">  code  amount  rets</span>
+<span class="go">0  001     100  0.01</span>
+<span class="go">1  001     100  0.23</span>
+<span class="go">2  002     200  0.02</span>
+<span class="go">3  002     400  0.55</span>
+<span class="go">4  003    1000  0.10</span>
+<span class="go">5  003    3000  0.45</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">fluidity</span><span class="p">(</span><span class="n">df</span><span class="p">))</span>
+<span class="go">      amount_mean_sorted  amount  rets_std_sorted      rets  v</span>
+<span class="go">code</span>
+<span class="go">003                    0    2000                1  0.247487  1</span>
+<span class="go">001                    2     100                0  0.155563  2</span>
+<span class="go">002                    1     300                2  0.374767  3</span>
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p>按照v值正向排序后的结果。</p>
+</dd>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="finance_tools_py.calc.position_unit">
+<code class="sig-prename descclassname">finance_tools_py.calc.</code><code class="sig-name descname">position_unit</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="n">v</span></em>, <em class="sig-param"><span class="n">funds</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.calc.position_unit" title="永久链接至目标">¶</a></dt>
+<dd><p>计算头寸单位</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>price</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 当前价格。</p></li>
+<li><p><strong>v</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 计算指标。海龟交易法则中常用ATR指标。</p></li>
+<li><p><strong>funds</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最大可亏损资金。根据海龟交易法则，最大可亏损为1%。假设总金额为10万，那么这里就是1000。</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>当前价格为6.39；ATR指标为0.08；最大可亏损资金1000（总金额10万，最大允许亏损1%）。</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.calc</span> <span class="kn">import</span> <span class="n">position_unit</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">position_unit</span><span class="p">(</span><span class="mf">6.39</span><span class="p">,</span><span class="mf">0.08</span><span class="p">,</span><span class="mi">1000</span><span class="p">)</span>
+<span class="go">1956</span>
+</pre></div>
+</div>
+<div class="admonition seealso">
+<p class="admonition-title">参见</p>
+<p>[详解：头寸单位限制规模法则的——（海龟交易法则）](<a class="reference external" href="https://www.fmz.com/bbs-topic/715">https://www.fmz.com/bbs-topic/715</a>)</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">返回</dt>
+<dd class="field-odd"><p></p>
+</dd>
+<dt class="field-even">返回类型</dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)">int</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="jupyter_helper.html" class="btn btn-neutral float-right" title="jupyter notebook 中可能用到的常用方法封装" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="simulation/callback_talib.html" class="btn btn-neutral float-left" title="趋势型指标计算回调" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, GuQiangJS
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

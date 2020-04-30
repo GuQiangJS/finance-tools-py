@@ -1,6 +1,7 @@
 devel/_sources/backtest/backtest.rst.txt
 devel/_sources/backtest/callback.rst.txt
 devel/_sources/backtest/utils.rst.txt
+devel/_sources/calc.rst.txt
 devel/_sources/index.rst.txt
 devel/_sources/jupyter_helper.rst.txt
 devel/_sources/simulation/callback.rst.txt
@@ -63,6 +64,7 @@ devel/_static/underscore.js
 devel/backtest/backtest.html
 devel/backtest/callback.html
 devel/backtest/utils.html
+devel/calc.html
 devel/genindex.html
 devel/index.html
 devel/jupyter_helper.html

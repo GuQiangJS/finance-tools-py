@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>jupyter notebook 中可能用到的常用方法封装 &mdash; finance-tools-py 0+untagged.57.gc5e37cb 文档</title>
+  <title>jupyter notebook 中可能用到的常用方法封装 &mdash; finance-tools-py 0+untagged.57.g5700a0f 文档</title>
   
 
   
@@ -36,7 +36,7 @@
   <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="index" title="索引" href="genindex.html" />
     <link rel="search" title="搜索" href="search.html" />
-    <link rel="prev" title="趋势型指标计算回调" href="simulation/callback_talib.html" /> 
+    <link rel="prev" title="计算方法集" href="calc.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -90,6 +90,7 @@
 <li class="toctree-l1"><a class="reference internal" href="backtest/utils.html">回测常用帮助类</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation/simulation.html">模拟工具</a></li>
 <li class="toctree-l1"><a class="reference internal" href="simulation/callback.html">模拟工具使用的回调</a></li>
+<li class="toctree-l1"><a class="reference internal" href="calc.html">计算方法集</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">jupyter notebook 中可能用到的常用方法封装</a><ul class="simple">
 </ul>
 </li>
@@ -243,6 +244,44 @@
 </dd></dl>
 
 <dl class="py function">
+<dt id="finance_tools_py._jupyter_helper.test_all_years">
+<code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">test_all_years</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fulldata</span></em>, <em class="sig-param"><span class="n">cbs</span></em>, <em class="sig-param"><span class="n">init_cash</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">start_year</span><span class="o">=</span><span class="default_value">2005</span></em>, <em class="sig-param"><span class="n">end_year</span><span class="o">=</span><span class="default_value">2020</span></em>, <em class="sig-param"><span class="n">lookback</span><span class="o">=</span><span class="default_value">1</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">show_report</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_plot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">tb_kwgs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">top</span><span class="o">=</span><span class="default_value">10</span></em>, <em class="sig-param"><span class="n">show_history</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.test_all_years" title="永久链接至目标">¶</a></dt>
+<dd><p>逐年度对流动性最大的n支股票进行回测。</p>
+<p>采用 <a class="reference internal" href="backtest/callback.html#finance_tools_py.backtest.TurtleStrategy" title="finance_tools_py.backtest.TurtleStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.TurtleStrategy</span></code></a> 进行回测</p>
+<dl class="field-list simple">
+<dt class="field-odd">参数</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fulldata</strong> (<a class="reference external" href="https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html#pandas.DataFrame" title="(在 pandas v1.0.3)"><code class="xref py py-class docutils literal notranslate"><span class="pre">pandas.DataFrame</span></code></a>) – 完整的原始数据。
+index[0]为股票代码,index[1]为日期。</p></li>
+<li><p><strong>init_cash</strong> – </p></li>
+<li><p><strong>top</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 选取流动性最大的n值股票。默认为10。
+流动性计算参考 <a class="reference internal" href="calc.html#finance_tools_py.calc.fluidity" title="finance_tools_py.calc.fluidity"><code class="xref py py-func docutils literal notranslate"><span class="pre">finance_tools_py.calc.fluidity()</span></code></a></p></li>
+<li><p><strong>start_year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 开始计算年份。</p></li>
+<li><p><strong>end_year</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 结束计算年份。</p></li>
+<li><p><strong>lookback</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 回看几年的数据，用来计算流动性。当lookback==1时，实际会回看</p></li>
+<li><p><strong>cbs</strong> ([<a class="reference internal" href="simulation/callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a>]) – 对数据进行模拟填充时的回调。参考 <a class="reference internal" href="simulation/simulation.html#finance_tools_py.simulation.Simulation" title="finance_tools_py.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Simulation</span></code></a> 中的`callbacks`参数。</p></li>
+<li><p><strong>tb_kwgs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – <a class="reference internal" href="backtest/callback.html#finance_tools_py.backtest.TurtleStrategy" title="finance_tools_py.backtest.TurtleStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.TurtleStrategy</span></code></a> 的参数集合。</p></li>
+</ul>
+</dd>
+<dt class="field-even">返回</dt>
+<dd class="field-even"><p><p>BackTest字典。key值为年份。</p>
+<ul class="simple">
+<li><p>dict: 回测用的数据源字典。key值为年份。</p></li>
+<li><p>dict: 买点字典。key值为年份。</p></li>
+<li><p>dict: 卖点字典。key值为年份。</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">返回类型</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p>dict</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
 <dt id="finance_tools_py._jupyter_helper.test_all_years_single_symbol">
 <code class="sig-prename descclassname">finance_tools_py._jupyter_helper.</code><code class="sig-name descname">test_all_years_single_symbol</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">symbol</span></em>, <em class="sig-param"><span class="n">fulldata</span></em>, <em class="sig-param"><span class="n">cbs</span></em>, <em class="sig-param"><span class="n">init_cash</span><span class="o">=</span><span class="default_value">10000</span></em>, <em class="sig-param"><span class="n">start_year</span><span class="o">=</span><span class="default_value">2005</span></em>, <em class="sig-param"><span class="n">end_year</span><span class="o">=</span><span class="default_value">2007</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">2</span></em>, <em class="sig-param"><span class="n">show_report</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_plot</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">show_history</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">tb_kwgs</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py._jupyter_helper.test_all_years_single_symbol" title="永久链接至目标">¶</a></dt>
 <dd><p>逐年度对单一股票进行回测。</p>
@@ -288,7 +327,7 @@ index[0]为股票代码,index[1]为日期。</p></li>
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
       
-        <a href="simulation/callback_talib.html" class="btn btn-neutral float-left" title="趋势型指标计算回调" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="calc.html" class="btn btn-neutral float-left" title="计算方法集" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
