@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.57.g1a5b5a2 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.57.g99d32ff 文档</title>
   
 
   
@@ -285,7 +285,7 @@
 <h2>可以控制止盈/止损/加仓的策略回调<a class="headerlink" href="#id3" title="永久链接至标题">¶</a></h2>
 <dl class="py class">
 <dt id="finance_tools_py.backtest.TurtleStrategy">
-<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">TurtleStrategy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colname</span></em>, <em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">single_max</span><span class="o">=</span><span class="default_value">400</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy" title="永久链接至目标">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">TurtleStrategy</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colname</span></em>, <em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">max_amount</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker" title="finance_tools_py.backtest.MinAmountChecker"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.MinAmountChecker</span></code></a></p>
 <p>海龟交易法则适用的交易策略。可以计算止盈/止损/加仓的价位，并且按照这些价位进行仓位控制。</p>
 <dl class="py class">
@@ -357,7 +357,7 @@
 
 <dl class="py method">
 <dt id="finance_tools_py.backtest.TurtleStrategy.__init__">
-<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colname</span></em>, <em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">single_max</span><span class="o">=</span><span class="default_value">400</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.__init__" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">__init__</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">colname</span></em>, <em class="sig-param"><span class="n">buy_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">sell_dict</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="n">max_amount</span><span class="o">=</span><span class="default_value">{}</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.__init__" title="永久链接至目标">¶</a></dt>
 <dd><p>构造函数</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
@@ -371,7 +371,7 @@
 计算止损价格`stopprofit_price=price+stoploss_point*row[colname]`。</p></li>
 <li><p><strong>next_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 下一个可买点。根据`colname`指定的数据进行计算。默认为1。设置为None时，表示不计算。
 计算下一个可买点`next_price=price+next_point*row[colname]`。</p></li>
-<li><p><strong>single_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 最大持仓数量。默认为400。</p></li>
+<li><p><strong>max_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – 最大持仓数量。默认为400。</p></li>
 <li><p><strong>holds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – 初始持仓。{symbol:[<a class="reference internal" href="#finance_tools_py.backtest.TurtleStrategy.Hold" title="finance_tools_py.backtest.TurtleStrategy.Hold"><code class="xref py py-class docutils literal notranslate"><span class="pre">TurtleStrategy.Hold</span></code></a>]}</p></li>
 <li><p><strong>update_price_onsameday</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 当买卖在同天发生时，是否允许更新最后一笔持仓的止盈价及下一个可买价。</p></li>
 </ul>
@@ -399,6 +399,12 @@
 <dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a>)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.TurtleStrategy.min_amount">
+<code class="sig-name descname">min_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">code</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.min_amount" title="永久链接至目标">¶</a></dt>
+<dd><p>最小购买量，默认为100</p>
 </dd></dl>
 
 <dl class="py method">
@@ -430,7 +436,7 @@
 <dt id="finance_tools_py.backtest.TurtleStrategy.on_calc_sell_amount">
 <code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">code</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="n">cash</span></em>, <em class="sig-param"><span class="n">hold_amount</span></em>, <em class="sig-param"><span class="n">hold_price</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量。
-当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
+当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.TurtleStrategy.min_amount" title="finance_tools_py.backtest.TurtleStrategy.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
 <span class="pre">否则返回</span> <span class="pre">`0</span></code>。</p>
 </dd></dl>
 
@@ -514,10 +520,10 @@
 <dl class="py attribute">
 <dt id="finance_tools_py.backtest.MinAmountChecker.min_amount">
 <code class="sig-name descname">min_amount</code><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="永久链接至目标">¶</a></dt>
-<dd><p>每次交易最小交易数量。默认为 <cite>100</cite> （股）。</p>
+<dd><p>每次交易最小交易数量。。</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type</dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)">dict</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -534,7 +540,7 @@
 <li><p><strong>tax_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 印花税费率。默认为 <cite>0.001</cite> 。</p></li>
 <li><p><strong>commission_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 手续费费率。默认为 <cite>0.001</cite> 。</p></li>
 <li><p><strong>min_commission</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最小手续费费率。默认为 <cite>5</cite> 。</p></li>
-<li><p><strong>min_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 每次交易最小交易数量。默认为 <cite>100</cite> （股）。</p></li>
+<li><p><strong>min_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – 每次交易最小交易数量。。</p></li>
 </ul>
 </dd>
 </dl>
@@ -562,6 +568,12 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="id0">
+<code class="sig-name descname">min_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">code</span></em><span class="sig-paren">)</span><a class="headerlink" href="#id0" title="永久链接至目标">¶</a></dt>
+<dd><p>最小购买量，默认为100</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_buy_sell_on_same_day">
 <code class="sig-name descname">on_buy_sell_on_same_day</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">code</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_buy_sell_on_same_day" title="永久链接至目标">¶</a></dt>
 <dd><p>同一天出现买入和卖出信号时的操作</p>
@@ -578,7 +590,7 @@
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount">
 <code class="sig-name descname">on_calc_sell_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_amount</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">hold_price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_sell_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算卖出数量。
-当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#finance_tools_py.backtest.MinAmountChecker.min_amount" title="finance_tools_py.backtest.MinAmountChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
+当 <cite>hold_amount</cite> （当前可用持仓） 大于等于参数 <a class="reference internal" href="#id0" title="finance_tools_py.backtest.MinAmountChecker.min_amount"><code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount</span></code></a> （每次交易数量）时返回参数 <code class="xref py py-attr docutils literal notranslate"><span class="pre">min_amount`（每次交易数量）。</span>
 <span class="pre">否则返回</span> <span class="pre">`0</span></code>。</p>
 </dd></dl>
 
@@ -616,7 +628,7 @@
 <li><p><strong>tax_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 印花税费率。默认为 <cite>0.001</cite> 。</p></li>
 <li><p><strong>commission_coeff</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 手续费费率。默认为 <cite>0.001</cite> 。</p></li>
 <li><p><strong>min_commission</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 最小手续费费率。默认为 <cite>5</cite> 。</p></li>
-<li><p><strong>min_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 每次交易最小交易数量。默认为 <cite>100</cite> （股）。</p></li>
+<li><p><strong>min_amount</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – 每次交易最小交易数量。。</p></li>
 </ul>
 </dd>
 </dl>
@@ -641,6 +653,12 @@
 <span class="gp">&gt;&gt;&gt; </span>                <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s1">&#39;1999-1-1&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()})</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.AllInChecker.min_amount">
+<code class="sig-name descname">min_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">code</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.min_amount" title="永久链接至目标">¶</a></dt>
+<dd><p>最小购买量，默认为100</p>
 </dd></dl>
 
 <dl class="py method">
