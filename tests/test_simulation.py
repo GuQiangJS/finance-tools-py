@@ -169,6 +169,32 @@ def test_example_ATR(init_global_data):
 @pytest.mark.skipif(
     "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
     reason="Skipping this test on Travis CI. This is an example.")
+def test_example_LINEARREG_SLOPE(init_global_data):
+    print('>>> from finance_tools_py.simulation.callbacks.talib import ATR')
+    print('>>> from finance_tools_py.simulation import Simulation')
+    from finance_tools_py.simulation.callbacks.talib import LINEARREG_SLOPE
+    print(">>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)]})")
+    data = pd.DataFrame({
+        'close': [y for y in np.arange(5.0, 10.0)]
+    })
+    print(">>> print(data)")
+    print(data)
+    t = 3
+    print('>>> t = {}'.format(t))
+    print(">>> s = Simulation(data,'',callbacks=[LINEARREG_SLOPE('close',t)])")
+    print('>>> s.simulate()')
+    s = Simulation(data, '', callbacks=[LINEARREG_SLOPE('close',t)])
+    s.simulate()
+    print(">>> cols = [col for col in data.columns if 'lineSlope' in col]")
+    cols = [col for col in s.data.columns if 'lineSlope' in col]
+    print(">>> for col in cols:")
+    print(">>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))")
+    for col in cols:
+        print('{}:{}'.format(col, np.round(s.data[col].values, 2)))
+
+@pytest.mark.skipif(
+    "TRAVIS" in os.environ and os.environ["TRAVIS"] == "true",
+    reason="Skipping this test on Travis CI. This is an example.")
 def test_example_TRANGE(init_global_data):
     print('>>> from finance_tools_py.simulation.callbacks.talib import TRANGE')
     print('>>> from finance_tools_py.simulation import Simulation')
@@ -515,6 +541,19 @@ def test_Sim_ATR(init_global_data):
     real = talib.ATR(s.data['high'], s.data['low'], s.data['close'], t)
     assert pd.Series.equals(real, s.data[w])
 
+def test_Sim_LINEARREG_SLOPE(init_global_data):
+    """测试通过回测调用LINEARREG_SLOPE，逻辑与`test_LINEARREG_SLOPE`一致"""
+    t = 5
+    colname='close'
+    b = cb_talib.LINEARREG_SLOPE(colname,t)
+    s = Simulation(pytest.global_data, pytest.global_code, callbacks=[b])
+    s.simulate()
+    print(s.data.info())
+    w = '{}_lineSlope_{}'.format(colname,t)
+    assert w in s.data.columns
+    real = talib.LINEARREG_SLOPE(s.data['close'], t)
+    assert pd.Series.equals(real, s.data[w])
+
 
 def test_Sim_NATR(init_global_data):
     """测试通过回测调用NATR，逻辑与`test_NATR`一致"""
@@ -676,6 +715,17 @@ def test_ATR(init_global_data):
                      pytest.global_data['close'], t)
     assert pd.Series.equals(real, pytest.global_data[w])
 
+
+def test_LINEARREG_SLOPE(init_global_data):
+    t = 5
+    col_name='close'
+    b = cb_talib.LINEARREG_SLOPE(col_name,t)
+    b.on_preparing_data(pytest.global_data)
+    print(pytest.global_data.info())
+    w = '{}_lineSlope_{}'.format(col_name,t)
+    assert w in pytest.global_data.columns
+    real = talib.LINEARREG_SLOPE(pytest.global_data[col_name],t)
+    assert pd.Series.equals(real, pytest.global_data[w])
 
 def test_TRANGE(init_global_data):
     b = cb_talib.TRANGE()

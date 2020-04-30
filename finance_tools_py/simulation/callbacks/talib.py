@@ -524,3 +524,46 @@ class TRANGE(CallBack):
         data['trange'] = talib.TRANGE(data[self.col_high].values,
                                       data[self.col_low].values,
                                       data[self.col_close].values)
+
+
+class LINEARREG_SLOPE(CallBack):
+    """计算线性角度
+
+        执行后会对数据源中附加如下的列：
+
+        * x_lineSlope_y: 线性角度。（ `x` 为 `colname`；`y` 为 `timeperiod` ）。
+
+        Examples:
+            >>> from finance_tools_py.simulation.callbacks.talib import ATR
+            >>> from finance_tools_py.simulation import Simulation
+            >>> data = pd.DataFrame({'close': [y for y in range(5.0, 10.0)]})
+            >>> print(data)
+               close
+            0    5.0
+            1    6.0
+            2    7.0
+            3    8.0
+            4    9.0
+            >>> t = 3
+            >>> s = Simulation(data,'',callbacks=[LINEARREG_SLOPE('close',t)])
+            >>> s.simulate()
+            >>> cols = [col for col in data.columns if 'lineSlope' in col]
+            >>> for col in cols:
+            >>>     print('{}:{}'.format(col,np.round(s.data[col].values,2)))
+            close_lineSlope_3:[nan nan  1.  1.  1.]
+    """
+    def __init__(self, colname, timeperiod, **kwargs):
+        """
+
+        Args:
+            colname: 计算角度的列名。
+            timeperiod: 计算角度时使用的时间窗口。
+        """
+        super().__init__(**kwargs)
+        self.colname = colname
+        self.timeperiod = timeperiod
+
+    def on_preparing_data(self, data, **kwargs):
+        col_name = '{}_lineSlope_{}'.format(self.colname, self.timeperiod)
+        data[col_name] = talib.LINEARREG_SLOPE(data[self.colname],
+                                               self.timeperiod)
