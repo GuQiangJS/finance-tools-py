@@ -910,6 +910,7 @@ def all_years(fulldata,
         lookback (int): 回看几年的数据，用来计算流动性。当lookback==1时，实际会回看
         cbs ([:py:class:`finance_tools_py.simulation.callbacks.CallBack`]): 对数据进行模拟填充时的回调。参考 :py:class:`finance_tools_py.simulation.Simulation` 中的`callbacks`参数。
         tb_kwgs (dict): :py:class:`finance_tools_py.backtest.TurtleStrategy` 的参数集合。
+        unit_percent (float): 计算头寸单元时使用的基准，默认为1%。
 
     Returns:
         - dict: BackTest字典。key值为年份。
@@ -927,7 +928,7 @@ def all_years(fulldata,
     sells = {}
     h = {}
     tb_kwgs_copy = copy.deepcopy(tb_kwgs)
-    baseValue = copy.deepcopy(init_cash) / 100  #计算头寸单元时使用的基准
+    baseValue = copy.deepcopy(init_cash) * kwargs.get('unit_percent',0.01)  #计算头寸单元时使用的基准
     lookbacks = []
     years = []
     lookback = lookback - 1
@@ -962,7 +963,7 @@ def all_years(fulldata,
         top_year = []
         for v in fluidity(year_df).index.values:
             df_symbol = year_df[year_df.index.get_level_values(0) == v]
-            s = Simulation(df_symbol.reset_index(), v, callbacks=[ATR(20)])
+            s = Simulation(df_symbol.reset_index(), v, callbacks=[ATR(20)])#TODO
             s.simulate()
             s.data.dropna(inplace=True)
             s.data['unit'] = s.data.apply(lambda row: position_unit(
