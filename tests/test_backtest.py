@@ -837,7 +837,7 @@ def test_temp():
                 buy_dict=buy_dict,
                 sell_dict=sell_dict,
                 holds=h,
-                single_max=single_max,
+                max_amount=single_max,
                 min_amount=min_amount,
             )
             bt = BackTest(df_symbol_years,

@@ -36,7 +36,7 @@ def test_TurtleStrategy():
     # 只有一笔持仓时的判断-开始
     ts = TurtleStrategy(
         colname='atr5',
-        single_max=100,
+        max_amount={'0': 100},
         verbose=2,
         buy_dict={'0': [datetime.date(2000, 1, 1),
                         datetime.date(2000, 1, 2)]})
@@ -92,7 +92,7 @@ def test_TurtleStrategy():
 
     # 多笔持仓时的判断-开始
     ts = TurtleStrategy(colname='atr5',
-                        single_max=100,
+                        max_amount={'0': 100},
                         verbose=2,
                         buy_dict={
                             '0': [
@@ -401,7 +401,11 @@ def test_TurtleStrategy_6():
     assert ts.holds[symbol][-1].next_price == 30
 
     row = pd.Series({'atr5': 0.05})
-    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1), symbol, 50, row=row,verbose=2)
+    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1),
+                               symbol,
+                               50,
+                               row=row,
+                               verbose=2)
 
     new_stoploss, new_stopprofit, new_next = ts.calc_price(50, row=row)
 
@@ -410,6 +414,7 @@ def test_TurtleStrategy_6():
 
     assert ts.holds[symbol][-1].stopprofit_price == new_stopprofit
     assert ts.holds[symbol][-1].next_price == new_next
+
 
 def test_TurtleStrategy_7():
     """买卖在同一天时，不更新止盈/下一个买点价格"""
@@ -445,7 +450,11 @@ def test_TurtleStrategy_7():
     assert ts.holds[symbol][-1].next_price == 30
 
     row = pd.Series({'atr5': 0.05})
-    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1), symbol, 50, row=row,verbose=2)
+    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1),
+                               symbol,
+                               50,
+                               row=row,
+                               verbose=2)
 
     new_stoploss, new_stopprofit, new_next = ts.calc_price(50, row=row)
 

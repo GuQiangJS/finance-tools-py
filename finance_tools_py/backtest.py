@@ -106,7 +106,7 @@ class MinAmountChecker(CallBack):
         tax_coeff (float): 印花税费率。默认为 `0.001` 。
         commission_coeff (float): 手续费费率。默认为 `0.001` 。
         min_commission (float): 最小手续费费率。默认为 `5` 。
-        min_amount (float): 每次交易最小交易数量。默认为 `100` （股）。
+        min_amount (dict): 每次交易最小交易数量。。
     """
     def __init__(self, buy_dict={}, sell_dict={}, **kwargs):
         """初始化
@@ -117,7 +117,7 @@ class MinAmountChecker(CallBack):
             tax_coeff (float): 印花税费率。默认为 `0.001` 。
             commission_coeff (float): 手续费费率。默认为 `0.001` 。
             min_commission (float): 最小手续费费率。默认为 `5` 。
-            min_amount (float): 每次交易最小交易数量。默认为 `100` （股）。
+            min_amount (dict): 每次交易最小交易数量。。
 
         Example:
             直接传入日期字典
@@ -146,7 +146,14 @@ class MinAmountChecker(CallBack):
         self.tax_coeff = kwargs.pop('tax_coeff', 0.001)
         self.commission_coeff = kwargs.pop('commission_coeff', 0.001)
         self.min_commission = kwargs.pop('min_commission', 5)
-        self.min_amount = kwargs.pop('min_amount', 100)
+        self._min_amount = kwargs.pop('min_amount', {})
+
+    def min_amount(self, code):
+        """最小购买量，默认为100"""
+        result = None
+        if self._min_amount and code in self._min_amount:
+            result = self._min_amount[code]
+        return result if result else 100
 
     def on_check_buy(self, date: datetime.datetime.timestamp, code: str,
                      price: float, cash: float, **kwargs) -> bool:
@@ -176,7 +183,7 @@ class MinAmountChecker(CallBack):
     def on_calc_buy_amount(self, date: datetime.datetime.timestamp, code: str,
                            price: float, cash: float, **kwargs) -> float:
         """计算买入数量。当交易实际花费金额小于 `cash` （可用现金） 时，返回参数 :py:attr: `min_amount` （每次交易数量）。"""
-        amount = self.min_amount
+        amount = self.min_amount(code)
         if price * amount + self._calc_commission(
                 price, amount) + self._calc_tax(price, amount) <= cash:
             return amount
@@ -188,8 +195,8 @@ class MinAmountChecker(CallBack):
         """计算卖出数量。
             当 `hold_amount` （当前可用持仓） 大于等于参数 :py:attr:`min_amount` （每次交易数量）时返回参数 :py:attr:`min_amount`（每次交易数量）。
             否则返回 `0`。"""
-        if hold_amount >= self.min_amount:
-            return self.min_amount
+        if hold_amount >= self.min_amount(code):
+            return self.min_amount(code)
         return 0
 
 
@@ -201,11 +208,11 @@ class AllInChecker(MinAmountChecker):
             根据 `cash` （可用现金）及 `price` （当前价格）计算实际可以买入的数量（参数 :py:attr: `min_amount` 的倍数）
             （计算时包含考虑了交易时可能产生的印花税和手续费）
         """
-        amount = self.min_amount
+        amount = self.min_amount(code)
         while price * amount + self._calc_commission(
                 price, amount) + self._calc_tax(price, amount) <= cash:
-            amount = amount + self.min_amount
-        amount = amount - self.min_amount
+            amount = amount + self.min_amount(code)
+        amount = amount - self.min_amount(code)
         return amount
 
     def on_calc_sell_amount(self, date: datetime.datetime.timestamp, code: str,
@@ -260,7 +267,7 @@ class TurtleStrategy(MinAmountChecker):
                  colname,
                  buy_dict={},
                  sell_dict={},
-                 single_max=400,
+                 max_amount={},
                  **kwargs):
         """构造函数
 
@@ -274,7 +281,7 @@ class TurtleStrategy(MinAmountChecker):
                 计算止损价格`stopprofit_price=price+stoploss_point*row[colname]`。
             next_point (float): 下一个可买点。根据`colname`指定的数据进行计算。默认为1。设置为None时，表示不计算。
                 计算下一个可买点`next_price=price+next_point*row[colname]`。
-            single_max (int): 最大持仓数量。默认为400。
+            max_amount (dict): 最大持仓数量。默认为400。
             holds (dict): 初始持仓。{symbol:[:py:class:`TurtleStrategy.Hold`]}
             update_price_onsameday (float): 当买卖在同天发生时，是否允许更新最后一笔持仓的止盈价及下一个可买价。
         """
@@ -283,10 +290,10 @@ class TurtleStrategy(MinAmountChecker):
         self.stoploss_point = kwargs.pop('stoploss_point', 2)
         self.stopprofit_point = kwargs.pop('stopprofit_point', 10)
         self.next_point = kwargs.pop('next_point', 1)
-        self.single_max = single_max
+        self._max_amount = max_amount
         self.holds = kwargs.pop('holds', {})
-        self.update_price_onsameday = kwargs.pop(
-            'update_price_onsameday', True)
+        self.update_price_onsameday = kwargs.pop('update_price_onsameday',
+                                                 True)
 
     def _add_hold(self, symbol, date, price, amount, stoploss_price,
                   stopprofit_price, next_price):
@@ -296,6 +303,10 @@ class TurtleStrategy(MinAmountChecker):
         self.holds[symbol].append(
             TurtleStrategy.Hold(symbol, date, price, amount, stoploss_price,
                                 stopprofit_price, next_price))
+
+    def max_amount(self, code):
+        return (self._max_amount[code] if self._max_amount
+                and code in self._max_amount else self.min_amount(code) * 4)
 
     def on_check_buy(self, date, code, price, cash, **kwargs):
         result = super().on_check_buy(date, code, price, cash, **kwargs)
@@ -311,7 +322,7 @@ class TurtleStrategy(MinAmountChecker):
                 return False
         h = sum([h.amount
                  for h in self.holds[code]]) if code in self.holds else 0
-        if h >= self.single_max:
+        if h >= self.max_amount(code):
             """超过最大持仓线时不再购买"""
             if verbose == 2:
                 print('{:%Y-%m-%d}-{}-超过最大持仓线时不再购买.当前持仓数量:{}'.format(
@@ -347,18 +358,19 @@ class TurtleStrategy(MinAmountChecker):
                     next_price = price + self.next_point * v
         return stoploss_price, stopprofit_price, next_price
 
-    def _update_last_price(self, date,code, price, **kwargs):
+    def _update_last_price(self, date, code, price, **kwargs):
         stoploss_price, stopprofit_price, next_price = self.calc_price(
             price, **kwargs)
         if stopprofit_price != -1:
             if kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(date,code,
-                    self.holds[code][-1].stopprofit_price, stopprofit_price))
+                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(
+                    date, code, self.holds[code][-1].stopprofit_price,
+                    stopprofit_price))
             self.holds[code][-1].stopprofit_price = stopprofit_price
         if next_price != -1:
             if kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-同天买卖.更新加仓价:{:.2f}->{:.2f}.'.format(date,code,
-                    self.holds[code][-1].next_price, next_price))
+                print('{:%Y-%m-%d}-{}-同天买卖.更新加仓价:{:.2f}->{:.2f}.'.format(
+                    date, code, self.holds[code][-1].next_price, next_price))
             self.holds[code][-1].next_price = next_price
 
     def on_buy_sell_on_same_day(self, date, code, price, **kwargs):
@@ -368,7 +380,7 @@ class TurtleStrategy(MinAmountChecker):
         """
         super().on_buy_sell_on_same_day(date, code, price, **kwargs)
         if self.update_price_onsameday:
-            self._update_last_price(date,code, price, **kwargs)
+            self._update_last_price(date, code, price, **kwargs)
 
     def on_calc_buy_amount(self, date, code, price, cash, **kwargs):
         """计算买入数量

@@ -31,7 +31,7 @@ def test_test_all_years():
     ret_datas.sort_values('date', inplace=True)
     ret_datas.set_index(['code', 'date'], inplace=True)
 
-    report, datas, buys, sells = test_all_years(fulldata=ret_datas,
+    report, datas, buys, sells = all_years(fulldata=ret_datas,
               cbs=[
         ATR(20),
         BBANDS(20, 2, 2),
@@ -48,6 +48,4 @@ def test_test_all_years():
               show_plot=True,
               tb_kwgs={
                   'colname': 'atr_20',
-                  'single_max': 400,
-                  'min_amount': 100
               })

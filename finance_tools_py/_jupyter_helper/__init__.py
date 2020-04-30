@@ -6,6 +6,7 @@ import seaborn as sns
 from IPython.display import clear_output
 from finance_tools_py.backtest import BackTest
 from finance_tools_py.simulation.callbacks import CallBack
+from finance_tools_py.simulation.callbacks.talib import ATR
 from finance_tools_py.simulation import Simulation
 from finance_tools_py.backtest import Utils
 import datetime
@@ -16,6 +17,7 @@ import empyrical
 import warnings
 import copy
 from finance_tools_py.calc import fluidity
+from finance_tools_py.calc import position_unit
 
 plt.rcParams['font.family'] = 'SimHei'
 
@@ -761,18 +763,19 @@ def plot_basic_seaborn(symbol, data=None, ys=[], **kwargs):
 #         plt.plot(b[x], b[col], 'gx', label='sell')
 #     return fig
 
+
 def all_years_single_symbol(symbol,
-                                 fulldata,
-                                 cbs,
-                                 init_cash=10000,
-                                 start_year=2005,
-                                 end_year=2007,
-                                 verbose=2,
-                                 show_report=True,
-                                 show_plot=True,
-                                 show_history=False,
-                                 tb_kwgs={},
-                                 **kwargs):
+                            fulldata,
+                            cbs,
+                            init_cash=10000,
+                            start_year=2005,
+                            end_year=2007,
+                            verbose=2,
+                            show_report=True,
+                            show_plot=True,
+                            show_history=False,
+                            tb_kwgs={},
+                            **kwargs):
     """逐年度对单一股票进行回测。
 
     采用 :py:class:`finance_tools_py.backtest.TurtleStrategy` 进行回测
@@ -880,18 +883,18 @@ def all_years_single_symbol(symbol,
 
 
 def all_years(fulldata,
-                   cbs,
-                   init_cash=10000,
-                   start_year=2005,
-                   end_year=2020,
-                   lookback=1,
-                   verbose=2,
-                   show_report=True,
-                   show_plot=True,
-                   tb_kwgs={},
-                   top=10,
-                   show_history=False,
-                   **kwargs):
+              cbs,
+              init_cash=10000,
+              start_year=2005,
+              end_year=2020,
+              lookback=1,
+              verbose=2,
+              show_report=True,
+              show_plot=True,
+              tb_kwgs={},
+              top=10,
+              show_history=False,
+              **kwargs):
     """逐年度对流动性最大的n支股票进行回测。
 
     采用 :py:class:`finance_tools_py.backtest.TurtleStrategy` 进行回测
@@ -924,7 +927,7 @@ def all_years(fulldata,
     sells = {}
     h = {}
     tb_kwgs_copy = copy.deepcopy(tb_kwgs)
-
+    baseValue = copy.deepcopy(init_cash) / 100  #计算头寸单元时使用的基准
     lookbacks = []
     years = []
     lookback = lookback - 1
@@ -943,16 +946,43 @@ def all_years(fulldata,
             (fulldata.index.get_level_values(1) <= '{}-12-31'.format(look[-1]))
             &
             (fulldata.index.get_level_values(1) >= '{}-01-01'.format(look[0]))]
+        #
+        # year_df = fluidity(year_df)
+        #
+        # #计算所有的头寸单元
+        # year_df.dropna(inplace=True)
+        # year_df['unit'] = year_df.apply(lambda row: int(position_unit(row['close'], row['atr_20'], baseValue)/100), axis=1)
+        # year_df=year_df[year_df['unit']>0]
+        # #计算所有的头寸单元
+        #
+        # top_year = year_df[:top] if top > 0 else year_df
 
-        year_df = fluidity(year_df)
-        top_year = year_df[:top] if top > 0 else year_df
+        tb_kwgs_copy['min_amount'] = {}
+        tb_kwgs_copy['max_amount'] = {}
+        top_year = []
+        for v in fluidity(year_df).index.values:
+            df_symbol = year_df[year_df.index.get_level_values(0) == v]
+            s = Simulation(df_symbol.reset_index(), v, callbacks=[ATR(20)])
+            s.simulate()
+            s.data.dropna(inplace=True)
+            s.data['unit'] = s.data.apply(lambda row: position_unit(
+                row['close'], row[tb_kwgs_copy['colname']], baseValue),
+                                          axis=1)
+            m = int(s.data.iloc[-1]['unit'] / 100) * 100
+            if m > 0:
+                tb_kwgs_copy['min_amount'][v] = m
+                tb_kwgs_copy['max_amount'][v] = m * 4
+                top_year.append(v)
+            if len(top_year) >= top:
+                break
+
         # 取 year 年的10支流动性最大的股票-结束
         #     print('{}年的10支流动性最大的股票'.format(year))
         # 遍历股票，对每支股票进行数据处理-开始
         df_symbol_years = []
         for symbol in list(
                 set(
-                    list(top_year.index.values) +
+                    list(top_year) +
                     list(hold['code'].unique() if not hold.empty else []))):
             df_symbol_year = fulldata[
                 (fulldata.index.get_level_values(0) == symbol)
