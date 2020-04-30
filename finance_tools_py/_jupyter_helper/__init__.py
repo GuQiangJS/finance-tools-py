@@ -951,7 +951,10 @@ def test_all_years(fulldata,
         #     print('{}年的10支流动性最大的股票'.format(year))
         # 遍历股票，对每支股票进行数据处理-开始
         df_symbol_years = []
-        for symbol in top_year.index.values:
+        for symbol in list(
+                set(
+                    list(top_year.index.values) +
+                    list(hold['code'].unique() if not hold.empty else []))):
             df_symbol_year = fulldata[
                 (fulldata.index.get_level_values(0) == symbol)
                 &
