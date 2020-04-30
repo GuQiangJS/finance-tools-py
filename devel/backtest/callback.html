@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.57.g5700a0f 文档</title>
+  <title>回测时的回调 &mdash; finance-tools-py 0+untagged.57.ge800045 文档</title>
   
 
   
@@ -175,6 +175,13 @@
 <em class="property">class </em><code class="sig-prename descclassname">finance_tools_py.backtest.</code><code class="sig-name descname">CallBack</code><a class="headerlink" href="#finance_tools_py.backtest.CallBack" title="永久链接至目标">¶</a></dt>
 <dd><p>基类：<a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(在 Python v3.8)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
 <p>回测时的回调。</p>
+<dl class="py method">
+<dt id="finance_tools_py.backtest.CallBack.on_buy_sell_on_same_day">
+<code class="sig-name descname">on_buy_sell_on_same_day</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">code</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_buy_sell_on_same_day" title="永久链接至目标">¶</a></dt>
+<dd><p>同一天出现买入和卖出信号时的操作</p>
+<p>可能由于止盈/止损或其他自定义事件，造成了买卖同天</p>
+</dd></dl>
+
 <dl class="py method">
 <dt id="finance_tools_py.backtest.CallBack.on_calc_buy_amount">
 <em class="property">abstract </em><code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.CallBack.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
@@ -363,10 +370,10 @@
 <li><p><strong>stopprofit_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 止盈点。根据`colname`指定的数据进行计算。默认为10。设置为None时，表示不计算。
 计算止损价格`stopprofit_price=price+stoploss_point*row[colname]`。</p></li>
 <li><p><strong>next_point</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 下一个可买点。根据`colname`指定的数据进行计算。默认为1。设置为None时，表示不计算。
-计算止损价格`next_price=price+next_point*row[colname]`。</p></li>
+计算下一个可买点`next_price=price+next_point*row[colname]`。</p></li>
 <li><p><strong>single_max</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 最大持仓数量。默认为400。</p></li>
 <li><p><strong>holds</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – 初始持仓。{symbol:[<a class="reference internal" href="#finance_tools_py.backtest.TurtleStrategy.Hold" title="finance_tools_py.backtest.TurtleStrategy.Hold"><code class="xref py py-class docutils literal notranslate"><span class="pre">TurtleStrategy.Hold</span></code></a>]}</p></li>
-<li><p><strong>**kwargs</strong> – </p></li>
+<li><p><strong>update_price_onsameday</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 当买卖在同天发生时，是否允许更新最后一笔持仓的止盈价及下一个可买价。</p></li>
 </ul>
 </dd>
 </dl>
@@ -379,7 +386,8 @@
 <p class="rubric">Examples</p>
 <div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">finance_tools_py.backtest</span> <span class="kn">import</span> <span class="n">TurtleStrategy</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span> <span class="o">=</span> <span class="n">TurtleStrategy</span><span class="p">(</span><span class="n">colname</span><span class="o">=</span><span class="s1">&#39;atr5&#39;</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">calc_price</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;atr5&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">row</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">({</span><span class="s1">&#39;atr5&#39;</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ts</span><span class="o">.</span><span class="n">calc_price</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
 <span class="go">(0.9, 1.5, 1.05)</span>
 </pre></div>
 </div>
@@ -391,6 +399,13 @@
 <dd class="field-even"><p>(<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a>,<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a>)</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.TurtleStrategy.on_buy_sell_on_same_day">
+<code class="sig-name descname">on_buy_sell_on_same_day</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">code</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.TurtleStrategy.on_buy_sell_on_same_day" title="永久链接至目标">¶</a></dt>
+<dd><p>同一天出现买入和卖出信号时的操作</p>
+<p>可能由于止盈/止损或其他自定义事件，造成了买卖同天</p>
 </dd></dl>
 
 <dl class="py method">
@@ -547,6 +562,13 @@
 </dd></dl>
 
 <dl class="py method">
+<dt id="finance_tools_py.backtest.MinAmountChecker.on_buy_sell_on_same_day">
+<code class="sig-name descname">on_buy_sell_on_same_day</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">code</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_buy_sell_on_same_day" title="永久链接至目标">¶</a></dt>
+<dd><p>同一天出现买入和卖出信号时的操作</p>
+<p>可能由于止盈/止损或其他自定义事件，造成了买卖同天</p>
+</dd></dl>
+
+<dl class="py method">
 <dt id="finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount">
 <code class="sig-name descname">on_calc_buy_amount</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span><span class="p">:</span> <span class="n">None.datetime.timestamp</span></em>, <em class="sig-param"><span class="n">code</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(在 Python v3.8)">str</a></span></em>, <em class="sig-param"><span class="n">price</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="n">cash</span><span class="p">:</span> <span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a></span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span> &#x2192; <a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)">float</a><a class="headerlink" href="#finance_tools_py.backtest.MinAmountChecker.on_calc_buy_amount" title="永久链接至目标">¶</a></dt>
 <dd><p>计算买入数量。当交易实际花费金额小于 <cite>cash</cite> （可用现金） 时，返回参数 :py:attr: <cite>min_amount</cite> （每次交易数量）。</p>
@@ -619,6 +641,13 @@
 <span class="gp">&gt;&gt;&gt; </span>                <span class="n">sell_dict</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;1234&#39;</span><span class="p">:</span><span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;date&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="s1">&#39;1999-1-1&#39;</span><span class="p">][</span><span class="s1">&#39;date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">to_pydatetime</span><span class="p">()})</span>
 </pre></div>
 </div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="finance_tools_py.backtest.AllInChecker.on_buy_sell_on_same_day">
+<code class="sig-name descname">on_buy_sell_on_same_day</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">date</span></em>, <em class="sig-param"><span class="n">code</span></em>, <em class="sig-param"><span class="n">price</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.AllInChecker.on_buy_sell_on_same_day" title="永久链接至目标">¶</a></dt>
+<dd><p>同一天出现买入和卖出信号时的操作</p>
+<p>可能由于止盈/止损或其他自定义事件，造成了买卖同天</p>
 </dd></dl>
 
 <dl class="py method">

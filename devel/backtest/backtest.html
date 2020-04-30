@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>回测工具 &mdash; finance-tools-py 0+untagged.57.g5700a0f 文档</title>
+  <title>回测工具 &mdash; finance-tools-py 0+untagged.57.ge800045 文档</title>
   
 
   
@@ -247,11 +247,15 @@
 
 <dl class="py method">
 <dt id="finance_tools_py.backtest.BackTest.calc_trade_history">
-<code class="sig-name descname">calc_trade_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">0</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.calc_trade_history" title="永久链接至目标">¶</a></dt>
+<code class="sig-name descname">calc_trade_history</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="headerlink" href="#finance_tools_py.backtest.BackTest.calc_trade_history" title="永久链接至目标">¶</a></dt>
 <dd><p>计算交易记录</p>
 <dl class="field-list simple">
 <dt class="field-odd">参数</dt>
-<dd class="field-odd"><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(在 Python v3.8)"><em>int</em></a>) – 是否显示计算过程。0（不显示），1（显示部分），2（显示全部）。默认为0。</p></li>
+<li><p><strong>bssd_buy</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 买卖发生在同一天，是否允许买入。默认False。</p></li>
+<li><p><strong>bssd_sell</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 买卖发生在同一天，是否允许买入。默认False。</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
