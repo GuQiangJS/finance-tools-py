@@ -401,7 +401,7 @@ def test_TurtleStrategy_6():
     assert ts.holds[symbol][-1].next_price == 30
 
     row = pd.Series({'atr5': 0.05})
-    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1), symbol, 50, row=row)
+    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1), symbol, 50, row=row,verbose=2)
 
     new_stoploss, new_stopprofit, new_next = ts.calc_price(50, row=row)
 
@@ -445,7 +445,7 @@ def test_TurtleStrategy_7():
     assert ts.holds[symbol][-1].next_price == 30
 
     row = pd.Series({'atr5': 0.05})
-    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1), symbol, 50, row=row)
+    ts.on_buy_sell_on_same_day(datetime.date(2000, 1, 1), symbol, 50, row=row,verbose=2)
 
     new_stoploss, new_stopprofit, new_next = ts.calc_price(50, row=row)
 

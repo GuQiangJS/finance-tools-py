@@ -347,18 +347,18 @@ class TurtleStrategy(MinAmountChecker):
                     next_price = price + self.next_point * v
         return stoploss_price, stopprofit_price, next_price
 
-    def _update_last_price(self, code, price, **kwargs):
+    def _update_last_price(self, date,code, price, **kwargs):
         stoploss_price, stopprofit_price, next_price = self.calc_price(
             price, **kwargs)
         if stopprofit_price != -1:
             if kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(
+                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(date,code,
                     self.holds[code][-1].stopprofit_price, stopprofit_price))
             self.holds[code][-1].stopprofit_price = stopprofit_price
         if next_price != -1:
             self.holds[code][-1].next_price = next_price
             if kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(
+                print('{:%Y-%m-%d}-{}-同天买卖.更新止盈价:{:.2f}->{:.2f}.'.format(date,code,
                     self.holds[code][-1].next_price, next_price))
 
     def on_buy_sell_on_same_day(self, date, code, price, **kwargs):
@@ -368,7 +368,7 @@ class TurtleStrategy(MinAmountChecker):
         """
         super().on_buy_sell_on_same_day(date, code, price, **kwargs)
         if self.update_price_onsameday:
-            self._update_last_price(code, price, **kwargs)
+            self._update_last_price(date,code, price, **kwargs)
 
     def on_calc_buy_amount(self, date, code, price, cash, **kwargs):
         """计算买入数量
