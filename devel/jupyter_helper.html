@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>jupyter notebook 中可能用到的常用方法封装 &mdash; finance-tools-py 0+untagged.57.gbd337d4 文档</title>
+  <title>jupyter notebook 中可能用到的常用方法封装 &mdash; finance-tools-py 0+untagged.57.g30d7a0c 文档</title>
   
 
   
@@ -181,6 +181,9 @@ index[0]为股票代码,index[1]为日期。</p></li>
 <li><p><strong>cbs</strong> ([<a class="reference internal" href="simulation/callback.html#finance_tools_py.simulation.callbacks.CallBack" title="finance_tools_py.simulation.callbacks.CallBack"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.callbacks.CallBack</span></code></a>]) – 对数据进行模拟填充时的回调。参考 <a class="reference internal" href="simulation/simulation.html#finance_tools_py.simulation.Simulation" title="finance_tools_py.simulation.Simulation"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.simulation.Simulation</span></code></a> 中的`callbacks`参数。</p></li>
 <li><p><strong>tb_kwgs</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(在 Python v3.8)"><em>dict</em></a>) – <a class="reference internal" href="backtest/callback.html#finance_tools_py.backtest.TurtleStrategy" title="finance_tools_py.backtest.TurtleStrategy"><code class="xref py py-class docutils literal notranslate"><span class="pre">finance_tools_py.backtest.TurtleStrategy</span></code></a> 的参数集合。</p></li>
 <li><p><strong>unit_percent</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(在 Python v3.8)"><em>float</em></a>) – 计算头寸单元时使用的基准，默认为1%。</p></li>
+<li><p><strong>fixed_unit</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(在 Python v3.8)"><em>bool</em></a>) – 是否使用固定金额（init_cash）作为计算头寸单元的标的。默认为True。
+如果为False的话，会在每年开始时，使用上一年度的总资产（<a class="reference internal" href="backtest/backtest.html#finance_tools_py.backtest.BackTest.total_assets_cur" title="finance_tools_py.backtest.BackTest.total_assets_cur"><code class="xref py py-attr docutils literal notranslate"><span class="pre">finance_tools_py.backtest.BackTest.total_assets_cur</span></code></a>）结合`unit_percent`进行运算。
+如果是第一年则使用`init_cash`结合`unit_percent`进行运算。</p></li>
 </ul>
 </dd>
 <dt class="field-even">返回</dt>
