@@ -1040,7 +1040,8 @@ def all_years(fulldata,
         bt.calc_trade_history(verbose=2)
         report[year] = bt
 
-        baseValue = bt.total_assets_cur * kwargs.get('unit_percent', 0.01)  # 计算头寸单元时使用的基准
+        if not kwargs.get('fixed_unit',True):
+            baseValue = bt.total_assets_cur * kwargs.get('unit_percent', 0.01)  # 计算头寸单元时使用的基准
 
         h = ts.holds
         if h:
