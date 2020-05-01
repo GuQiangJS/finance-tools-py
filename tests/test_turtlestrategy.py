@@ -463,3 +463,56 @@ def test_TurtleStrategy_7():
 
     assert not ts.holds[symbol][-1].stopprofit_price == new_stopprofit
     assert not ts.holds[symbol][-1].next_price == new_next
+
+
+def test_TurtleStrategy_MaxDays():
+    symbol = '123456'
+    holds = {
+        symbol: [
+            TurtleStrategy.Hold(
+                symbol,
+                datetime.date(1999, 1, 1),
+                10,  # 买入价
+                100,  # 持仓数量
+                9,  # 止损价
+                11,  # 止盈价
+                10.5  # 下一个仓位价格
+            ),
+        ]
+    }
+    ts = TurtleStrategy(
+        colname='',
+        holds=holds,
+    )
+    assert ts._get_overdue(symbol, datetime.date(2222, 1, 1)) is None
+
+    ts = TurtleStrategy(
+        colname='',
+        holds=holds,
+        max_days=10,
+    )
+    assert not ts._get_overdue(symbol, datetime.date(1999, 1, 9))
+    assert not ts._get_overdue(symbol, datetime.date(1999, 1, 10))
+    assert len(ts._get_overdue(symbol, datetime.date(1999, 1, 11))) > 0
+
+    assert ts.on_calc_sell_amount(datetime.date(1999, 1, 9),
+                                  symbol,
+                                  10,
+                                  0,
+                                  0,
+                                  0,
+                                  verbose=2) == 0
+    assert ts.on_calc_sell_amount(datetime.date(1999, 1, 10),
+                                  symbol,
+                                  10,
+                                  0,
+                                  0,
+                                  0,
+                                  verbose=2) == 0
+    assert ts.on_calc_sell_amount(datetime.date(1999, 1, 11),
+                                  symbol,
+                                  10,
+                                  0,
+                                  0,
+                                  0,
+                                  verbose=2) == 100

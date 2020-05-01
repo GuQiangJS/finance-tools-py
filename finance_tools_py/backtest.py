@@ -5,6 +5,7 @@ import abc
 from tqdm.auto import tqdm
 import matplotlib.pyplot as plt
 import logging
+import statistics
 
 
 class CallBack():
@@ -284,6 +285,7 @@ class TurtleStrategy(MinAmountChecker):
             max_amount (dict): 最大持仓数量。默认为400。
             holds (dict): 初始持仓。{symbol:[:py:class:`TurtleStrategy.Hold`]}
             update_price_onsameday (float): 当买卖在同天发生时，是否允许更新最后一笔持仓的止盈价及下一个可买价。
+            max_days (int): 最大持仓天数。默认为0。表示不判断。
         """
         super().__init__(buy_dict, sell_dict, **kwargs)
         self.colname = colname
@@ -294,6 +296,9 @@ class TurtleStrategy(MinAmountChecker):
         self.holds = kwargs.pop('holds', {})
         self.update_price_onsameday = kwargs.pop('update_price_onsameday',
                                                  True)
+        self.max_days = kwargs.pop('max_days', 0)
+        self._max_days_timedelta = datetime.timedelta(
+            days=self.max_days) if self.max_days > 0 else None
 
     def _add_hold(self, symbol, date, price, amount, stoploss_price,
                   stopprofit_price, next_price):
@@ -426,6 +431,16 @@ class TurtleStrategy(MinAmountChecker):
                     print('{:%Y-%m-%d}-{}-止盈.止盈数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
                           format(date, code, result, price, hold_price))
                 return result
+            hs = self._get_overdue(code, date)
+            if hs:
+                result = sum([h.amount for h in hs])
+                if kwargs.get('verbose', 0) == 2:
+                    for h in hs:
+                        print(
+                            '{:%Y-%m-%d}-{}-达到持仓期限.{}Days,购买日期:{:%Y-%m-%d},数量:{},当前金额:{:.2f},持仓金额:{:.2f}'
+                            .format(date, code, self.max_days, h.date,
+                                    h.amount, price, h.price))
+                return result
         result = super().on_calc_sell_amount(date, code, price, cash,
                                              hold_amount, hold_price, **kwargs)
         result_temp = result
@@ -469,7 +484,17 @@ class TurtleStrategy(MinAmountChecker):
                 print('{:%Y-%m-%d}-{}-触及止盈线.当前可卖数量:{}.'.format(
                     date, code, result))
                 return True
+            if self._get_overdue(code, date):
+                return True
         return result
+
+    def _get_overdue(self, code, date):
+        if self._max_days_timedelta and code in self.holds:
+            return [
+                h for h in self.holds[code]
+                if (h.date + self._max_days_timedelta) <= date
+            ]
+        return None
 
 
 class BackTest():
