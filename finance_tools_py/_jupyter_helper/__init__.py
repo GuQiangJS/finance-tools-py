@@ -911,6 +911,9 @@ def all_years(fulldata,
         cbs ([:py:class:`finance_tools_py.simulation.callbacks.CallBack`]): 对数据进行模拟填充时的回调。参考 :py:class:`finance_tools_py.simulation.Simulation` 中的`callbacks`参数。
         tb_kwgs (dict): :py:class:`finance_tools_py.backtest.TurtleStrategy` 的参数集合。
         unit_percent (float): 计算头寸单元时使用的基准，默认为1%。
+        fixed_unit (bool): 是否使用固定金额（init_cash）作为计算头寸单元的标的。默认为True。
+            如果为False的话，会在每年开始时，使用上一年度的总资产（:py:attr:`finance_tools_py.backtest.BackTest.total_assets_cur`）结合`unit_percent`进行运算。
+            如果是第一年则使用`init_cash`结合`unit_percent`进行运算。
 
     Returns:
         - dict: BackTest字典。key值为年份。
@@ -928,7 +931,7 @@ def all_years(fulldata,
     sells = {}
     h = {}
     tb_kwgs_copy = copy.deepcopy(tb_kwgs)
-    baseValue = copy.deepcopy(init_cash) * kwargs.get('unit_percent',0.01)  #计算头寸单元时使用的基准
+    baseValue = init_cash * kwargs.get('unit_percent',0.01)  #计算头寸单元时使用的基准
     lookbacks = []
     years = []
     lookback = lookback - 1
@@ -1036,6 +1039,8 @@ def all_years(fulldata,
                       callbacks=[ts])
         bt.calc_trade_history(verbose=2)
         report[year] = bt
+
+        baseValue = bt.total_assets_cur * kwargs.get('unit_percent', 0.01)  # 计算头寸单元时使用的基准
 
         h = ts.holds
         if h:
