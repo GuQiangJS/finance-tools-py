@@ -1037,7 +1037,7 @@ def all_years(fulldata,
                       init_hold=hold,
                       live_start_date=datetime.datetime(year, 1, 1),
                       callbacks=[ts])
-        bt.calc_trade_history(verbose=2)
+        bt.calc_trade_history(verbose=verbose)
         report[year] = bt
 
         if not kwargs.get('fixed_unit',True):
