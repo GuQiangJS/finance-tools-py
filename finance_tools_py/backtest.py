@@ -434,9 +434,10 @@ class TurtleStrategy(MinAmountChecker):
             hs = self._get_overdue(code, date)
             if hs:
                 result = sum([h.amount for h in hs])
-                if kwargs.get('verbose', 0) == 2 and result > 0:
+                if result > 0:
                     for h in hs:
-                        print(
+                        if  kwargs.get('verbose', 0) == 2:
+                            print(
                             '{:%Y-%m-%d}-{}-达到持仓期限.{}Days,购买日期:{:%Y-%m-%d},数量:{},当前金额:{:.2f},持仓金额:{:.2f}'
                             .format(date, code, self.max_days, h.date,
                                     h.amount, price, h.price))
@@ -447,18 +448,18 @@ class TurtleStrategy(MinAmountChecker):
         result_temp = result
         while result_temp > 0:
             if result_temp >= self.holds[code][0].amount:
-                print(
-                    '{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.format(
-                        date, code, self.holds[code][0].amount, price,
-                        self.holds[code][0].price))
+                if kwargs.get('verbose', 0) == 2:
+                    print('{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                          format(date, code, self.holds[code][0].amount, price,
+                                 self.holds[code][0].price))
                 a = self.holds[code][0]
                 result_temp = result_temp - a.amount
                 self.holds[code].remove(a)
             else:
-                print(
-                    '{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.format(
-                        date, code, self.holds[code][0].amount, price,
-                        self.holds[code][0].price))
+                if kwargs.get('verbose', 0) == 2:
+                    print('{:%Y-%m-%d}-{}-正常卖出.数量:{},当前金额:{:.2f},持仓金额:{:.2f}'.
+                          format(date, code, self.holds[code][0].amount, price,
+                                 self.holds[code][0].price))
                 self.holds[code][
                     0].amount = self.holds[code][0].amount - result_temp
                 result_temp = 0
@@ -473,16 +474,18 @@ class TurtleStrategy(MinAmountChecker):
                 h.amount for h in self.holds[code]
                 if h.stoploss_price != -1 and h.stoploss_price >= price
             ])
-            if result and kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-触及止损线.当前可卖数量:{}.'.format(
+            if result:
+                if kwargs.get('verbose', 0) == 2:
+                    print('{:%Y-%m-%d}-{}-触及止损线.当前可卖数量:{}.'.format(
                     date, code, result))
                 return True
             result = sum([
                 h.amount for h in self.holds[code]
                 if h.stopprofit_price != -1 and h.stopprofit_price <= price
             ])
-            if result and kwargs.get('verbose', 0) == 2:
-                print('{:%Y-%m-%d}-{}-触及止盈线.当前可卖数量:{}.'.format(
+            if result:
+                if kwargs.get('verbose', 0) == 2:
+                    print('{:%Y-%m-%d}-{}-触及止盈线.当前可卖数量:{}.'.format(
                     date, code, result))
                 return True
             if self._get_overdue(code, date):
@@ -892,7 +895,7 @@ class BackTest():
                                desc='回测计算中...'):
             date = row['date']
             if date < self._live_start_date:
-                if verbose > 1:
+                if verbose ==2:
                     print('{:%Y-%m-%d} < 起始日期:{:%Y-%m-%d} 跳过判断。'.format(
                         date, self._live_start_date))
                 continue
@@ -943,12 +946,12 @@ class BackTest():
                         1,
                     )
                     self.__update_buy_price(date, code, amount, price, 1)
-                    if verbose > 0:
+                    if verbose ==2:
                         print('{:%Y-%m-%d} {} 买入 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
                                      self.available_cash))
                 else:
-                    if verbose > 1:
+                    if verbose ==2:
                         print('{:%Y-%m-%d} {} {:.2f} 可用资金不足，跳过购买。'.format(
                             date, code, price))
             if _sell:
@@ -974,14 +977,14 @@ class BackTest():
                         -1,
                     )
                     self.__update_buy_price(date, code, amount, price, -1)
-                    if verbose > 0:
+                    if verbose ==2:
                         print('{:%Y-%m-%d} {} 卖出 {:.2f}/{:.2f}，剩余资金 {:.2f}'.
                               format(date, code, price, amount,
                                      self.available_cash))
                 else:
-                    if verbose > 1:
+                    if verbose ==2:
                         print('{:%Y-%m-%d} {} 没有持仓，跳过卖出。'.format(date, code))
-        if verbose > 0:
+        if verbose ==2:
             print('计算完成！')
         self._calced = True
 
