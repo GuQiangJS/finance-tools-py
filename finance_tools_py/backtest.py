@@ -434,12 +434,13 @@ class TurtleStrategy(MinAmountChecker):
             hs = self._get_overdue(code, date)
             if hs:
                 result = sum([h.amount for h in hs])
-                if kwargs.get('verbose', 0) == 2:
+                if kwargs.get('verbose', 0) == 2 and result > 0:
                     for h in hs:
                         print(
                             '{:%Y-%m-%d}-{}-达到持仓期限.{}Days,购买日期:{:%Y-%m-%d},数量:{},当前金额:{:.2f},持仓金额:{:.2f}'
                             .format(date, code, self.max_days, h.date,
                                     h.amount, price, h.price))
+                        self.holds[code].remove(h)
                 return result
         result = super().on_calc_sell_amount(date, code, price, cash,
                                              hold_amount, hold_price, **kwargs)
