@@ -478,6 +478,15 @@ def test_TurtleStrategy_MaxDays():
                 11,  # 止盈价
                 10.5  # 下一个仓位价格
             ),
+            TurtleStrategy.Hold(
+                symbol,
+                datetime.date(1999, 1, 2),
+                20,  # 买入价
+                100,  # 持仓数量
+                9,  # 止损价
+                11,  # 止盈价
+                10.5  # 下一个仓位价格
+            ),
         ]
     }
     ts = TurtleStrategy(
@@ -502,6 +511,7 @@ def test_TurtleStrategy_MaxDays():
                                   0,
                                   0,
                                   verbose=2) == 0
+    assert sum([h.amount for h in ts.holds[symbol]]) == 200
     assert ts.on_calc_sell_amount(datetime.date(1999, 1, 10),
                                   symbol,
                                   10,
@@ -509,6 +519,7 @@ def test_TurtleStrategy_MaxDays():
                                   0,
                                   0,
                                   verbose=2) == 0
+    assert sum([h.amount for h in ts.holds[symbol]]) == 200
     assert ts.on_calc_sell_amount(datetime.date(1999, 1, 11),
                                   symbol,
                                   10,
@@ -516,3 +527,5 @@ def test_TurtleStrategy_MaxDays():
                                   0,
                                   0,
                                   verbose=2) == 100
+    assert sum([h.amount for h in ts.holds[symbol]]) == 100
+    assert ts.holds[symbol][0].price == 20
