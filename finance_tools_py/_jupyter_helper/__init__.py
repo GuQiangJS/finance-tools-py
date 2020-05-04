@@ -931,7 +931,7 @@ def all_years(fulldata,
     sells = {}
     h = {}
     tb_kwgs_copy = copy.deepcopy(tb_kwgs)
-    baseValue = init_cash * kwargs.get('unit_percent',0.01)  #计算头寸单元时使用的基准
+    baseValue = init_cash * kwargs.get('unit_percent', 0.01)  #计算头寸单元时使用的基准
     lookbacks = []
     years = []
     lookback = lookback - 1
@@ -964,9 +964,10 @@ def all_years(fulldata,
         tb_kwgs_copy['min_amount'] = {}
         tb_kwgs_copy['max_amount'] = {}
         top_year = []
-        for v in fluidity(year_df).index.values[:top]:
+        for v in fluidity(year_df).index.values:
             df_symbol = year_df[year_df.index.get_level_values(0) == v]
-            s = Simulation(df_symbol.reset_index(), v, callbacks=[ATR(20)])#TODO
+            s = Simulation(df_symbol.reset_index(), v,
+                           callbacks=[ATR(20)])  #TODO
             s.simulate()
             s.data.dropna(inplace=True)
             if s.data.empty:
@@ -979,17 +980,29 @@ def all_years(fulldata,
                 tb_kwgs_copy['min_amount'][v] = m
                 tb_kwgs_copy['max_amount'][v] = m * 4
                 top_year.append(v)
-            # if len(top_year) >= top:
-            #     break
+            else:
+                if verbose > 0:
+                    print('{}-根据时间 {:%Y-%m-%d}~{:%Y-%m-%d} 计算头寸单位大小为0'.format(
+                        v,
+                        year_df.index.get_level_values(1)[0],
+                        year_df.index.get_level_values(1)[-1]))
+            if len(top_year) >= top:
+                break
+
+        ls = list(
+            set(
+                list(top_year) +
+                list(hold['code'].unique() if not hold.empty else [])))
+        if not ls:
+            if verbose > 0:
+                print('{}无任何可跟踪的股票'.format(year))
+            continue
 
         # 取 year 年的10支流动性最大的股票-结束
         #     print('{}年的10支流动性最大的股票'.format(year))
         # 遍历股票，对每支股票进行数据处理-开始
         df_symbol_years = []
-        for symbol in list(
-                set(
-                    list(top_year) +
-                    list(hold['code'].unique() if not hold.empty else []))):
+        for symbol in ls:
             df_symbol_year = fulldata[
                 (fulldata.index.get_level_values(0) == symbol)
                 &
@@ -1042,8 +1055,9 @@ def all_years(fulldata,
         bt.calc_trade_history(verbose=verbose)
         report[year] = bt
 
-        if not kwargs.get('fixed_unit',True):
-            baseValue = bt.total_assets_cur * kwargs.get('unit_percent', 0.01)  # 计算头寸单元时使用的基准
+        if not kwargs.get('fixed_unit', True):
+            baseValue = bt.total_assets_cur * kwargs.get('unit_percent',
+                                                         0.01)  # 计算头寸单元时使用的基准
 
         h = ts.holds
         if h:
