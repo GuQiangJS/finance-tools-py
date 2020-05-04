@@ -964,11 +964,13 @@ def all_years(fulldata,
         tb_kwgs_copy['min_amount'] = {}
         tb_kwgs_copy['max_amount'] = {}
         top_year = []
-        for v in fluidity(year_df).index.values:
+        for v in fluidity(year_df).index.values[:top]:
             df_symbol = year_df[year_df.index.get_level_values(0) == v]
             s = Simulation(df_symbol.reset_index(), v, callbacks=[ATR(20)])#TODO
             s.simulate()
             s.data.dropna(inplace=True)
+            if s.data.empty:
+                continue
             s.data['unit'] = s.data.apply(lambda row: position_unit(
                 row['close'], row[tb_kwgs_copy['colname']], baseValue),
                                           axis=1)
@@ -977,8 +979,8 @@ def all_years(fulldata,
                 tb_kwgs_copy['min_amount'][v] = m
                 tb_kwgs_copy['max_amount'][v] = m * 4
                 top_year.append(v)
-            if len(top_year) >= top:
-                break
+            # if len(top_year) >= top:
+            #     break
 
         # 取 year 年的10支流动性最大的股票-结束
         #     print('{}年的10支流动性最大的股票'.format(year))
