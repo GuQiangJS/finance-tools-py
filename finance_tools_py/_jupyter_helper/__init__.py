@@ -961,12 +961,17 @@ def all_years(fulldata,
     _top_dict = {}
     _every_year_dict = {}
 
+    if 'symbol' not in fulldata.columns:
+        fulldata['symbol']=fulldata.index.get_level_values(0)
+    if 'datetime' not in fulldata.columns:
+        fulldata['datetime']=fulldata.index.get_level_values(1)
+
     for look, year in tqdm(zip(lookbacks, years)):
         # 取 year 年的n支流动性最大的股票-开始
         year_df = fulldata[
-            (fulldata.index.get_level_values(1) <= '{}-12-31'.format(look[-1]))
+            (fulldata['datetime'] <= datetime.date(look[-1],12,31))
             &
-            (fulldata.index.get_level_values(1) >= '{}-01-01'.format(look[0]))]
+            (fulldata['datetime'] >= datetime.date(look[0],1,1))]
         #
         # year_df = fluidity(year_df)
         #
@@ -985,7 +990,7 @@ def all_years(fulldata,
             c = _cache(v)
             _s_data = None
             if c not in _top_dict or _top_dict[c] is None:
-                df_symbol = year_df[year_df.index.get_level_values(0) == v]
+                df_symbol = year_df[year_df['symbol'] == v]
                 s = Simulation(df_symbol.reset_index(), v,
                                callbacks=[ATR(20)])  #TODO
                 s.simulate()
@@ -1008,8 +1013,8 @@ def all_years(fulldata,
                 if verbose > 0:
                     print('{}-根据时间 {:%Y-%m-%d}~{:%Y-%m-%d} 计算头寸单位大小为0'.format(
                         v,
-                        year_df.index.get_level_values(1)[0],
-                        year_df.index.get_level_values(1)[-1]))
+                        year_df['datetime'][0],
+                        year_df['datetime'][-1]))
             if len(top_year) >= top:
                 break
 
@@ -1031,11 +1036,9 @@ def all_years(fulldata,
             _s_data = None
             if c not in _every_year_dict or _every_year_dict[c] is None:
                 df_symbol_year = fulldata[
-                    (fulldata.index.get_level_values(0) == symbol)
-                    & (fulldata.index.get_level_values(1) <= '{}-12-31'.format(
-                        year))
-                    & (fulldata.index.get_level_values(1) >= '{}-01-01'.format(
-                        look[0]))]
+                    (fulldata['symbol'] == symbol)
+                    & (fulldata['datetime'] <= datetime.date(year,12,31))
+                    & (fulldata['datetime'] >= datetime.date(look[0],1,1))]
                 s = Simulation(df_symbol_year.reset_index(),
                                symbol,
                                callbacks=cbs)
