@@ -982,10 +982,10 @@ def all_years(fulldata,
         tb_kwgs_copy['max_amount'] = {}
         top_year = []
         for v in fluidity(year_df).index.values:
-            df_symbol = year_df[year_df.index.get_level_values(0) == v]
             c = _cache(v)
             _s_data = None
-            if c not in _top_dict:
+            if c not in _top_dict or _top_dict[c] is None:
+                df_symbol = year_df[year_df.index.get_level_values(0) == v]
                 s = Simulation(df_symbol.reset_index(), v,
                                callbacks=[ATR(20)])  #TODO
                 s.simulate()
@@ -1027,22 +1027,22 @@ def all_years(fulldata,
         # 遍历股票，对每支股票进行数据处理-开始
         df_symbol_years = []
         for symbol in ls:
-            df_symbol_year = fulldata[
-                (fulldata.index.get_level_values(0) == symbol)
-                &
-                (fulldata.index.get_level_values(1) <= '{}-12-31'.format(year))
-                & (fulldata.index.get_level_values(1) >= '{}-01-01'.format(
-                    look[0]))]
             c = _cache(symbol, look[0], year)
             _s_data = None
-            if c not in _top_dict:
+            if c not in _every_year_dict or _every_year_dict[c] is None:
+                df_symbol_year = fulldata[
+                    (fulldata.index.get_level_values(0) == symbol)
+                    & (fulldata.index.get_level_values(1) <= '{}-12-31'.format(
+                        year))
+                    & (fulldata.index.get_level_values(1) >= '{}-01-01'.format(
+                        look[0]))]
                 s = Simulation(df_symbol_year.reset_index(),
                                symbol,
                                callbacks=cbs)
                 s.simulate()
                 _s_data = s.data.copy()
             else:
-                _s_data = _top_dict[c]
+                _s_data = _every_year_dict[c]
             df_symbol_years.append(_s_data)
         df_symbol_years = pd.concat(df_symbol_years)
         df_symbol_years.sort_values('date', inplace=True)
