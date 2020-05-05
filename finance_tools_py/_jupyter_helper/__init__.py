@@ -882,6 +882,20 @@ def all_years_single_symbol(symbol,
     return report, datas, buys, sells
 
 
+class _cache():
+    def __init__(self, symbol, start=None, end=None):
+        self.symbol = symbol
+        self.start = start
+        self.end = end
+
+    def __hash__(self):
+        return self.symbol.__hash__() ^ self.start.__hash__(
+        ) ^ self.end.__hash__()
+
+    def __eq__(self, other):
+        return self.symbol == other.symbol and self.start == other.start and self.end == other.end
+
+
 def all_years(fulldata,
               cbs,
               init_cash=10000,
@@ -944,6 +958,9 @@ def all_years(fulldata,
         for lookback, year in zip(lookbacks, years):
             print(lookback, year)
 
+    _top_dict = {}
+    _every_year_dict = {}
+
     for look, year in tqdm(zip(lookbacks, years)):
         # 取 year 年的n支流动性最大的股票-开始
         year_df = fulldata[
@@ -966,16 +983,23 @@ def all_years(fulldata,
         top_year = []
         for v in fluidity(year_df).index.values:
             df_symbol = year_df[year_df.index.get_level_values(0) == v]
-            s = Simulation(df_symbol.reset_index(), v,
-                           callbacks=[ATR(20)])  #TODO
-            s.simulate()
-            s.data.dropna(inplace=True)
-            if s.data.empty:
+            c = _cache(v)
+            _s_data = None
+            if c not in _top_dict:
+                s = Simulation(df_symbol.reset_index(), v,
+                               callbacks=[ATR(20)])  #TODO
+                s.simulate()
+                s.data.dropna(inplace=True)
+                _s_data = s.data.copy()
+                _top_dict[c] = _s_data.copy()
+            else:
+                _s_data = _top_dict[c]
+            if _s_data.empty:
                 continue
-            s.data['unit'] = s.data.apply(lambda row: position_unit(
+            _s_data['unit'] = _s_data.apply(lambda row: position_unit(
                 row['close'], row[tb_kwgs_copy['colname']], baseValue),
-                                          axis=1)
-            m = int(s.data.iloc[-1]['unit'] / 100) * 100
+                                            axis=1)
+            m = int(_s_data.iloc[-1]['unit'] / 100) * 100
             if m > 0:
                 tb_kwgs_copy['min_amount'][v] = m
                 tb_kwgs_copy['max_amount'][v] = m * 4
@@ -1009,9 +1033,17 @@ def all_years(fulldata,
                 (fulldata.index.get_level_values(1) <= '{}-12-31'.format(year))
                 & (fulldata.index.get_level_values(1) >= '{}-01-01'.format(
                     look[0]))]
-            s = Simulation(df_symbol_year.reset_index(), symbol, callbacks=cbs)
-            s.simulate()
-            df_symbol_years.append(s.data)
+            c = _cache(symbol, look[0], year)
+            _s_data = None
+            if c not in _top_dict:
+                s = Simulation(df_symbol_year.reset_index(),
+                               symbol,
+                               callbacks=cbs)
+                s.simulate()
+                _s_data = s.data.copy()
+            else:
+                _s_data = _top_dict[c]
+            df_symbol_years.append(_s_data)
         df_symbol_years = pd.concat(df_symbol_years)
         df_symbol_years.sort_values('date', inplace=True)
         # 遍历股票，对每支股票进行数据处理-结束
@@ -1089,4 +1121,5 @@ def all_years(fulldata,
             Utils.plt_pnl_ratio(rp, ax=axes[1])
             plt.gcf().autofmt_xdate()
             plt.show()
-    return report, datas, buys, sells
+    df_profit = pd.concat([x.profit_loss_df() for x in report.values()])
+    return df_profit, report, datas, buys, sells
